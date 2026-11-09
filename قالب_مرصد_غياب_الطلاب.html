@@ -771,7 +771,7 @@ function activateApprovedSnapshot(){
  document.documentElement.classList.add('approved-report');
  const a=DB.approved;
  d('approvedReportBanner').hidden=false;
- d('approvedReportBanner').textContent='✓ تقرير فترة معتمد: '+a.from+' — '+a.to+' · اعتمد بتاريخ '+new Date(a.createdAt).toLocaleString('ar-SA-u-ca-gregory')+' · '+fmt(a.events)+' سجل غياب · لا يمكن تعديل تقويم هذا التقرير';
+ d('approvedReportBanner').textContent='✓ تقرير فترة معتمد: '+a.from+' — '+a.to+' · اعتمد بتاريخ '+new Date(a.createdAt).toLocaleString('ar-SA-u-ca-gregory')+' · '+fmt(a.counts?.events??DB.events.length)+' سجل غياب · لا يمكن تعديل تقويم هذا التقرير';
  d('approvePeriodBtn').hidden=true;
  d('holidayWeekDays').querySelectorAll('input[data-holiday-date]').forEach(el=>{el.disabled=true});
  d('holidayReason').disabled=true;
