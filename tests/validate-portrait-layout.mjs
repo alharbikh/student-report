@@ -42,13 +42,13 @@ const ctx={
 };
 const fn=vm.runInNewContext(take('function makePrintReport(sectionKeys){','function makePrintBlob(){')+'\nmakePrintReport',ctx);
 const studentHTML=fn(['students']);
-assert.equal((studentHTML.match(/<section class="sheet" data-report="students">/g)||[]).length,3,'53 students should print across 3 portrait sheets (27 per sheet)');
+assert.equal((studentHTML.match(/<section class="sheet" data-report="students">/g)||[]).length,2,'53 students should print across 2 portrait sheets (27 per sheet)');
 assert.match(studentHTML,/@page\{size:A4 portrait;margin:0\}/);
 const dailyHTML=fn(['daily']);
 assert.equal((dailyHTML.match(/<section class="sheet" data-report="daily">/g)||[]).length,3,'53 daily students should print across 3 portrait sheets (25 per sheet)');
 assert.match(dailyHTML,/@page\{size:A4 portrait;margin:0\}/);
 const mixed=fn(['students','daily']);
-assert.equal((mixed.match(/<section class="sheet" data-report=/g)||[]).length,6);
+assert.equal((mixed.match(/<section class="sheet" data-report=/g)||[]).length,5);
 assert.match(mixed,/@page\{size:A4 landscape;margin:0\}/);
 assert.match(mixed,/page:studentPortrait;width:210mm;height:297mm/);
 assert.match(mixed,/page:dailyPortrait;width:210mm;height:297mm/);
