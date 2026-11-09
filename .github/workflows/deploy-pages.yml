@@ -7,6 +7,7 @@ on:
       - index.html
       - 'قالب_مرصد_غياب_الطلاب.html'
       - .github/workflows/deploy-pages.yml
+      - tests/validate-generated-dashboard.mjs
   workflow_dispatch:
 
 permissions:
@@ -39,6 +40,8 @@ jobs:
               raise SystemExit('Privacy check failed: dashboard template includes student data.')
           print('Privacy check passed: template includes no student data.')
           PY
+      - name: Validate generated dashboard JavaScript
+        run: node tests/validate-generated-dashboard.mjs
       - name: Build site from safe HTML files only
         run: |
           mkdir -p _site
