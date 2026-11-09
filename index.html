@@ -73,7 +73,7 @@ main{max-width:1120px;padding:27px 17px;margin:auto}.intro{text-align:center;mar
     <div class="review-head"><div><h1>مراجعة بيانات الغياب قبل التحليل</h1><p id="reviewSchool">المدرسة</p></div><span class="review-note" id="reviewSource"></span></div>
     <div class="review-panel"><h2>بطاقة جودة بيانات المصدر</h2><div class="review-metrics" id="reviewMetrics"></div><div class="review-warnings" id="reviewWarnings"></div></div>
     <div class="review-panel"><h2>معاينة سجل الغياب — جدول موحد</h2>
-      <div class="review-table-tools"><input id="reviewSearch" type="search" autocomplete="off" placeholder="بحث بالاسم أو الرقم أو الفصل أو التاريخ" aria-label="البحث في سجلات المعاينة"><select id="reviewGrade" aria-label="تصفية المعاينة بحسب الصف"><option value="all">جميع الصفوف</option><option value="1">الأول الثانوي</option><option value="2">الثاني الثانوي</option><option value="3">الثالث الثانوي</option></select><select id="reviewStatus" aria-label="تصفية حسب حالة يوم الغياب"><option value="all">جميع السجلات</option><option value="school">أيام الدوام فقط</option><option value="weekend">الجمعة والسبت (للمراجعة)</option><option value="high">أيام غياب مرتفع</option></select></div>
+      <div class="review-table-tools"><input id="reviewSearch" type="search" autocomplete="off" placeholder="بحث بالاسم أو الرقم أو الفصل أو التاريخ" aria-label="البحث في سجلات المعاينة"><select id="reviewGrade" aria-label="تصفية المعاينة بحسب الصف"><option value="all">جميع الصفوف</option><option value="1">الأول الثانوي</option><option value="2">الثاني الثانوي</option><option value="3">الثالث الثانوي</option></select><select id="reviewStatus" aria-label="تصفية حسب حالة يوم الغياب"><option value="all">جميع السجلات</option><option value="high">أيام غياب مرتفع</option></select></div>
       <div class="review-table-scroll" tabindex="0" aria-label="جدول السجلات، قابل للتمرير أفقيًا"><table class="review-table"><thead><tr><th>م</th><th>التاريخ</th><th>اليوم</th><th>رقم الطالب</th><th>اسم الطالب</th><th>الصف</th><th>الفصل</th><th>الحالة</th></tr></thead><tbody id="reviewRows"></tbody></table></div>
       <div class="review-pager"><span id="reviewCount"></span><div><button type="button" class="btn secondary" id="reviewPrev">السابق</button> <span id="reviewPageLabel"></span> <button type="button" class="btn secondary" id="reviewNext">التالي</button></div></div>
     </div>
@@ -104,15 +104,26 @@ function readCell(cell,shared){const typ=cell.getAttribute('t');if(typ==='inline
 async function parseBook(file){if(!/\.xlsx$/i.test(file.name))throw Error('اختر ملف Excel بصيغة XLSX');if(file.size>30*1024*1024)throw Error('حجم الملف يتجاوز 30 ميغابايت');const zip=await readZip(await file.arrayBuffer());const names=zip.names.filter(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n)).sort((a,b)=>Number(a.match(/sheet(\d+)/)[1])-Number(b.match(/sheet(\d+)/)[1]));if(!names.length)throw Error('لم يتم العثور على ورقة عمل XLSX');const sb=await zip.get('xl/sharedStrings.xml');let shared=[];if(sb){const doc=xml(sb);shared=Array.from(els(doc,'si'),si=>Array.from(els(si,'t'),t=>t.textContent||'').join(''))}
  const sheetBytes=await zip.get(names[0]);if(!sheetBytes||sheetBytes.byteLength>70*1024*1024)throw Error('ورقة العمل كبيرة جدًا أو غير صالحة');const sheet=xml(sheetBytes),studentIndex=new Map(),seen=new Set(),students=[],datesSet=new Set(),rawEvents=[];let school='',headerStart='',sourceRows=0,totalLines=0,invalid=0,halfDays=0,invalidDate=0,missingFields=0,duplicateRows=0,unknownGrade=0,conflicts=0;const rows=els(sheet,'row');for(const row of rows){const rn=Number(row.getAttribute('r')||0);if(rn<2)continue;const cells={};for(const cell of els(row,'c')){const ref=cell.getAttribute('r')||'',col=ref.match(/^[A-Z]+/);if(col)cells[col[0]]=readCell(cell,shared)}if(rn===2)school=(cells.H||'').trim();if(rn===9)headerStart=isoDate(cells.M)||'';if(rn<12)continue;if(!['C','G','L','O'].some(k=>cells[k]))continue;sourceRows++;const rawDate=cells.C||'',iso=isoDate(rawDate);if(!iso){if(/اجمالي|المجموع/.test(rawDate.replace(/[إأآ]/g,'ا')))totalLines++;else {invalid++;invalidDate++}continue}const id=(cells.O||'').trim(),name=(cells.L||'').trim(),cls=(cells.G||'').trim();if(!id||!name||!cls){invalid++;missingFields++;continue}const key=id+'\u0000'+iso;if(seen.has(key)){invalid++;duplicateRows++;continue}seen.add(key);const grade=gradeOf(cls,cells.J||'');if(!grade){invalid++;unknownGrade++;continue}if(!studentIndex.has(id)){studentIndex.set(id,students.length);students.push([id,name,cls,grade])}else{const existing=students[studentIndex.get(id)];if(existing[1]!==name||existing[2]!==cls||existing[3]!==grade){invalid++;conflicts++}}if(Number(cells.A)===.5)halfDays++;rawEvents.push([studentIndex.get(id),iso]);datesSet.add(iso)}if(!rawEvents.length)throw Error('لم تُعثر على سجلات صالحة. تحقق من الأعمدة C وG وL وO');const dates=Array.from(datesSet).sort(),dateIndex=new Map(dates.map((iso,i)=>[iso,i]));const events=rawEvents.map(([pi,iso])=>[pi,dateIndex.get(iso)]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);return {school:school||'المدرسة',sourceHeaderStart:headerStart||dates[0],students,dates,events,meta:{sourceRows,totalLines,validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]},issues:invalid,halfDays,quality:{invalidDate,missingFields,duplicateRows,unknownGrade,conflicts}}}
 
-const WEEKDAY_NAMES=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const WEEKDAY_NAMES=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'];
 const GRADE_NAMES_LOCAL=['','الأول الثانوي','الثاني الثانوي','الثالث الثانوي'];
 const fmt=n=>Number(n||0).toLocaleString('en-US');
 const isSchoolDay=iso=>{const d=new Date(iso+'T12:00:00Z').getUTCDay();return d!==5&&d!==6};
+function keepSchoolDaysOnly(data){
+ // The published dashboard, preview and exported JSON never contain Friday/Saturday rows.
+ const valid=data.events.filter(([pi,di])=>isSchoolDay(data.dates[di]));
+ if(!valid.length)throw Error('الملف لا يحتوي على سجلات غياب في أيام الدوام (الأحد إلى الخميس)');
+ const usedStudents=new Set(valid.map(([pi])=>pi));
+ const students=[],studentsMap=new Map();
+ data.students.forEach((st,i)=>{if(usedStudents.has(i)){studentsMap.set(i,students.length);students.push(st)}});
+ const dates=[...new Set(valid.map(([,di])=>data.dates[di]))].sort(),datesMap=new Map(dates.map((date,i)=>[date,i]));
+ const events=valid.map(([pi,di])=>[studentsMap.get(pi),datesMap.get(data.dates[di])]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ return {...data,students,dates,events,meta:{...data.meta,validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]}};
+}
 function previewQuality(data){
- const dayCounts=new Map(),weekends=new Set();let weekendRecords=0;
- for(const [pi,di] of data.events){const date=data.dates[di];dayCounts.set(date,(dayCounts.get(date)||0)+1);if(!isSchoolDay(date)){weekendRecords++;weekends.add(date)}}
- const highDates=new Set([...dayCounts].filter(([date,n])=>isSchoolDay(date)&&data.students.length&&n>=.8*data.students.length).map(([date])=>date));
- return {dayCounts,weekendRecords,weekendDays:weekends.size,highDates,issues:Math.max(0,Number(data.issues)||0),details:data.quality||{}};
+ const dayCounts=new Map();
+ for(const [pi,di] of data.events){const date=data.dates[di];dayCounts.set(date,(dayCounts.get(date)||0)+1)}
+ const highDates=new Set([...dayCounts].filter(([date,n])=>data.students.length&&n>=.8*data.students.length).map(([date])=>date));
+ return {dayCounts,highDates,issues:Math.max(0,Number(data.issues)||0),details:data.quality||{}};
 }
 function previewStat(label,value){return '<div class="review-metric"><strong>'+fmt(value)+'</strong><span>'+htmlEscape(label)+'</span></div>'}
 function showPreview(data,filename){
@@ -120,25 +131,24 @@ function showPreview(data,filename){
  $('reviewSchool').textContent=data.school;
  $('reviewSource').textContent='المصدر: '+filename+' · من '+data.meta.dateMin+' إلى '+data.meta.dateMax;
  const q=previewQuality(data),details=q.details;
- $('reviewMetrics').innerHTML=previewStat('سجل غياب صالح',data.events.length)+previewStat('طالب في السجل',data.students.length)+previewStat('تاريخ مختلف',data.dates.length)+previewStat('صف إجمالي تم تجاهله',data.meta.totalLines||0)+previewStat('سجل عطلة أسبوعية',q.weekendRecords)+previewStat('صف بحاجة للمراجعة',q.issues)+previewStat('أيام غياب مرتفع',q.highDates.size)+previewStat('صفوف البيانات المقروءة',data.meta.sourceRows||data.events.length);
+ $('reviewMetrics').innerHTML=previewStat('سجل غياب صالح',data.events.length)+previewStat('طالب في السجل',data.students.length)+previewStat('تاريخ مختلف',data.dates.length)+previewStat('صف إجمالي تم تجاهله',data.meta.totalLines||0)+previewStat('أيام دوام فعلية',data.dates.length)+previewStat('صف بحاجة للمراجعة',q.issues)+previewStat('أيام غياب مرتفع',q.highDates.size)+previewStat('صفوف البيانات المقروءة',data.meta.sourceRows||data.events.length);
  const warnings=[];
- if(q.weekendRecords)warnings.push('هناك '+fmt(q.weekendRecords)+' سجلًا في الجمعة والسبت موزعة على '+fmt(q.weekendDays)+' يوم؛ تظهر هنا للمراجعة، لكنها مستبعدة تلقائيًا من إحصاءات الدوام.');
  if(q.highDates.size)warnings.push('أيام ذات غياب مرتفع غير معتاد: '+[...q.highDates].sort().slice(0,8).map(x=>x+' ('+fmt(q.dayCounts.get(x))+')').join('، ')+'. افحص هذه التواريخ قبل اعتماد النتائج.');
  if(q.issues)warnings.push('سجلات أو تعارضات بحاجة للمراجعة: '+fmt(q.issues)+'؛ تاريخ غير صالح '+fmt(details.invalidDate)+ '، حقول ناقصة '+fmt(details.missingFields)+'، مكرر '+fmt(details.duplicateRows)+'، صف غير معروف '+fmt(details.unknownGrade)+'، تعارض بيانات طالب '+fmt(details.conflicts)+'.');
  if(data.halfDays)warnings.push('يوجد '+fmt(data.halfDays)+' سجلًا يحمل قيمة نصف يوم في المصدر؛ يحتسب المحرك كل سجل يوم غياب واحدًا وفق البنية الحالية.');
  if(!warnings.length)warnings.push('لم تُكتشف ملاحظات آلية في هذا الملف. يُنصح بمراجعة عينة من السجلات قبل بدء التحليل.');
- $('reviewWarnings').innerHTML=warnings.map((msg,i)=>'<div class="review-warning'+(!q.issues&&!q.weekendRecords&&!q.highDates.size&&!data.halfDays?' ok':'')+'">'+htmlEscape(msg)+'</div>').join('');
+ $('reviewWarnings').innerHTML=warnings.map((msg,i)=>'<div class="review-warning'+(!q.issues&&!q.highDates.size&&!data.halfDays?' ok':'')+'">'+htmlEscape(msg)+'</div>').join('');
  $('reviewSearch').value='';$('reviewGrade').value='all';$('reviewStatus').value='all';$('reviewError').textContent='';
- reviewList=data.events.map(([pi,di])=>{const student=data.students[pi],iso=data.dates[di];const wd=new Date(iso+'T12:00:00Z').getUTCDay();return {pi,di,student,iso,wd,weekend:wd===5||wd===6,high:q.highDates.has(iso)}}).sort((a,b)=>b.iso.localeCompare(a.iso)||String(a.student[1]).localeCompare(String(b.student[1]),'ar'));
+ reviewList=data.events.map(([pi,di])=>{const student=data.students[pi],iso=data.dates[di];const wd=new Date(iso+'T12:00:00Z').getUTCDay();return {pi,di,student,iso,wd,high:q.highDates.has(iso)}}).sort((a,b)=>b.iso.localeCompare(a.iso)||String(a.student[1]).localeCompare(String(b.student[1]),'ar'));
  document.body.classList.remove('loaded');document.body.classList.add('previewing');renderPreviewRows();window.scrollTo(0,0);
 }
 function renderPreviewRows(){
  if(!pendingData)return;
  const text=$('reviewSearch').value.trim().toLowerCase(),grade=$('reviewGrade').value,status=$('reviewStatus').value;
- reviewRows=reviewList.filter(r=>(grade==='all'||String(r.student[3])===grade)&&(status==='all'||(status==='school'&&!r.weekend)||(status==='weekend'&&r.weekend)||(status==='high'&&r.high))&&(!text||[r.iso,r.student[0],r.student[1],r.student[2],GRADE_NAMES_LOCAL[r.student[3]]].some(v=>String(v||'').toLowerCase().includes(text))));
+ reviewRows=reviewList.filter(r=>(grade==='all'||String(r.student[3])===grade)&&(status==='all'||(status==='high'&&r.high))&&(!text||[r.iso,r.student[0],r.student[1],r.student[2],GRADE_NAMES_LOCAL[r.student[3]]].some(v=>String(v||'').toLowerCase().includes(text))));
  const size=60,maxPage=Math.max(1,Math.ceil(reviewRows.length/size));reviewPage=Math.min(Math.max(1,reviewPage),maxPage);
  $('reviewRows').innerHTML=reviewRows.slice((reviewPage-1)*size,reviewPage*size).map((r,i)=>{
-  const state=r.weekend?'<span class="review-tag rest">عطلة أسبوعية · مستبعد</span>':r.high?'<span class="review-tag warn">غياب مرتفع · للمراجعة</span>':'<span class="review-tag">يوم دوام</span>';
+  const state=r.high?'<span class="review-tag warn">غياب مرتفع · للمراجعة</span>':'<span class="review-tag">يوم دوام</span>';
   return '<tr><td>'+fmt((reviewPage-1)*size+i+1)+'</td><td>'+htmlEscape(r.iso)+'</td><td>'+WEEKDAY_NAMES[r.wd]+'</td><td>'+htmlEscape(r.student[0])+'</td><td class="name">'+htmlEscape(r.student[1])+'</td><td>'+htmlEscape(GRADE_NAMES_LOCAL[r.student[3]]||'غير معروف')+'</td><td>'+htmlEscape(r.student[2])+'</td><td>'+state+'</td></tr>';
  }).join('')||'<tr><td colspan="8">لا توجد سجلات مطابقة للبحث</td></tr>';
  $('reviewCount').textContent='عرض '+fmt(reviewRows.length)+' من '+fmt(reviewList.length)+' سجل';$('reviewPageLabel').textContent=fmt(reviewPage)+' / '+fmt(maxPage);
@@ -169,7 +179,7 @@ tpl=tpl.replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/,tag=>tag.re
 const db={title:'مرصد غياب الطلاب — '+data.school,school:data.school,source:filename,filenameStart:data.meta.dateMin,filenameEnd:data.meta.dateMax,sourceHeaderStart:data.sourceHeaderStart,students:data.students,dates:data.dates,events:data.events,meta:data.meta};const encoded=JSON.stringify(db).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');const marker=/const DB=\{[^;]*\};\s*const GRADE_NAMES=/;if(!marker.test(tpl))throw Error('نسخة القالب غير متوافقة مع أداة الاستيراد');tpl=tpl.replace(marker,()=>`const DB=${encoded};\nconst GRADE_NAMES=`);tpl=tpl.replace('<title>مرصد غياب الطلاب | المدرسة</title>','<title>مرصد غياب الطلاب | '+htmlEscape(data.school)+'</title>');tpl=tpl.replace('<small>المدرسة · لوحة تحليل تفاعلية</small>','<small>'+htmlEscape(data.school)+' · لوحة تحليل تفاعلية</small>');return new Blob([tpl],{type:'text/html;charset=utf-8'})}
 async function loadFile(file){
  if(!file||working)return;const wasLoaded=document.body.classList.contains('loaded');working=true;$('pickFile').disabled=true;$('status').classList.remove('error');$('status').textContent='جارٍ قراءة بيانات الملف وتحضير المعاينة محليًا…';
- try{const data=/\.json$/i.test(file.name)?await parseJsonBook(file):await parseBook(file);showPreview(data,file.name);}
+ try{const parsed=/\.json$/i.test(file.name)?await parseJsonBook(file):await parseBook(file);const data=keepSchoolDaysOnly(parsed);showPreview(data,file.name);}
  catch(e){const message='تعذّر قراءة الملف: '+(e.message||String(e));$('status').classList.add('error');$('status').textContent=message;console.error('Import failed:',e);if(wasLoaded||document.body.classList.contains('previewing')){alert(message)}}
  finally{working=false;$('pickFile').disabled=false;$('file').value=''}
 }
