@@ -10,6 +10,7 @@ on:
       - tests/validate-generated-dashboard.mjs
       - tests/validate-school-days-print.mjs
       - tests/validate-approved-period.mjs
+      - tests/validate-portrait-layout.mjs
       - 'reports/**'
   workflow_dispatch:
 
@@ -48,6 +49,7 @@ jobs:
           node tests/validate-generated-dashboard.mjs
           node tests/validate-school-days-print.mjs
           node tests/validate-approved-period.mjs
+          node tests/validate-portrait-layout.mjs
       - name: Build site from safe HTML files only
         run: |
           mkdir -p _site
