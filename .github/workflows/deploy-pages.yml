@@ -9,6 +9,8 @@ on:
       - .github/workflows/deploy-pages.yml
       - tests/validate-generated-dashboard.mjs
       - tests/validate-school-days-print.mjs
+      - tests/validate-approved-period.mjs
+      - 'reports/**'
   workflow_dispatch:
 
 permissions:
@@ -45,11 +47,15 @@ jobs:
         run: |
           node tests/validate-generated-dashboard.mjs
           node tests/validate-school-days-print.mjs
+          node tests/validate-approved-period.mjs
       - name: Build site from safe HTML files only
         run: |
           mkdir -p _site
           cp index.html _site/index.html
           cp 'قالب_مرصد_غياب_الطلاب.html' _site/
+          mkdir -p _site/reports
+          cp reports/unlock.js _site/reports/
+          find reports -maxdepth 1 -type f -name 'period-*.html' -exec cp -t _site/reports/ {} +
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
