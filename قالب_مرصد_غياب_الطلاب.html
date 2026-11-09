@@ -738,7 +738,8 @@ function makePrintReport(sectionKeys){
  }
  if(sectionKeys.includes('daily')){
   const iso=dailyState.date,orderedDaily=dailyVisible.slice().sort(compareGradeClassName),rows=orderedDaily.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
-  chunkRows(rows,17).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · عدد الغائبين بعد تصفية الفصل والبحث: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[6,33,12,21,12,16],orderedDaily.slice(i*17,(i+1)*17).map(r=>absenceLevel(r.days)))}`));
+  const dailyPageRows=25;
+  chunkRows(rows,dailyPageRows).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد — A4 طولي',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · الترتيب: الصف ← الفصل ← الاسم · إجمالي الغائبين: ${fmt(rows.length)} طالب · الصفحة ${fmt(i+1)} من ${fmt(all.length)}</div>${absenceLegend()}${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[5,31,13,22,11,18],orderedDaily.slice(i*dailyPageRows,(i+1)*dailyPageRows).map(r=>absenceLevel(r.days)))`));
  }
  if(sectionKeys.includes('repeat')){
   const days=repeatOpportunityDates,criterion=d('repeatCriteria').selectedOptions[0]?.textContent||'';
@@ -757,10 +758,11 @@ function makePrintReport(sectionKeys){
  }
  const allSections=new Map(reportSections);
  const title=sectionKeys.length===1?`تقرير ${allSections.get(sectionKeys[0])}`:sectionKeys.includes('students')?'التقرير الإحصائي الشامل لغياب الطلاب':'التقرير الإحصائي لغياب الطلاب بدون القائمة الفردية';
- const portraitOnly=sectionKeys.length===1&&sectionKeys[0]==='students';
+ const portraitOnly=sectionKeys.length===1&&['students','daily'].includes(sectionKeys[0]);
  const styles=`
 @page{size:${portraitOnly?'A4 portrait':'A4 landscape'};margin:0}
 @page studentPortrait{size:A4 portrait;margin:0}
+@page dailyPortrait{size:A4 portrait;margin:0}
 *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajawal',Tahoma,Arial,sans-serif;direction:rtl;font-size:10pt;line-height:1.35}
 .preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:9;padding:13px 20px;background:#123f34;color:#fff;font:14px Tahoma,Arial,sans-serif}
@@ -769,6 +771,15 @@ html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajaw
 .sheet{width:297mm;height:210mm;margin:15px auto;background:#fff;display:flex;flex-direction:column;padding:9mm 11mm 7mm;overflow:hidden;box-shadow:0 2px 16px #234c3933;break-after:page;page-break-after:always}
 .sheet:last-child{break-after:auto;page-break-after:auto}
 .sheet[data-report="students"]{page:studentPortrait;width:210mm;height:297mm}
+.sheet[data-report="daily"]{page:dailyPortrait;width:210mm;height:297mm}
+.sheet[data-report="daily"] .sheet-head h1{font-size:15pt}
+.sheet[data-report="daily"] .sheet-body{font-size:8.4pt}
+.sheet[data-report="daily"] .pt-table{font-size:8.6pt}
+.sheet[data-report="daily"] .pt-table th{padding:2.4mm 1.3mm}
+.sheet[data-report="daily"] .pt-table td{padding:2mm 1.3mm;line-height:1.12}
+.sheet[data-report="daily"] .pt-list-meta{font-size:8.5pt;margin-bottom:2.2mm}
+.sheet[data-report="daily"] .absence-legend{margin-bottom:2.5mm}
+.sheet[data-report="daily"] .absence-legend span{font-size:7pt;padding:1mm 2mm}
 .sheet[data-report="students"] .sheet-head h1{font-size:15pt}
 .sheet[data-report="students"] .sheet-body{font-size:8.4pt}
 .sheet[data-report="students"] .pt-table{font-size:8.1pt}
@@ -803,10 +814,10 @@ html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajaw
 .pt-datewrap{border:1px solid #e0ebe3;border-radius:2mm;padding:2mm 3mm;margin-bottom:3mm;font-size:8.3pt;color:#507461}
 .pt-note{font-size:8.2pt;color:#658075;line-height:1.35;margin:3mm 0}
 .pt-ribbon{font-size:9pt;color:#296549;background:#edf7f0;padding:3mm 4mm;border-radius:2mm;margin-top:3mm}
-@media print{html,body{width:297mm;background:#fff}.preview-toolbar,.preview-guide{display:none!important}.sheet{box-shadow:none;margin:0;padding:9mm 11mm 7mm;overflow:hidden;break-after:page;page-break-after:always}.sheet:last-child{break-after:auto;page-break-after:auto}}
+@media print{html,body{width:auto;min-width:0;background:#fff}.preview-toolbar,.preview-guide{display:none!important}.sheet{box-shadow:none;margin:0;padding:9mm 11mm 7mm;overflow:hidden;break-after:page;page-break-after:always}.sheet:last-child{break-after:auto;page-break-after:auto}}
 `;
  const sheetMarkup=pages.map((p,i)=>`<section class="sheet" data-report="${p.key}"><header class="sheet-head"><div><h1>${pt(p.name)}</h1><p>${pt(printMeta)}</p></div><div class="school">المدرسة<br>${pt(title)}</div></header><main class="sheet-body">${p.body}</main><footer class="sheet-foot"><span>مرصد غياب الطلاب · مؤشرات من بيانات السجل وليست نسب الغياب الرسمية</span><span class="page-count">صفحة ${fmt(i+1)} من ${fmt(pages.length)}</span></footer></section>`).join('');
- return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+pt(title)+'</title><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"><style>'+styles+'</style></head><body><div class="preview-toolbar"><div><strong>'+pt(title)+'</strong><p>'+fmt(pages.length)+' صفحة · A4 عرضي · للحفظ ملفًا واحدًا اختر PDF من الطابعة</p></div><button onclick="window.print()">⎙ طباعة / حفظ PDF</button></div><p class="preview-guide">معاينة الصفحات قبل الطباعة؛ الصفحات مقسمة مسبقًا وتحتفظ بترويسة وتذييل ورقم صفحة.</p>'+sheetMarkup+'</body></html>';
+ return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+pt(title)+'</title><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"><style>'+styles+'</style></head><body><div class="preview-toolbar"><div><strong>'+pt(title)+'</strong><p>'+fmt(pages.length)+' صفحة · A4 باتجاه القسم (طولي للأفراد والكشف اليومي) · للحفظ ملفًا واحدًا اختر PDF من الطابعة</p></div><button onclick="window.print()">⎙ طباعة / حفظ PDF</button></div><p class="preview-guide">معاينة الصفحات قبل الطباعة؛ الصفحات مقسمة مسبقًا وتحتفظ بترويسة وتذييل ورقم صفحة.</p>'+sheetMarkup+'</body></html>';
 }
 function makePrintBlob(){return new Blob([makePrintReport(printSelectedSections())],{type:'text/html;charset=utf-8'})}
 function previewPrintable(){
