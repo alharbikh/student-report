@@ -782,7 +782,148 @@ function activateApprovedSnapshot(){
  d('filterInfo').textContent='نسخة معتمدة من البيانات المحددة فقط · '+fmt(last.total)+' سجل';
 }
 
-updateClasses();wire();wireHolidays();wireFocusReports();render();activateApprovedSnapshot();installCompactChoiceControls();
+
+/* اعتماد تقرير محدد — نسخة مستقلة تحتوي فقط على سجلات المرشحات وأيام الدوام. */
+let pendingApprovedSnapshot=null;
+function periodReportSlug(approved){return 'period-'+approved.from+'_to_'+approved.to}
+function makeApprovedSnapshot(){
+ if(IS_APPROVED_REPORT)throw Error('هذه النسخة معتمدة بالفعل. أنشئ تقريرًا جديدًا من المرصد الأصلي.');
+ if(state.start>state.end)throw Error('تاريخ البداية يتجاوز النهاية.');
+ const c=calculate();
+ if(!c.allowed.length)throw Error('لا يوجد طلاب ضمن المرشحات الحالية.');
+ if(!c.activeDates.length)throw Error('الفترة المختارة لا تحتوي على أيام دوام فعلية بعد استبعاد الإجازات.');
+ const students=c.allowed.map(pi=>DB.students[pi].slice());
+ const index=new Map(c.allowed.map((pi,i)=>[pi,i]));
+ const dates=[...new Set(c.activeDates)].sort(),dateIndex=new Map(dates.map((iso,i)=>[iso,i]));
+ const events=c.filtered.map(([pi,di])=>[index.get(pi),dateIndex.get(DB.dates[di])]).filter(([pi,di])=>pi!==undefined&&di!==undefined).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const holidays=Object.fromEntries(holidayDates().filter(iso=>iso>=state.start&&iso<=state.end&&isWeekday(iso)).map(iso=>[iso,savedHolidays[iso]]));
+ const approved={
+  version:1,createdAt:new Date().toISOString(),from:state.start,to:state.end,
+  originalSource:DB.source||'',holidays,
+  filters:{grade:state.grade,cls:state.cls,threshold:state.threshold,skipAnomaly:state.skipAnomaly},
+  counts:{students:students.length,events:events.length,schoolDays:c.schoolDayCount,excludedHolidays:Object.keys(holidays).length,excludedHolidayEvents:c.manuallyExcludedEvents}
+ };
+ return {schema:'student-absence-report/v1',sourceFilename:DB.source||'',school:DB.school,sourceHeaderStart:state.start,students,dates,events,meta:{sourceRows:events.length,totalLines:0,validRows:events.length,uniqueStudents:students.length,dateMin:state.start,dateMax:state.end},issues:0,halfDays:0,quality:{},approved};
+}
+function snapshotMessage(message,isError){
+ const box=d('snapshotFeedback');box.textContent=message;box.classList.toggle('error',!!isError);
+}
+function showPeriodDialog(){
+ try{
+  pendingApprovedSnapshot=makeApprovedSnapshot();
+  const data=pendingApprovedSnapshot,meta=data.approved,counts=meta.counts;
+  d('approvedPeriodSummary').textContent='الفترة: '+meta.from+' — '+meta.to+' · '+fmt(counts.schoolDays)+' يوم دوام · '+fmt(counts.events)+' سجل غياب · '+fmt(counts.students)+' طالب في النطاق · '+fmt(counts.excludedHolidays)+' يوم إجازة مستبعد · '+fmt(counts.excludedHolidayEvents)+' سجل مستبعد بسبب الإجازات';
+  d('snapshotFileName').textContent=periodReportSlug(meta)+'.html';
+  d('snapshotPassword').value='';d('snapshotPasswordConfirm').value='';
+  snapshotMessage('',false);
+  const dlg=d('approvedPeriodDialog');dlg.classList.add('open');dlg.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  d('downloadPeriodJSON').focus();
+ }catch(e){alert(e.message||String(e))}
+}
+function closePeriodDialog(){
+ const dlg=d('approvedPeriodDialog');dlg.classList.remove('open');dlg.setAttribute('aria-hidden','true');
+ document.body.style.overflow='';d('snapshotPassword').value='';d('snapshotPasswordConfirm').value='';
+ pendingApprovedSnapshot=null;d('approvePeriodBtn').focus();
+}
+function saveSnapshotFile(data,filename,contentType){
+ const blob=data instanceof Blob?data:new Blob([data],{type:contentType});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+function snapshotJSON(){
+ if(!pendingApprovedSnapshot)return;
+ const info=pendingApprovedSnapshot.approved;
+ saveSnapshotFile(JSON.stringify(pendingApprovedSnapshot,null,2),periodReportSlug(info)+'.json','application/json;charset=utf-8');
+ snapshotMessage('تم تجهيز ملف JSON للفترة، مع استبعاد الإجازات والجمعة والسبت. يحتوي على بيانات طلاب حساسة؛ لا ترفعه إلى GitHub العام.',false);
+}
+async function snapshotStandaloneHtml(){
+ if(!pendingApprovedSnapshot)throw Error('لم تُعتمد فترة للتصدير.');
+ const parentUrl=window.parent.location.href;
+ const url=new URL('قالب_مرصد_غياب_الطلاب.html',parentUrl);
+ const response=await fetch(url.href,{cache:'no-store'});
+ if(!response.ok)throw Error('تعذّر الحصول على قالب التقرير المستقل ('+response.status+').');
+ let source=await response.text();
+ const report=pendingApprovedSnapshot;
+ const db={title:'تقرير غياب الطلاب · '+report.approved.from+' — '+report.approved.to,
+  school:report.school,source:report.sourceFilename,filenameStart:report.approved.from,filenameEnd:report.approved.to,
+  sourceHeaderStart:report.sourceHeaderStart,students:report.students,dates:report.dates,
+  events:report.events,meta:report.meta,approved:report.approved};
+ const encoded=JSON.stringify(db).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+ const marker=/const DB=\{[^;]*\};\s*const GRADE_NAMES=/;
+ if(!marker.test(source))throw Error('القالب الحالي غير متوافق مع اعتماد تقارير الفترة.');
+ source=source.replace(marker,()=> 'const DB='+encoded+';\nconst GRADE_NAMES=');
+ source=source.replace('<title>مرصد غياب الطلاب | المدرسة</title>','<title>تقرير الغياب '+report.approved.from+' — '+report.approved.to+'</title>');
+ source=source.replace('<small>المدرسة · لوحة تحليل تفاعلية</small>','<small>'+esc(report.school)+' · تقرير فترة معتمد</small>');
+ return source;
+}
+async function downloadStandalonePeriod(){
+ try{
+  d('downloadPeriodHTML').disabled=true;snapshotMessage('جارٍ تجهيز صفحة الفترة المستقلة...',false);
+  const html=await snapshotStandaloneHtml();
+  saveSnapshotFile(html,periodReportSlug(pendingApprovedSnapshot.approved)+'.html','text/html;charset=utf-8');
+  snapshotMessage('تم تنزيل HTML تفاعلي مستقل. يحتوي على أسماء الطلاب دون تشفير؛ احتفظ به محليًا ولا ترفعه إلى GitHub العام.',false);
+ }catch(e){snapshotMessage(e.message||String(e),true)}
+ finally{d('downloadPeriodHTML').disabled=false}
+}
+function periodBase64(bytes){
+ let result='';for(let i=0;i<bytes.length;i+=0x6000)result+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x6000));
+ return btoa(result);
+}
+async function encryptPeriodHTML(html,phrase){
+ const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),iterations=360000;
+ const rawKey=await crypto.subtle.importKey('raw',new TextEncoder().encode(phrase),'PBKDF2',false,['deriveKey']);
+ const derived=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},rawKey,{name:'AES-GCM',length:256},false,['encrypt']);
+ const encrypted=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},derived,new TextEncoder().encode(html)));
+ return {version:1,algorithm:'AES-256-GCM',iterations,salt:periodBase64(salt),iv:periodBase64(iv),ciphertext:periodBase64(encrypted),period:{from:pendingApprovedSnapshot.approved.from,to:pendingApprovedSnapshot.approved.to}};
+}
+function wrappedEncryptedPage(data){
+ const title='تقرير الغياب المعتمد · '+data.period.from+' — '+data.period.to;
+ const payload=JSON.stringify(data).replace(/</g,'\\u003c');
+ const html=[
+ '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+ '<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#115e50">',
+ '<title>'+esc(title)+'</title>',
+ '<style>*,*:before,*:after{box-sizing:border-box}body{font-family:Tahoma,Arial,sans-serif;background:#f2f8f5;color:#154d3d;margin:0}header{background:#105b49;color:white;padding:18px 22px;font-weight:bold}main{max-width:600px;margin:7vh auto;padding:25px;background:#fff;border:1px solid #d7e7dd;border-radius:16px;box-shadow:0 10px 45px #183a2920}h1{font-size:21px}p{line-height:2}label{display:block;font-weight:bold;margin:15px 0 7px}input{width:100%;min-height:45px;padding:10px;border:1px solid #cbded1;border-radius:9px;font-size:16px}button{background:#12614e;color:white;border:0;border-radius:9px;padding:11px 20px;margin-top:12px;font-size:14px;font-weight:bold;cursor:pointer}button:disabled{opacity:.55}#unlockError{color:#af3131;min-height:24px}#viewer[hidden],#login[hidden]{display:none!important}#viewer{height:100dvh}#viewer iframe{display:block;width:100%;height:100%;border:0}small{color:#5e8275}body.unlocked header{display:none}body.unlocked{background:white}</style>',
+ '</head><body><header>مرصد غياب الطلاب · نسخة فترة محمية</header>',
+ '<main id="login"><h1>'+esc(title)+'</h1>',
+ '<p>هذا تقرير تفاعلي معتمد للفترة ومشفر. أدخل عبارة المرور التي قدمها مُصدر التقرير لعرض البيانات داخل جهازك. لا تُرسل كلمة المرور إلى GitHub أو أي خادم.</p>',
+ '<form id="unlockForm"><label for="unlockPassword">عبارة المرور</label><input id="unlockPassword" type="password" autocomplete="off" required><button id="unlockButton" type="submit">فتح التقرير المحمي</button></form>',
+ '<p id="unlockError" role="alert"></p><small>إذا فقدت عبارة المرور، فلا يمكن استعادة بيانات التقرير من هذه النسخة.</small></main>',
+ '<section id="viewer" hidden><iframe id="reportFrame" title="التقرير الإحصائي المعتمد"></iframe></section>',
+ '<script>window.REPORT_ENCRYPTED='+payload+';</scr'+'ipt>',
+ '<script src="./unlock.js" defer></scr'+'ipt>',
+ '</body></html>'
+ ];
+ return html.join('\n');
+}
+async function downloadEncryptedPeriod(){
+ if(!pendingApprovedSnapshot)return;
+ const phrase=d('snapshotPassword').value,confirm=d('snapshotPasswordConfirm').value;
+ if(phrase.length<14){snapshotMessage('يجب أن تتكون عبارة المرور من 14 حرفًا على الأقل (ويُفضل عبارة عشوائية طويلة).',true);return}
+ if(phrase!==confirm){snapshotMessage('عبارتا المرور غير متطابقتين.',true);return}
+ if(!globalThis.crypto?.subtle){snapshotMessage('يتطلب تشفير التقرير فتح الموقع عبر HTTPS في متصفح حديث.',true);return}
+ try{
+  d('downloadEncryptedPeriod').disabled=true;snapshotMessage('جارٍ تجهيز وتشفير تقرير الفترة داخل جهازك...',false);
+  const html=await snapshotStandaloneHtml(),encrypted=await encryptPeriodHTML(html,phrase);
+  saveSnapshotFile(wrappedEncryptedPage(encrypted),periodReportSlug(pendingApprovedSnapshot.approved)+'.html','text/html;charset=utf-8');
+  d('snapshotPassword').value='';d('snapshotPasswordConfirm').value='';
+  snapshotMessage('تم تنزيل الصفحة المشفرة. ارفع هذا الملف المشفر فقط إلى reports/ في GitHub، ثم افتح رابط الفترة باستخدام عبارة المرور. لا ترفع نسخة HTML المحلية أو JSON.',false);
+ }catch(e){snapshotMessage(e.message||String(e),true)}
+ finally{d('downloadEncryptedPeriod').disabled=false}
+}
+function wireApprovedPeriod(){
+ if(IS_APPROVED_REPORT)return;
+ d('approvePeriodBtn').addEventListener('click',showPeriodDialog);
+ d('closeApprovedPeriod').addEventListener('click',closePeriodDialog);
+ d('cancelApprovedPeriod').addEventListener('click',closePeriodDialog);
+ d('approvedPeriodDialog').addEventListener('click',e=>{if(e.target===d('approvedPeriodDialog'))closePeriodDialog()});
+ d('downloadPeriodJSON').addEventListener('click',snapshotJSON);
+ d('downloadPeriodHTML').addEventListener('click',downloadStandalonePeriod);
+ d('downloadEncryptedPeriod').addEventListener('click',downloadEncryptedPeriod);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&d('approvedPeriodDialog').classList.contains('open'))closePeriodDialog()});
+}
+
+updateClasses();wire();wireHolidays();wireFocusReports();render();wireApprovedPeriod();activateApprovedSnapshot();installCompactChoiceControls();
 
 /* واجهة الخيارات المدمجة للجوال - تبقى عناصر select الأصلية مصدر الحالة */
 function installCompactChoiceControls(){
