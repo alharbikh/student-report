@@ -739,7 +739,7 @@ function makePrintReport(sectionKeys){
  if(sectionKeys.includes('daily')){
   const iso=dailyState.date,orderedDaily=dailyVisible.slice().sort(compareGradeClassName),rows=orderedDaily.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
   const dailyPageRows=25;
-  chunkRows(rows,dailyPageRows).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد — A4 طولي',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · الترتيب: الصف ← الفصل ← الاسم · إجمالي الغائبين: ${fmt(rows.length)} طالب · الصفحة ${fmt(i+1)} من ${fmt(all.length)}</div>${absenceLegend()}${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[5,31,13,22,11,18],orderedDaily.slice(i*dailyPageRows,(i+1)*dailyPageRows).map(r=>absenceLevel(r.days)))`));
+  chunkRows(rows,dailyPageRows).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد — A4 طولي',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · الترتيب: الصف ← الفصل ← الاسم · إجمالي الغائبين: ${fmt(rows.length)} طالب · الصفحة ${fmt(i+1)} من ${fmt(all.length)}</div>${absenceLegend()}${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[5,31,13,22,11,18],orderedDaily.slice(i*dailyPageRows,(i+1)*dailyPageRows).map(r=>absenceLevel(r.days)))}`));
  }
  if(sectionKeys.includes('repeat')){
   const days=repeatOpportunityDates,criterion=d('repeatCriteria').selectedOptions[0]?.textContent||'';
