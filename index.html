@@ -24,7 +24,7 @@ main{max-width:1120px;padding:27px 17px;margin:auto}.intro{text-align:center;mar
 #file{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 @media(max-width:650px){main{padding:13px 10px}.intro h1{font-size:21px}.intro p{font-size:12px}.upload{padding:23px 13px}.help{grid-template-columns:1fr;gap:9px}.help article{padding:11px 13px}.upload h2{font-size:16px}.data-tools{gap:5px;padding:7px 8px}.data-tools span{width:100%}#report{height:calc(100dvh - 137px)}}
 
-/* شريط معلومات الملف على الجوال: اسم المدرسة والملخص بأحجام مناسبة */
+/* شريط معلومات الملف على الجوال: سطران صغيران بدلاً من شريط مزدحم */
 .data-tools>div{min-width:0}
 @media(max-width:650px){
  .data-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px;padding:8px 10px;position:relative}
@@ -33,24 +33,61 @@ main{max-width:1120px;padding:27px 17px;margin:auto}.intro{text-align:center;mar
  .data-tools button{font-size:10px;padding:7px 9px;white-space:normal;max-width:105px;line-height:1.35}
  #report{height:calc(100dvh - 85px);min-height:420px}
 }
+
+/* معاينة الاستيراد: جدول موحد مع فحص جودة البيانات قبل اعتماد التحليل */
+#preview{display:none}.previewing #landing{display:none}.previewing #preview{display:block}.previewing #analysis{display:none}
+.review-page{max-width:1250px;margin:auto;padding:21px 17px 55px;display:grid;gap:15px}
+.review-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.review-head h1{font-size:22px;margin:0;color:var(--green)}.review-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.review-note{font-size:11px;color:#627e71;max-width:450px;overflow-wrap:anywhere}
+.review-panel{background:white;border:1px solid var(--border);border-radius:16px;padding:16px;min-width:0}
+.review-panel h2{font-size:15px;margin:0 0 11px;color:#175f4c}
+.review-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.review-metric{background:#f0f7f3;border-radius:10px;padding:12px;min-width:0}.review-metric strong{display:block;font-size:23px;line-height:1.5;color:#135543;font-variant-numeric:tabular-nums}.review-metric span{font-size:11px;color:#5c756b}
+.review-warnings{display:grid;gap:7px;margin-top:12px}.review-warning{background:#fff9eb;border:1px solid #f0dfb6;border-radius:9px;padding:9px 12px;font-size:12px;color:#7d5721;line-height:1.8}.review-warning.ok{background:#eaf7ef;color:#216947;border-color:#d7e9da}
+.review-table-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+.review-table-tools input,.review-table-tools select{border:1px solid #d4e4dc;padding:9px 11px;border-radius:9px;background:#fff;color:#164b3d;font-size:12px;min-height:39px}.review-table-tools input{flex:1 1 210px;min-width:130px}.review-table-tools select{flex:0 1 190px;max-width:100%}
+.review-table-scroll{max-height:min(54vh,610px);overflow:auto;border:1px solid var(--border);border-radius:10px;max-width:100%;overscroll-behavior:contain}
+.review-table{width:100%;border-collapse:collapse;min-width:810px;table-layout:auto;white-space:nowrap;font-size:11px}
+.review-table thead{position:sticky;top:0;z-index:2}.review-table th{text-align:right;background:#e9f4ed;color:#245847;padding:10px 9px;border-bottom:1px solid #cbded3}.review-table td{border-bottom:1px solid #e6eee9;padding:9px;line-height:1.55}
+.review-table tbody tr:nth-child(even){background:#fafcfb}.review-table tbody tr:hover{background:#f1f8f3}.review-table td.name{font-weight:700}
+.review-tag{display:inline-block;border-radius:7px;padding:2px 7px;background:#e6f3ed;color:#216448}.review-tag.warn{background:#fff0dd;color:#925f1d}.review-tag.rest{background:#f1f1f1;color:#656565}
+.review-pager{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;color:var(--muted);font-size:11px;margin-top:11px}
+.review-actions{display:flex;align-items:center;justify-content:space-between;gap:11px;flex-wrap:wrap;padding:13px 15px;background:white;border:1px solid var(--border);border-radius:14px}
+.review-actions>div{display:flex;flex-wrap:wrap;gap:8px}.review-actions p{font-size:11px;color:#6d7e74;max-width:500px;margin:0;line-height:1.8}
+.review-actions .btn{font-size:12px;padding:10px 14px}.review-actions .btn.primary{background:#12614e}.review-error{font-size:12px;color:#ab3730;min-height:0}
+@media(max-width:750px){.review-page{padding:12px 9px 30px;gap:10px}.review-head h1{font-size:18px}.review-panel{padding:11px}.review-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.review-metric{padding:9px}.review-metric strong{font-size:20px}.review-table-tools input{flex:1 1 100%}.review-table-tools select{flex:1 1 100%;min-width:0}.review-actions{padding:11px;gap:10px}.review-actions>div{width:100%;display:grid;grid-template-columns:1fr 1fr}.review-actions .btn.primary{grid-column:1/-1}.review-actions p{max-width:none}}
 </style>
 </head>
 <body>
 <header><div class="brand"><span class="brand-mark">▥</span><div><strong>مرصد غياب الطلاب</strong><small>استيراد وتحليل تفاعلي من Excel</small></div></div><button id="changeFileHeader" type="button">اختيار ملف Excel</button></header>
-<div id="landing"><main><div class="intro"><h1>مرصد الغياب المدرسي</h1><p>استورد كشف غياب الطلاب، ثم حلله مباشرة على جهازك</p></div>
-<div class="upload" id="dropzone"><span class="glyph" aria-hidden="true">▤</span><h2>اختر ملف الغياب بصيغة Excel</h2><p>يدعم ملفات XLSX المطابقة للكشف المعتمد، بالأعمدة C للتاريخ، G للفصل، L لاسم الطالب، O لرقمه.</p><button type="button" class="btn" id="pickFile">اختيار ملف XLSX</button><small>يمكن أيضًا سحب الملف وإفلاته هنا على الكمبيوتر. لا تُرفع البيانات إلى أي خادم.</small></div>
+<div id="landing"><main><div class="intro"><h1>مرصد الغياب المدرسي</h1><p>اختر ملف الغياب، راجع البيانات وجودتها، ثم اعتمدها للتحليل</p></div>
+<div class="upload" id="dropzone"><span class="glyph" aria-hidden="true">▤</span><h2>اختر ملف Excel أو نسخة JSON محفوظة</h2><p>يدعم ملفات XLSX المطابقة للكشف المعتمد، أو ملف JSON صادرًا عن هذا المرصد. Excel: التاريخ C، الفصل G، الاسم L، الرقم O.</p><button type="button" class="btn" id="pickFile">اختيار ملف XLSX / JSON</button><small>يمكن أيضًا سحب الملف وإفلاته هنا على الكمبيوتر. لا تُرفع البيانات إلى أي خادم.</small></div>
 <div class="status" id="status" role="status" aria-live="polite"></div>
 <div class="help"><article><b>▦ تحليلات شاملة</b><p>المؤشرات العامة، الصفوف والفصول، الطلاب، اليوم المحدد والتكرار الأسبوعي.</p></article><article><b>▤ تقويم الإجازات</b><p>استبعاد الجمعة والسبت، وتحديد الإجازات واحتساب النتائج من أيام الدوام فقط.</p></article><article><b>⎙ طباعة موحّدة</b><p>تقرير واحد بجميع الأقسام، أو القسم الحالي، مع إمكانية حفظه PDF.</p></article></div>
-<div class="privacy"><strong>حماية البيانات:</strong> تُقرأ الملفات محليًا في المتصفح ولا تُرسل إلى GitHub أو إلى أي خدمة تحليل. لا تُحفظ أسماء الطلاب في الموقع أو مستودعه، وتزول بيانات الجلسة عند تحديث الصفحة. تُحفظ إعدادات الإجازات فقط في مساحة المتصفح المحلية، ويمكن تصديرها واستيرادها.</div>
+<div class="privacy"><strong>حماية البيانات:</strong> تُقرأ الملفات محليًا في المتصفح ولا تُرسل إلى GitHub أو إلى أي خدمة تحليل. لا تُحفظ أسماء الطلاب في الموقع أو مستودعه، وتزول بيانات الجلسة عند تحديث الصفحة. ملف JSON الذي تحفظه يحتوي على البيانات الشخصية ويجب الاحتفاظ به في مكان آمن. تُحفظ إعدادات الإجازات فقط في مساحة المتصفح المحلية، ويمكن تصديرها واستيرادها.</div>
 </main></div>
-<div id="analysis"><div class="data-tools"><div><strong id="schoolLabel">المدرسة</strong> <span id="importSummary"></span></div><button type="button" id="changeFile">تبديل ملف Excel</button></div><iframe id="report" title="لوحة مرصد غياب الطلاب" referrerpolicy="no-referrer"></iframe></div>
-<input type="file" id="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-label="اختيار كشف غياب بصيغة Excel">
+
+<section id="preview" aria-label="معاينة البيانات قبل التحليل">
+  <div class="review-page">
+    <div class="review-head"><div><h1>مراجعة بيانات الغياب قبل التحليل</h1><p id="reviewSchool">المدرسة</p></div><span class="review-note" id="reviewSource"></span></div>
+    <div class="review-panel"><h2>بطاقة جودة بيانات المصدر</h2><div class="review-metrics" id="reviewMetrics"></div><div class="review-warnings" id="reviewWarnings"></div></div>
+    <div class="review-panel"><h2>معاينة سجل الغياب — جدول موحد</h2>
+      <div class="review-table-tools"><input id="reviewSearch" type="search" autocomplete="off" placeholder="بحث بالاسم أو الرقم أو الفصل أو التاريخ" aria-label="البحث في سجلات المعاينة"><select id="reviewGrade" aria-label="تصفية المعاينة بحسب الصف"><option value="all">جميع الصفوف</option><option value="1">الأول الثانوي</option><option value="2">الثاني الثانوي</option><option value="3">الثالث الثانوي</option></select><select id="reviewStatus" aria-label="تصفية حسب حالة يوم الغياب"><option value="all">جميع السجلات</option><option value="school">أيام الدوام فقط</option><option value="weekend">الجمعة والسبت (للمراجعة)</option><option value="high">أيام غياب مرتفع</option></select></div>
+      <div class="review-table-scroll" tabindex="0" aria-label="جدول السجلات، قابل للتمرير أفقيًا"><table class="review-table"><thead><tr><th>م</th><th>التاريخ</th><th>اليوم</th><th>رقم الطالب</th><th>اسم الطالب</th><th>الصف</th><th>الفصل</th><th>الحالة</th></tr></thead><tbody id="reviewRows"></tbody></table></div>
+      <div class="review-pager"><span id="reviewCount"></span><div><button type="button" class="btn secondary" id="reviewPrev">السابق</button> <span id="reviewPageLabel"></span> <button type="button" class="btn secondary" id="reviewNext">التالي</button></div></div>
+    </div>
+    <div class="review-actions"><p>التحليل لا يبدأ إلا بعد اعتماد البيانات. تحفظ نسخة JSON الأسماء وسجلات الغياب؛ لا تشاركها إلا مع المخولين.</p><div><button type="button" class="btn secondary" id="reviewCancel">اختيار ملف آخر</button><button type="button" class="btn secondary" id="saveJson">حفظ البيانات JSON</button><button type="button" class="btn primary" id="confirmAnalysis">اعتماد البيانات وبدء التحليل</button></div><div class="review-error" id="reviewError" role="alert"></div></div>
+  </div>
+</section>
+<div id="analysis"><div class="data-tools"><div><strong id="schoolLabel">المدرسة</strong> <span id="importSummary"></span></div><button type="button" id="changeFile">تبديل ملف</button></div><iframe id="report" title="لوحة مرصد غياب الطلاب" referrerpolicy="no-referrer"></iframe></div>
+<input type="file" id="file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-label="اختيار كشف غياب بصيغة Excel">
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 const htmlEscape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=new TextDecoder('utf-8');
-let reportURL=null,working=false;
+let reportURL=null,working=false,pendingData=null,pendingFileName="",reviewList=[],reviewPage=1,reviewRows=[];
 const NS='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
 function first(el,local){return el.getElementsByTagNameNS(NS,local)[0]||el.getElementsByTagName(local)[0]}
 function els(el,local){const x=el.getElementsByTagNameNS(NS,local);return x.length?x:el.getElementsByTagName(local)}
@@ -65,9 +102,93 @@ async function readZip(ab){const view=new DataView(ab),bytes=new Uint8Array(ab);
  return {get,names:[...entries.keys()]}}
 function readCell(cell,shared){const typ=cell.getAttribute('t');if(typ==='inlineStr')return Array.from(els(cell,'t'),t=>t.textContent||'').join('').trim();const node=first(cell,'v');if(!node)return '';let val=(node.textContent||'').trim();return typ==='s'?(shared[Number(val)]??''):val}
 async function parseBook(file){if(!/\.xlsx$/i.test(file.name))throw Error('اختر ملف Excel بصيغة XLSX');if(file.size>30*1024*1024)throw Error('حجم الملف يتجاوز 30 ميغابايت');const zip=await readZip(await file.arrayBuffer());const names=zip.names.filter(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n)).sort((a,b)=>Number(a.match(/sheet(\d+)/)[1])-Number(b.match(/sheet(\d+)/)[1]));if(!names.length)throw Error('لم يتم العثور على ورقة عمل XLSX');const sb=await zip.get('xl/sharedStrings.xml');let shared=[];if(sb){const doc=xml(sb);shared=Array.from(els(doc,'si'),si=>Array.from(els(si,'t'),t=>t.textContent||'').join(''))}
- const sheetBytes=await zip.get(names[0]);if(!sheetBytes||sheetBytes.byteLength>70*1024*1024)throw Error('ورقة العمل كبيرة جدًا أو غير صالحة');const sheet=xml(sheetBytes),studentIndex=new Map(),seen=new Set(),students=[],datesSet=new Set(),rawEvents=[];let school='',headerStart='',sourceRows=0,totalLines=0,invalid=0,halfDays=0;const rows=els(sheet,'row');for(const row of rows){const rn=Number(row.getAttribute('r')||0);if(rn<2)continue;const cells={};for(const cell of els(row,'c')){const ref=cell.getAttribute('r')||'',col=ref.match(/^[A-Z]+/);if(col)cells[col[0]]=readCell(cell,shared)}if(rn===2)school=(cells.H||'').trim();if(rn===9)headerStart=isoDate(cells.M)||'';if(rn<12)continue;if(!['C','G','L','O'].some(k=>cells[k]))continue;sourceRows++;const rawDate=cells.C||'',iso=isoDate(rawDate);if(!iso){if(/اجمالي|المجموع/.test(rawDate.replace(/[إأآ]/g,'ا')))totalLines++;else invalid++;continue}const id=(cells.O||'').trim(),name=(cells.L||'').trim(),cls=(cells.G||'').trim();if(!id||!name||!cls){invalid++;continue}const key=id+'\u0000'+iso;if(seen.has(key)){invalid++;continue}seen.add(key);const grade=gradeOf(cls,cells.J||'');if(!grade){invalid++;continue}if(!studentIndex.has(id)){studentIndex.set(id,students.length);students.push([id,name,cls,grade])}else{const existing=students[studentIndex.get(id)];if(existing[1]!==name||existing[2]!==cls||existing[3]!==grade)invalid++}if(Number(cells.A)===.5)halfDays++;rawEvents.push([studentIndex.get(id),iso]);datesSet.add(iso)}if(!rawEvents.length)throw Error('لم تُعثر على سجلات صالحة. تحقق من الأعمدة C وG وL وO');const dates=Array.from(datesSet).sort(),dateIndex=new Map(dates.map((iso,i)=>[iso,i]));const events=rawEvents.map(([pi,iso])=>[pi,dateIndex.get(iso)]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);return {school:school||'المدرسة',sourceHeaderStart:headerStart||dates[0],students,dates,events,meta:{sourceRows,totalLines,validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]},issues:invalid,halfDays}}
-async function buildReport(data,filename){const res=await fetch('./قالب_مرصد_غياب_الطلاب.html',{cache:'no-cache'});if(!res.ok)throw Error('تعذّر تحميل قالب المرصد من GitHub Pages ('+res.status+')');let tpl=await res.text();tpl=tpl.replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/,tag=>tag.replace('rel="stylesheet"', "rel=\"stylesheet\" media=\"print\" onload=\"this.media='all'\""));const db={title:'مرصد غياب الطلاب — '+data.school,school:data.school,source:filename,filenameStart:data.meta.dateMin,filenameEnd:data.meta.dateMax,sourceHeaderStart:data.sourceHeaderStart,students:data.students,dates:data.dates,events:data.events,meta:data.meta};const encoded=JSON.stringify(db).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');const marker=/const DB=\{[^;]*\};\s*const GRADE_NAMES=/;if(!marker.test(tpl))throw Error('نسخة القالب غير متوافقة مع أداة الاستيراد');tpl=tpl.replace(marker,()=>`const DB=${encoded};\nconst GRADE_NAMES=`);tpl=tpl.replace('<title>مرصد غياب الطلاب | المدرسة</title>','<title>مرصد غياب الطلاب | '+htmlEscape(data.school)+'</title>');tpl=tpl.replace('<small>المدرسة · لوحة تحليل تفاعلية</small>','<small>'+htmlEscape(data.school)+' · لوحة تحليل تفاعلية</small>');return new Blob([tpl],{type:'text/html;charset=utf-8'})}
-async function loadFile(file){if(!file||working)return;working=true;$('pickFile').disabled=true;$('status').classList.remove('error');$('status').textContent='جارٍ قراءة البيانات وتحليل سجلات الغياب محليًا…';try{const data=await parseBook(file);$('status').textContent='جارٍ تجهيز اللوحة…';const blob=await buildReport(data,file.name),url=URL.createObjectURL(blob);$('report').onload=()=>{if(reportURL)URL.revokeObjectURL(reportURL);reportURL=url};$('report').src=url;$('schoolLabel').textContent=data.school;$('importSummary').textContent=` · ${data.students.length.toLocaleString('en-US')} طالب · ${data.events.length.toLocaleString('en-US')} سجل · ${data.dates.length} تاريخ${data.issues?' · '+data.issues+' ملاحظة مصدر':''}`;document.body.classList.add('loaded');document.title='مرصد غياب الطلاب | '+data.school;window.scrollTo(0,0)}catch(e){$('status').classList.add('error');$('status').textContent='تعذّر تحليل الملف: '+(e.message||String(e));console.error('XLSX import failed:',e)}finally{working=false;$('pickFile').disabled=false;$('file').value=''}}
+ const sheetBytes=await zip.get(names[0]);if(!sheetBytes||sheetBytes.byteLength>70*1024*1024)throw Error('ورقة العمل كبيرة جدًا أو غير صالحة');const sheet=xml(sheetBytes),studentIndex=new Map(),seen=new Set(),students=[],datesSet=new Set(),rawEvents=[];let school='',headerStart='',sourceRows=0,totalLines=0,invalid=0,halfDays=0,invalidDate=0,missingFields=0,duplicateRows=0,unknownGrade=0,conflicts=0;const rows=els(sheet,'row');for(const row of rows){const rn=Number(row.getAttribute('r')||0);if(rn<2)continue;const cells={};for(const cell of els(row,'c')){const ref=cell.getAttribute('r')||'',col=ref.match(/^[A-Z]+/);if(col)cells[col[0]]=readCell(cell,shared)}if(rn===2)school=(cells.H||'').trim();if(rn===9)headerStart=isoDate(cells.M)||'';if(rn<12)continue;if(!['C','G','L','O'].some(k=>cells[k]))continue;sourceRows++;const rawDate=cells.C||'',iso=isoDate(rawDate);if(!iso){if(/اجمالي|المجموع/.test(rawDate.replace(/[إأآ]/g,'ا')))totalLines++;else {invalid++;invalidDate++}continue}const id=(cells.O||'').trim(),name=(cells.L||'').trim(),cls=(cells.G||'').trim();if(!id||!name||!cls){invalid++;missingFields++;continue}const key=id+'\u0000'+iso;if(seen.has(key)){invalid++;duplicateRows++;continue}seen.add(key);const grade=gradeOf(cls,cells.J||'');if(!grade){invalid++;unknownGrade++;continue}if(!studentIndex.has(id)){studentIndex.set(id,students.length);students.push([id,name,cls,grade])}else{const existing=students[studentIndex.get(id)];if(existing[1]!==name||existing[2]!==cls||existing[3]!==grade){invalid++;conflicts++}}if(Number(cells.A)===.5)halfDays++;rawEvents.push([studentIndex.get(id),iso]);datesSet.add(iso)}if(!rawEvents.length)throw Error('لم تُعثر على سجلات صالحة. تحقق من الأعمدة C وG وL وO');const dates=Array.from(datesSet).sort(),dateIndex=new Map(dates.map((iso,i)=>[iso,i]));const events=rawEvents.map(([pi,iso])=>[pi,dateIndex.get(iso)]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);return {school:school||'المدرسة',sourceHeaderStart:headerStart||dates[0],students,dates,events,meta:{sourceRows,totalLines,validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]},issues:invalid,halfDays,quality:{invalidDate,missingFields,duplicateRows,unknownGrade,conflicts}}}
+
+const WEEKDAY_NAMES=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const GRADE_NAMES_LOCAL=['','الأول الثانوي','الثاني الثانوي','الثالث الثانوي'];
+const fmt=n=>Number(n||0).toLocaleString('en-US');
+const isSchoolDay=iso=>{const d=new Date(iso+'T12:00:00Z').getUTCDay();return d!==5&&d!==6};
+function previewQuality(data){
+ const dayCounts=new Map(),weekends=new Set();let weekendRecords=0;
+ for(const [pi,di] of data.events){const date=data.dates[di];dayCounts.set(date,(dayCounts.get(date)||0)+1);if(!isSchoolDay(date)){weekendRecords++;weekends.add(date)}}
+ const highDates=new Set([...dayCounts].filter(([date,n])=>isSchoolDay(date)&&data.students.length&&n>=.8*data.students.length).map(([date])=>date));
+ return {dayCounts,weekendRecords,weekendDays:weekends.size,highDates,issues:Math.max(0,Number(data.issues)||0),details:data.quality||{}};
+}
+function previewStat(label,value){return '<div class="review-metric"><strong>'+fmt(value)+'</strong><span>'+htmlEscape(label)+'</span></div>'}
+function showPreview(data,filename){
+ pendingData=data;pendingFileName=filename;reviewPage=1;
+ $('reviewSchool').textContent=data.school;
+ $('reviewSource').textContent='المصدر: '+filename+' · من '+data.meta.dateMin+' إلى '+data.meta.dateMax;
+ const q=previewQuality(data),details=q.details;
+ $('reviewMetrics').innerHTML=previewStat('سجل غياب صالح',data.events.length)+previewStat('طالب في السجل',data.students.length)+previewStat('تاريخ مختلف',data.dates.length)+previewStat('صف إجمالي تم تجاهله',data.meta.totalLines||0)+previewStat('سجل عطلة أسبوعية',q.weekendRecords)+previewStat('صف بحاجة للمراجعة',q.issues)+previewStat('أيام غياب مرتفع',q.highDates.size)+previewStat('صفوف البيانات المقروءة',data.meta.sourceRows||data.events.length);
+ const warnings=[];
+ if(q.weekendRecords)warnings.push('هناك '+fmt(q.weekendRecords)+' سجلًا في الجمعة والسبت موزعة على '+fmt(q.weekendDays)+' يوم؛ تظهر هنا للمراجعة، لكنها مستبعدة تلقائيًا من إحصاءات الدوام.');
+ if(q.highDates.size)warnings.push('أيام ذات غياب مرتفع غير معتاد: '+[...q.highDates].sort().slice(0,8).map(x=>x+' ('+fmt(q.dayCounts.get(x))+')').join('، ')+'. افحص هذه التواريخ قبل اعتماد النتائج.');
+ if(q.issues)warnings.push('سجلات أو تعارضات بحاجة للمراجعة: '+fmt(q.issues)+'؛ تاريخ غير صالح '+fmt(details.invalidDate)+ '، حقول ناقصة '+fmt(details.missingFields)+'، مكرر '+fmt(details.duplicateRows)+'، صف غير معروف '+fmt(details.unknownGrade)+'، تعارض بيانات طالب '+fmt(details.conflicts)+'.');
+ if(data.halfDays)warnings.push('يوجد '+fmt(data.halfDays)+' سجلًا يحمل قيمة نصف يوم في المصدر؛ يحتسب المحرك كل سجل يوم غياب واحدًا وفق البنية الحالية.');
+ if(!warnings.length)warnings.push('لم تُكتشف ملاحظات آلية في هذا الملف. يُنصح بمراجعة عينة من السجلات قبل بدء التحليل.');
+ $('reviewWarnings').innerHTML=warnings.map((msg,i)=>'<div class="review-warning'+(!q.issues&&!q.weekendRecords&&!q.highDates.size&&!data.halfDays?' ok':'')+'">'+htmlEscape(msg)+'</div>').join('');
+ $('reviewSearch').value='';$('reviewGrade').value='all';$('reviewStatus').value='all';$('reviewError').textContent='';
+ reviewList=data.events.map(([pi,di])=>{const student=data.students[pi],iso=data.dates[di];const wd=new Date(iso+'T12:00:00Z').getUTCDay();return {pi,di,student,iso,wd,weekend:wd===5||wd===6,high:q.highDates.has(iso)}}).sort((a,b)=>b.iso.localeCompare(a.iso)||String(a.student[1]).localeCompare(String(b.student[1]),'ar'));
+ document.body.classList.remove('loaded');document.body.classList.add('previewing');renderPreviewRows();window.scrollTo(0,0);
+}
+function renderPreviewRows(){
+ if(!pendingData)return;
+ const text=$('reviewSearch').value.trim().toLowerCase(),grade=$('reviewGrade').value,status=$('reviewStatus').value;
+ reviewRows=reviewList.filter(r=>(grade==='all'||String(r.student[3])===grade)&&(status==='all'||(status==='school'&&!r.weekend)||(status==='weekend'&&r.weekend)||(status==='high'&&r.high))&&(!text||[r.iso,r.student[0],r.student[1],r.student[2],GRADE_NAMES_LOCAL[r.student[3]]].some(v=>String(v||'').toLowerCase().includes(text))));
+ const size=60,maxPage=Math.max(1,Math.ceil(reviewRows.length/size));reviewPage=Math.min(Math.max(1,reviewPage),maxPage);
+ $('reviewRows').innerHTML=reviewRows.slice((reviewPage-1)*size,reviewPage*size).map((r,i)=>{
+  const state=r.weekend?'<span class="review-tag rest">عطلة أسبوعية · مستبعد</span>':r.high?'<span class="review-tag warn">غياب مرتفع · للمراجعة</span>':'<span class="review-tag">يوم دوام</span>';
+  return '<tr><td>'+fmt((reviewPage-1)*size+i+1)+'</td><td>'+htmlEscape(r.iso)+'</td><td>'+WEEKDAY_NAMES[r.wd]+'</td><td>'+htmlEscape(r.student[0])+'</td><td class="name">'+htmlEscape(r.student[1])+'</td><td>'+htmlEscape(GRADE_NAMES_LOCAL[r.student[3]]||'غير معروف')+'</td><td>'+htmlEscape(r.student[2])+'</td><td>'+state+'</td></tr>';
+ }).join('')||'<tr><td colspan="8">لا توجد سجلات مطابقة للبحث</td></tr>';
+ $('reviewCount').textContent='عرض '+fmt(reviewRows.length)+' من '+fmt(reviewList.length)+' سجل';$('reviewPageLabel').textContent=fmt(reviewPage)+' / '+fmt(maxPage);
+ $('reviewPrev').disabled=reviewPage<=1;$('reviewNext').disabled=reviewPage>=maxPage;
+}
+function exportReviewJSON(){
+ if(!pendingData)return;
+ const data=pendingData;
+ const payload={schema:'student-absence-report/v1',exportedAt:new Date().toISOString(),sourceFilename:pendingFileName,school:data.school,sourceHeaderStart:data.sourceHeaderStart,students:data.students,dates:data.dates,events:data.events,meta:data.meta,issues:data.issues||0,halfDays:data.halfDays||0,quality:data.quality||{}};
+ const blob=new Blob([JSON.stringify(payload)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='مرصد_غياب_الطلاب_'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ $('reviewError').textContent='تم تجهيز ملف JSON للتنزيل. يحتوي على أسماء الطلاب؛ احتفظ به في مكان آمن.';
+}
+async function parseJsonBook(file){
+ if(file.size>40*1024*1024)throw Error('حجم JSON يتجاوز الحد المسموح (40 ميغابايت)');
+ let raw;try{raw=JSON.parse(await file.text())}catch(e){throw Error('ملف JSON غير صالح')}
+ if(!raw||raw.schema!=='student-absence-report/v1'||!Array.isArray(raw.students)||!Array.isArray(raw.dates)||!Array.isArray(raw.events))throw Error('الملف ليس نسخة JSON محفوظة من المرصد');
+ if(!raw.students.length||!raw.events.length||raw.students.length>250000||raw.events.length>2000000)throw Error('أعداد السجلات غير صالحة');
+ if(!raw.dates.length||raw.dates.length>10000||raw.dates.some(v=>typeof v!=='string'||!isoDate(v)))throw Error('تواريخ JSON غير صالحة');
+ if(raw.students.some(s=>!Array.isArray(s)||s.length<4||typeof s[0]!=='string'||typeof s[1]!=='string'||typeof s[2]!=='string'||![1,2,3].includes(s[3])))throw Error('بيانات الطلاب في JSON غير صالحة');
+ if(raw.events.some(e=>!Array.isArray(e)||e.length!==2||!Number.isInteger(e[0])||!Number.isInteger(e[1])||e[0]<0||e[0]>=raw.students.length||e[1]<0||e[1]>=raw.dates.length))throw Error('فهرس سجلات JSON غير صالح');
+ const dateMin=raw.dates.slice().sort()[0],dateMax=raw.dates.slice().sort().at(-1);
+ return {school:String(raw.school||'المدرسة').slice(0,200),sourceHeaderStart:String(raw.sourceHeaderStart||dateMin),students:raw.students,dates:raw.dates,events:raw.events,meta:{sourceRows:raw.meta?.sourceRows||raw.events.length,totalLines:raw.meta?.totalLines||0,validRows:raw.events.length,uniqueStudents:raw.students.length,dateMin,dateMax},issues:Number(raw.issues)||0,halfDays:Number(raw.halfDays)||0,quality:raw.quality||{}};
+}
+async function buildReport(data,filename){const res=await fetch('./قالب_مرصد_غياب_الطلاب.html',{cache:'no-cache'});if(!res.ok)throw Error('تعذّر تحميل قالب المرصد من GitHub Pages ('+res.status+')');let tpl=await res.text();
+// Avoid blocking the analytic engine while Cairo font CSS is loading on weak networks.
+tpl=tpl.replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/,tag=>tag.replace('rel="stylesheet"',`rel="stylesheet" media="print" onload="this.media='all'"`));
+const db={title:'مرصد غياب الطلاب — '+data.school,school:data.school,source:filename,filenameStart:data.meta.dateMin,filenameEnd:data.meta.dateMax,sourceHeaderStart:data.sourceHeaderStart,students:data.students,dates:data.dates,events:data.events,meta:data.meta};const encoded=JSON.stringify(db).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');const marker=/const DB=\{[^;]*\};\s*const GRADE_NAMES=/;if(!marker.test(tpl))throw Error('نسخة القالب غير متوافقة مع أداة الاستيراد');tpl=tpl.replace(marker,()=>`const DB=${encoded};\nconst GRADE_NAMES=`);tpl=tpl.replace('<title>مرصد غياب الطلاب | المدرسة</title>','<title>مرصد غياب الطلاب | '+htmlEscape(data.school)+'</title>');tpl=tpl.replace('<small>المدرسة · لوحة تحليل تفاعلية</small>','<small>'+htmlEscape(data.school)+' · لوحة تحليل تفاعلية</small>');return new Blob([tpl],{type:'text/html;charset=utf-8'})}
+async function loadFile(file){
+ if(!file||working)return;const wasLoaded=document.body.classList.contains('loaded');working=true;$('pickFile').disabled=true;$('status').classList.remove('error');$('status').textContent='جارٍ قراءة بيانات الملف وتحضير المعاينة محليًا…';
+ try{const data=/\.json$/i.test(file.name)?await parseJsonBook(file):await parseBook(file);showPreview(data,file.name);}
+ catch(e){const message='تعذّر قراءة الملف: '+(e.message||String(e));$('status').classList.add('error');$('status').textContent=message;console.error('Import failed:',e);if(wasLoaded||document.body.classList.contains('previewing')){alert(message)}}
+ finally{working=false;$('pickFile').disabled=false;$('file').value=''}
+}
+async function confirmPreview(){
+ if(!pendingData||working)return;working=true;$('confirmAnalysis').disabled=true;$('reviewError').textContent='جارٍ تجهيز محرك التحليل…';
+ try{const data=pendingData;const blob=await buildReport(data,pendingFileName),url=URL.createObjectURL(blob);
+ $('report').onload=()=>{if(reportURL)URL.revokeObjectURL(reportURL);reportURL=url};$('report').src=url;
+ $('schoolLabel').textContent=data.school;$('importSummary').textContent=' · '+fmt(data.students.length)+' طالب · '+fmt(data.events.length)+' سجل · '+fmt(data.dates.length)+' تاريخ'+(data.issues?' · '+fmt(data.issues)+' ملاحظة مصدر':'');
+ document.body.classList.remove('previewing');document.body.classList.add('loaded');document.title='مرصد غياب الطلاب | '+data.school;window.scrollTo(0,0);pendingData=null;reviewList=[];reviewRows=[];
+ }catch(e){$('reviewError').textContent='تعذّر فتح التحليل: '+(e.message||String(e));console.error(e)}
+ finally{working=false;$('confirmAnalysis').disabled=false}
+}
+function cancelPreview(){pendingData=null;pendingFileName='';reviewList=[];reviewRows=[];document.body.classList.remove('previewing');document.body.classList.toggle('loaded',Boolean(reportURL));window.scrollTo(0,0)}
+$('reviewSearch').addEventListener('input',()=>{reviewPage=1;renderPreviewRows()});
+$('reviewGrade').addEventListener('change',()=>{reviewPage=1;renderPreviewRows()});
+$('reviewStatus').addEventListener('change',()=>{reviewPage=1;renderPreviewRows()});
+$('reviewPrev').addEventListener('click',()=>{reviewPage--;renderPreviewRows()});$('reviewNext').addEventListener('click',()=>{reviewPage++;renderPreviewRows()});
+$('saveJson').addEventListener('click',exportReviewJSON);$('reviewCancel').addEventListener('click',()=>$('file').click());
+$('confirmAnalysis').addEventListener('click',confirmPreview);
 $('pickFile').addEventListener('click',()=>$('file').click());$('changeFile').addEventListener('click',()=>$('file').click());$('changeFileHeader').addEventListener('click',()=>$('file').click());$('file').addEventListener('change',e=>loadFile(e.target.files[0]));const zone=$('dropzone');zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag');loadFile(e.dataTransfer.files[0])});
 </script>
 </body></html>
