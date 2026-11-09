@@ -1,0 +1,25 @@
+# Confidential school data — never commit student data or generated reports
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.tsv
+*.pdf
+*.zip
+*.json
+
+# Generated HTML may contain student names/IDs/absence records
+*.html
+!قالب_مرصد_غياب_الطلاب.html
+
+# Output folders and Python artifacts
+output/
+outputs/
+data/
+reports/
+exports/
+uploads/
+private/
+__pycache__/
+*.py[cod]
+.venv/
