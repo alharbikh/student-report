@@ -315,7 +315,7 @@ html.approved-report .calendar-card .week-day{cursor:default}
     <label>تأكيد عبارة المرور<input id="snapshotPasswordConfirm" type="password" minlength="14" autocomplete="new-password" placeholder="أعد إدخال عبارة المرور"></label>
    </div>
    <button class="btn primary" type="button" id="downloadEncryptedPeriod">🔒 تنزيل صفحة مشفرة للنشر</button>
-   <div class="snapshot-path">اسم الصفحة: <code id="snapshotFileName"></code></div>
+   <div class="snapshot-path">اسم الصفحة: <code id="snapshotFileName"></code></div><div class="snapshot-path">الرابط المتوقع بعد الرفع: <code id="snapshotPublishedUrl"></code></div>
    <p>بعد تنزيل الملف المشفر، ارفعه يدويًا إلى مجلد <code>reports/</code> في GitHub. سيصبح رابط الفترة متاحًا بعد نجاح GitHub Actions، ولن يُفتح المحتوى دون عبارة المرور.</p>
    <a href="https://github.com/alharbikh/student-report/upload/main/reports" target="_blank" rel="noopener noreferrer">فتح مجلد رفع التقارير المشفرة إلى GitHub</a>
   </div>
@@ -816,6 +816,7 @@ function showPeriodDialog(){
   const data=pendingApprovedSnapshot,meta=data.approved,counts=meta.counts;
   d('approvedPeriodSummary').textContent='الفترة: '+meta.from+' — '+meta.to+' · '+fmt(counts.schoolDays)+' يوم دوام · '+fmt(counts.events)+' سجل غياب · '+fmt(counts.students)+' طالب في النطاق · '+fmt(counts.excludedHolidays)+' يوم إجازة مستبعد · '+fmt(counts.excludedHolidayEvents)+' سجل مستبعد بسبب الإجازات';
   d('snapshotFileName').textContent=periodReportSlug(meta)+'.html';
+  d('snapshotPublishedUrl').textContent=new URL('reports/'+periodReportSlug(meta)+'.html',window.parent.location.href).href;
   d('snapshotPassword').value='';d('snapshotPasswordConfirm').value='';
   snapshotMessage('',false);
   const dlg=d('approvedPeriodDialog');dlg.classList.add('open');dlg.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
