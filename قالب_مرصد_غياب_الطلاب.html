@@ -343,6 +343,7 @@ html.approved-report .calendar-card .week-day{cursor:default}
 'use strict';
 const DB={"title":"مرصد غياب الطلاب","school":"المدرسة","source":"","filenameStart":"2026-01-01","filenameEnd":"2026-01-01","sourceHeaderStart":"","students":[],"dates":[],"events":[],"meta":{"sourceRows":0,"totalLines":0,"validRows":0,"uniqueStudents":0,"dateMin":"","dateMax":""}};
 const GRADE_NAMES={1:'الأول الثانوي',2:'الثاني الثانوي',3:'الثالث الثانوي'};
+const IS_APPROVED_REPORT=Boolean(DB.approved&&DB.approved.version===1);
 const WEEKDAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 const d=(id)=>document.getElementById(id);
 const fmt=(n,digits=0)=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits});
@@ -380,9 +381,9 @@ function refreshPeriodOptions(){
 }
 function refreshWeekOptions(){const el=d('holidayWeekDate'),current=el.value||sunday(DB.filenameStart),weeks=[];for(let iso=sunday(DB.meta.dateMin);iso<=DB.meta.dateMax;iso=dayOffset(iso,7))weeks.push(iso);el.innerHTML=weeks.map(w=>`<option value="${w}">${esc(readable(w,{year:'numeric'}))} – ${esc(readable(dayOffset(w,4),{year:'numeric'}))}</option>`).join('');el.value=weeks.includes(current)?current:weeks.includes(sunday(DB.filenameStart))?sunday(DB.filenameStart):weeks[0]}
 function validateHolidays(data){const safe={};if(data&&typeof data==='object'&&!Array.isArray(data))for(const [iso,reason] of Object.entries(data)){if(validDate(iso)&&typeof reason==='string'&&reason.trim())safe[iso]=reason.trim().slice(0,120)}return safe}
-function loadHolidayStore(){try{const value=localStorage.getItem(HOLIDAY_STORAGE_KEY);return value?validateHolidays(JSON.parse(value)):{};}catch(e){holidayStorageOk=false;return {}}}
+function loadHolidayStore(){if(IS_APPROVED_REPORT)return validateHolidays(DB.approved.holidays||{});try{const value=localStorage.getItem(HOLIDAY_STORAGE_KEY);return value?validateHolidays(JSON.parse(value)):{};}catch(e){holidayStorageOk=false;return {}}}
 let savedHolidays=loadHolidayStore();
-function persistHolidays(){try{localStorage.setItem(HOLIDAY_STORAGE_KEY,JSON.stringify(savedHolidays));holidayStorageOk=true}catch(e){holidayStorageOk=false}}
+function persistHolidays(){if(IS_APPROVED_REPORT)return;try{localStorage.setItem(HOLIDAY_STORAGE_KEY,JSON.stringify(savedHolidays));holidayStorageOk=true}catch(e){holidayStorageOk=false}}
 const holidayDates=()=>Object.keys(savedHolidays).sort();
 function holidayReasonFor(iso){return Object.prototype.hasOwnProperty.call(savedHolidays,iso)?savedHolidays[iso]:null}
 function selectedWeek(){return sunday(d('holidayWeekDate').value||DB.filenameStart)}
@@ -399,22 +400,22 @@ function updateHolidayWeek(){const week=selectedWeek();d('holidayWeekLabel').tex
 function renderHolidayList(c){const sorted=holidayDates();d('holidayListCount').textContent=`${fmt(sorted.length)} يوم`;d('calendarTabCount').textContent=sorted.length?`(${fmt(sorted.length)})`:'';d('calendarMarkedDays').textContent=fmt(sorted.length);d('calendarSkippedRows').textContent=fmt(c.manuallyExcludedEvents);
  d('holidayQuickCount').textContent=sorted.length?`${fmt(sorted.length)} يوم إجازة خارج الحسابات`:'لا توجد إجازات محددة';
  d('holidayList').innerHTML=sorted.length?sorted.map(iso=>{const within=iso>=state.start&&iso<=state.end;return `<div class="holiday-entry"><div><strong>${esc(fullDate(iso))}</strong><small><span class="holiday-tag">${esc(savedHolidays[iso])}</span> · ${within?'ضمن الفترة الحالية':'خارج الفترة الحالية'} · خارج جميع الإحصائيات</small></div><div class="calendar-actions" style="margin:0"><button class="btn small" type="button" data-go-holiday="${iso}" aria-label="تحرير يوم ${esc(iso)}">تحرير</button><button class="btn small" type="button" data-remove-holiday="${iso}" aria-label="إعادة ${esc(iso)} يوم دوام">إعادة إلى دوام</button></div></div>`}).join(''):'<div class="empty">لا توجد إجازات مسجلة. اختر أسبوعًا وحدد أيام الإجازة ثم احفظ.</div>';
- d('holidayStorageNote').textContent=holidayStorageOk?'تُحفظ الإجازات محليًا في هذا المتصفح وعلى هذا الجهاز فقط. لن تنتقل تلقائيًا إلى أجهزة أخرى أو إلى نسخة HTML بعنوان مختلف؛ استخدم التصدير والاستيراد لنسخ الإعدادات.':'تعذّر حفظ الإجازات في تخزين المتصفح. تعمل الخيارات حاليًا حتى إغلاق الصفحة فقط؛ صدّر ملف JSON للاحتفاظ بها.';
+ d('holidayStorageNote').textContent=IS_APPROVED_REPORT?'هذه نسخة تقرير معتمد. التقويم والإجازات ثابتان ضمن التقرير ولا يمكن تغييرهما. عد إلى المرصد الأصلي لإنشاء تقرير جديد.':holidayStorageOk?'تُحفظ الإجازات محليًا في هذا المتصفح وعلى هذا الجهاز فقط. لن تنتقل تلقائيًا إلى أجهزة أخرى أو إلى نسخة HTML بعنوان مختلف؛ استخدم التصدير والاستيراد لنسخ الإعدادات.':'تعذّر حفظ الإجازات في تخزين المتصفح. تعمل الخيارات حاليًا حتى إغلاق الصفحة فقط؛ صدّر ملف JSON للاحتفاظ بها.';
  d('printCalendarNote').textContent=sorted.length?`أيام الإجازات المستبعدة من الحسابات خلال الفترة: ${fmt(c.manuallyExcludedDates)} يوم. أيام الدوام الفعلية المحتسبة: ${fmt(c.schoolDayCount)} يوم.`:`أيام الدوام الفعلية المحتسبة: ${fmt(c.schoolDayCount)} يوم.`;
 }
-function saveWeekHolidays(){const week=selectedWeek(),days=calendarWeekDates(week).filter(validDate),selected=new Set([...d('holidayWeekDays').querySelectorAll('input[data-holiday-date]:checked')].map(el=>el.dataset.holidayDate));
+function saveWeekHolidays(){if(IS_APPROVED_REPORT)return;const week=selectedWeek(),days=calendarWeekDates(week).filter(validDate),selected=new Set([...d('holidayWeekDays').querySelectorAll('input[data-holiday-date]:checked')].map(el=>el.dataset.holidayDate));
  let reason=d('holidayReason').value;if(reason==='أخرى')reason=d('customHolidayReason').value.trim();if(selected.size&&!reason){calendarMessage('اكتب سبب الاستبعاد أولًا.',true);return}
  for(const iso of days){if(selected.has(iso))savedHolidays[iso]=reason;else delete savedHolidays[iso]}
  persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تم حفظ ${fmt(selected.size)} يوم إجازة للأسبوع المختار وتحديث الإحصائيات.${holidayStorageOk?'':' احفظ نسخة JSON لضمان بقاء الإعدادات.'}`,!holidayStorageOk)}
-function clearWeekHolidays(){let count=0;for(const iso of calendarWeekDates(selectedWeek())){if(holidayReasonFor(iso)){delete savedHolidays[iso];count++}}persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تم إلغاء استبعاد ${fmt(count)} يوم من هذا الأسبوع.`)}
+function clearWeekHolidays(){if(IS_APPROVED_REPORT)return;let count=0;for(const iso of calendarWeekDates(selectedWeek())){if(holidayReasonFor(iso)){delete savedHolidays[iso];count++}}persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تم إلغاء استبعاد ${fmt(count)} يوم من هذا الأسبوع.`)}
 function exportHolidaysJSON(){const payload={schema:'student-absence-holidays',version:1,scope:{dateMin:DB.meta.dateMin,dateMax:DB.meta.dateMax,students:DB.students.length},days:savedHolidays};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='إعدادات_إجازات_غياب_الطلاب.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-async function importHolidaysJSON(file){if(!file)return;try{if(file.size>1000000)throw Error('حجم الملف كبير جدًا');const json=JSON.parse(await file.text());if(json.schema!=='student-absence-holidays'||json.version!==1||!json.days||typeof json.days!=='object'||Array.isArray(json.days))throw Error('هذا ليس ملف إعدادات إجازات صالحًا');const imported=validateHolidays(json.days),count=Object.keys(imported).length;
+async function importHolidaysJSON(file){if(IS_APPROVED_REPORT)return;if(!file)return;try{if(file.size>1000000)throw Error('حجم الملف كبير جدًا');const json=JSON.parse(await file.text());if(json.schema!=='student-absence-holidays'||json.version!==1||!json.days||typeof json.days!=='object'||Array.isArray(json.days))throw Error('هذا ليس ملف إعدادات إجازات صالحًا');const imported=validateHolidays(json.days),count=Object.keys(imported).length;
  if(count===0)throw Error('لا يحتوي الملف على تواريخ إجازات ضمن نطاق التقرير الحالي');savedHolidays={...savedHolidays,...imported};persistHolidays();refreshPeriodOptions();updateHolidayWeek();state.page=1;render();calendarMessage(`تم استيراد ${fmt(count)} يوم ودمجها مع الإجازات الموجودة بنجاح.`)}catch(err){calendarMessage('تعذّر الاستيراد: '+err.message,true)}finally{d('holidayImportFile').value=''}}
 function wireHolidays(){d('openCalendarBtn').addEventListener('click',()=>switchTab('calendar'));refreshWeekOptions();
  d('holidayWeekDate').addEventListener('change',()=>{updateHolidayWeek();calendarMessage('')});d('previousWeek').addEventListener('click',()=>{const el=d('holidayWeekDate');el.selectedIndex=Math.max(0,el.selectedIndex-1);updateHolidayWeek();calendarMessage('')});d('nextWeek').addEventListener('click',()=>{const el=d('holidayWeekDate');el.selectedIndex=Math.min(el.options.length-1,el.selectedIndex+1);updateHolidayWeek();calendarMessage('')});
  d('holidayWeekDays').addEventListener('change',e=>{if(e.target.matches('input[data-holiday-date]')){e.target.closest('label').classList.toggle('selected',e.target.checked);e.target.closest('label').querySelector('.marked').textContent=e.target.checked?'✓ إجازة':'دوام';calendarMessage('اضغط حفظ لتطبيق التغييرات على جميع الإحصائيات.')}});
  d('holidayReason').addEventListener('change',calendarReasonInput);d('saveHolidayWeek').addEventListener('click',saveWeekHolidays);d('clearHolidayWeek').addEventListener('click',clearWeekHolidays);
- d('holidayList').addEventListener('click',e=>{const remove=e.target.closest('[data-remove-holiday]');const go=e.target.closest('[data-go-holiday]');if(remove){const iso=remove.dataset.removeHoliday;delete savedHolidays[iso];persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تمت إعادة ${fullDate(iso)} إلى الدوام واستعادة حساباته.`)}else if(go){d('holidayWeekDate').value=sunday(go.dataset.goHoliday);updateHolidayWeek();calendarMessage('يمكنك تغيير حالة اليوم أو سببه ثم حفظ الأسبوع.');d('holidayWeekDate').focus()}});
+ d('holidayList').addEventListener('click',e=>{const remove=e.target.closest('[data-remove-holiday]');const go=e.target.closest('[data-go-holiday]');if(remove&&!IS_APPROVED_REPORT){const iso=remove.dataset.removeHoliday;delete savedHolidays[iso];persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تمت إعادة ${fullDate(iso)} إلى الدوام واستعادة حساباته.`)}else if(go&&!IS_APPROVED_REPORT){d('holidayWeekDate').value=sunday(go.dataset.goHoliday);updateHolidayWeek();calendarMessage('يمكنك تغيير حالة اليوم أو سببه ثم حفظ الأسبوع.');d('holidayWeekDate').focus()}});
  d('exportHolidayJSON').addEventListener('click',exportHolidaysJSON);d('importHolidayJSON').addEventListener('click',()=>d('holidayImportFile').click());d('holidayImportFile').addEventListener('change',e=>importHolidaysJSON(e.target.files[0]));
  d('exportCalendarCSV').addEventListener('click',()=>downloadCSV([['تاريخ الإجازة','اليوم','السبب','حالة اليوم'],...holidayDates().map(iso=>[iso,WEEKDAYS[day(iso)],savedHolidays[iso],'مستبعد من جميع الإحصائيات'])],'قائمة_أيام_الإجازات_المستبعدة.csv'));
  updateHolidayWeek();
@@ -762,7 +763,26 @@ d('downloadPrintHTML').addEventListener('click',downloadPrintable);
 d('printOptions').addEventListener('click',e=>{if(e.target===d('printOptions'))closePrintOptions()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&d('printOptions').classList.contains('open'))closePrintOptions()});
 
-updateClasses();wire();wireHolidays();wireFocusReports();render();installCompactChoiceControls();
+
+function activateApprovedSnapshot(){
+ if(!IS_APPROVED_REPORT)return;
+ document.documentElement.classList.add('approved-report');
+ const a=DB.approved;
+ d('approvedReportBanner').hidden=false;
+ d('approvedReportBanner').textContent='✓ تقرير فترة معتمد: '+a.from+' — '+a.to+' · اعتمد بتاريخ '+new Date(a.createdAt).toLocaleString('ar-SA-u-ca-gregory')+' · '+fmt(a.events)+' سجل غياب · لا يمكن تعديل تقويم هذا التقرير';
+ d('approvePeriodBtn').hidden=true;
+ d('holidayWeekDays').querySelectorAll('input[data-holiday-date]').forEach(el=>{el.disabled=true});
+ d('holidayReason').disabled=true;
+ d('customHolidayReason').disabled=true;
+ d('saveHolidayWeek').disabled=true;
+ d('clearHolidayWeek').disabled=true;
+ d('importHolidayJSON').disabled=true;
+ d('holidayList').querySelectorAll('[data-remove-holiday],[data-go-holiday]').forEach(btn=>{btn.disabled=true});
+ const skip=d('skipAnomaly');if(skip){skip.checked=false;skip.disabled=true;skip.closest('label')?.setAttribute('hidden','')}
+ d('filterInfo').textContent='نسخة معتمدة من البيانات المحددة فقط · '+fmt(last.total)+' سجل';
+}
+
+updateClasses();wire();wireHolidays();wireFocusReports();render();activateApprovedSnapshot();installCompactChoiceControls();
 
 /* واجهة الخيارات المدمجة للجوال - تبقى عناصر select الأصلية مصدر الحالة */
 function installCompactChoiceControls(){
