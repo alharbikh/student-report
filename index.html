@@ -117,7 +117,7 @@ function keepSchoolDaysOnly(data){
  data.students.forEach((st,i)=>{if(usedStudents.has(i)){studentsMap.set(i,students.length);students.push(st)}});
  const dates=[...new Set(valid.map(([,di])=>data.dates[di]))].sort(),datesMap=new Map(dates.map((date,i)=>[date,i]));
  const events=valid.map(([pi,di])=>[studentsMap.get(pi),datesMap.get(data.dates[di])]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
- return {...data,students,dates,events,meta:{...data.meta,validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]}};
+ return {...data,students,dates,events,meta:{...data.meta,sourceRows:Math.max(0,Number(data.meta?.sourceRows||data.events.length)-(data.events.length-valid.length)),validRows:events.length,uniqueStudents:students.length,dateMin:dates[0],dateMax:dates[dates.length-1]}};
 }
 function previewQuality(data){
  const dayCounts=new Map();
