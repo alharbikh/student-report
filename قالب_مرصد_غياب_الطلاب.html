@@ -174,16 +174,16 @@ body{overflow-x:hidden}
 .absence-legend span{display:inline-block;border:1px solid #d9e6df;padding:4px 9px;border-radius:7px;color:#375a4f}
 .abs-low{background:#f3faf6!important}.abs-mild{background:#e7f7ee!important}
 .abs-medium{background:#fff8e7!important}.abs-raised{background:#fff0e0!important}.abs-high{background:#fde9e9!important}
-#studentTable tbody tr.abs-low td{background:#f3faf6}
-#studentTable tbody tr.abs-mild td{background:#e7f7ee}
-#studentTable tbody tr.abs-medium td{background:#fff8e7}
-#studentTable tbody tr.abs-raised td{background:#fff0e0}
-#studentTable tbody tr.abs-high td{background:#fde9e9}
+#studentTable tbody tr.abs-low td,#dailyTable tbody tr.abs-low td,#repeatTable tbody tr.abs-low td{background:#f3faf6}
+#studentTable tbody tr.abs-mild td,#dailyTable tbody tr.abs-mild td,#repeatTable tbody tr.abs-mild td{background:#e7f7ee}
+#studentTable tbody tr.abs-medium td,#dailyTable tbody tr.abs-medium td,#repeatTable tbody tr.abs-medium td{background:#fff8e7}
+#studentTable tbody tr.abs-raised td,#dailyTable tbody tr.abs-raised td,#repeatTable tbody tr.abs-raised td{background:#fff0e0}
+#studentTable tbody tr.abs-high td,#dailyTable tbody tr.abs-high td,#repeatTable tbody tr.abs-high td{background:#fde9e9}
 #studentTable tbody tr td{transition:background-color .12s}
 @media(max-width:680px){.absence-legend{gap:5px}.absence-legend span{font-size:9px;padding:3px 6px}
-#studentTable tbody tr.abs-low{background:#f3faf6}#studentTable tbody tr.abs-mild{background:#e7f7ee}
-#studentTable tbody tr.abs-medium{background:#fff8e7}#studentTable tbody tr.abs-raised{background:#fff0e0}
-#studentTable tbody tr.abs-high{background:#fde9e9}}
+#studentTable tbody tr.abs-low,#dailyTable tbody tr.abs-low,#repeatTable tbody tr.abs-low{background:#f3faf6}#studentTable tbody tr.abs-mild,#dailyTable tbody tr.abs-mild,#repeatTable tbody tr.abs-mild{background:#e7f7ee}
+#studentTable tbody tr.abs-medium,#dailyTable tbody tr.abs-medium,#repeatTable tbody tr.abs-medium{background:#fff8e7}#studentTable tbody tr.abs-raised,#dailyTable tbody tr.abs-raised,#repeatTable tbody tr.abs-raised{background:#fff0e0}
+#studentTable tbody tr.abs-high,#dailyTable tbody tr.abs-high,#repeatTable tbody tr.abs-high{background:#fde9e9}}
 </style>
 </head>
 <body>
@@ -215,7 +215,7 @@ body{overflow-x:hidden}
  <div class="focus-grid" id="dailySummary"></div>
  <article class="panel chart-card">
   <div class="focus-results-top"><h3 id="dailyTableTitle">كشف الغائبين</h3><span class="pill neutral" id="dailyResultCount">0 طالب</span></div>
-  <div class="tablewrap"><table class="datatable focus-table" id="dailyTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف الدراسي</th><th>الفصل</th><th>إجمالي غيابه في الفترة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
+  <div class="absence-legend" aria-label="ألوان تدرج الغياب"><span class="abs-low">0–4 أيام</span><span class="abs-mild">5–9 أيام</span><span class="abs-medium">10–14 يومًا</span><span class="abs-raised">15–19 يومًا</span><span class="abs-high">20 يومًا فأكثر</span></div><div class="tablewrap"><table class="datatable focus-table" id="dailyTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف الدراسي</th><th>الفصل</th><th>إجمالي غيابه في الفترة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
   <div class="pager nonprint"><span id="dailyPageLabel"></span><button class="btn small" type="button" id="dailyNext">التالي ‹</button><button class="btn small" type="button" id="dailyPrev">› السابق</button></div>
  </article>
  <div class="focus-note">المصدر يسجل الغياب ولا يقدم سجل حضور مستقلًا. النتيجة تعرض من <strong>سُجّل غيابه</strong> في التاريخ المختار، لا من يمكن إثبات حضوره أو عدم حضوره من نظام المدرسة.</div>
@@ -240,7 +240,7 @@ body{overflow-x:hidden}
  </article>
  <article class="panel chart-card">
   <div class="focus-results-top"><h3 id="repeatTableTitle">قائمة الطلاب المطابقين</h3><span class="pill neutral" id="repeatResultCount">0 طالب</span></div>
-  <div class="tablewrap"><table class="datatable focus-table" id="repeatTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف والفصل</th><th>مرات الغياب</th><th>فرص اليوم المحتسبة</th><th>نسبة التكرار</th><th>تواريخ الغياب المسجلة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
+  <div class="absence-legend" aria-label="ألوان تدرج الغياب الإجمالي"><span class="abs-low">0–4 أيام</span><span class="abs-mild">5–9 أيام</span><span class="abs-medium">10–14 يومًا</span><span class="abs-raised">15–19 يومًا</span><span class="abs-high">20 يومًا فأكثر</span></div><div class="tablewrap"><table class="datatable focus-table" id="repeatTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف والفصل</th><th>مرات الغياب</th><th>فرص اليوم المحتسبة</th><th>نسبة التكرار</th><th>تواريخ الغياب المسجلة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
   <div class="pager nonprint"><span id="repeatPageLabel"></span><button class="btn small" type="button" id="repeatNext">التالي ‹</button><button class="btn small" type="button" id="repeatPrev">› السابق</button></div>
  </article>
  <div class="focus-note"><strong>كيفية القراءة:</strong> «جميع مرات الأحد» تعني أن الطالب لديه سجل غياب في كل يوم أحد من أيام الدوام الفعلية داخل الفترة المختارة، بعد حذف الإجازات. عدم وجود سجل غياب في يوم لا يعد إثباتًا مستقلًا للحضور؛ ويُفضل مراجعة اكتمال بيانات المصدر قبل اتخاذ إجراء إداري.</div>
@@ -491,7 +491,7 @@ function renderDaily(c){
 }
 function renderDailyPage(){
  const v=focusPage(dailyVisible,dailyState.page,30,'dailyTable',7,'dailyPageLabel','dailyPrev','dailyNext');dailyState.page=v.current;
- d('dailyTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num">${fmt(x.days)}</td><td><button class="btn small" data-student="${x.pi}" type="button">تفاصيل الطالب</button></td></tr>`}).join('')||'<tr><td colspan="7" class="empty">لا توجد سجلات غياب مطابقة في هذا اليوم ضمن المرشحات.</td></tr>';
+ d('dailyTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr class="${absenceLevel(x.days)}"><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num">${fmt(x.days)}</td><td><button class="btn small" data-student="${x.pi}" type="button">تفاصيل الطالب</button></td></tr>`}).join('')||'<tr><td colspan="7" class="empty">لا توجد سجلات غياب مطابقة في هذا اليوم ضمن المرشحات.</td></tr>';
 }
 function eligibleWeekdayDates(c,weekday){return c.activeDates.filter(iso=>day(iso)===weekday)}
 function matchesRepeatCriteria(n,total,criterion){if(total===0||n===0)return false;
@@ -530,7 +530,7 @@ function renderRepeat(c){
 }
 function renderRepeatPage(){
  const v=focusPage(repeatVisible,repeatState.page,25,'repeatTable',9,'repeatPageLabel','repeatPrev','repeatNext');repeatState.page=v.current;
- d('repeatTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])} · ${esc(p[2].replace('اول','أول'))}</td><td class="num"><strong>${fmt(x.n)}</strong></td><td class="num">${fmt(x.total)}</td><td class="num"><span class="pill ${x.rate===100?'danger':x.rate>=75?'warning':''}">${fmt(x.rate,1)}%</span></td><td class="dates-cell"><small>${esc(x.matched.map(iso=>readable(iso,{year:'numeric'})).join('، '))}</small></td><td><button class="btn small" type="button" data-student="${x.pi}">التفاصيل</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">لا يوجد طلاب يطابقون معيار الغياب في هذا اليوم خلال الفترة الحالية.</td></tr>';
+ d('repeatTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr class="${absenceLevel(x.days)}"><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])} · ${esc(p[2].replace('اول','أول'))}</td><td class="num"><strong>${fmt(x.n)}</strong></td><td class="num">${fmt(x.total)}</td><td class="num"><span class="pill ${x.rate===100?'danger':x.rate>=75?'warning':''}">${fmt(x.rate,1)}%</span></td><td class="dates-cell"><small>${esc(x.matched.map(iso=>readable(iso,{year:'numeric'})).join('، '))}</small></td><td><button class="btn small" type="button" data-student="${x.pi}">التفاصيل</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">لا يوجد طلاب يطابقون معيار الغياب في هذا اليوم خلال الفترة الحالية.</td></tr>';
 }
 function exportDailyCSV(){const rows=[['تاريخ الغياب','اليوم','رقم الطالب','اسم الطالب','الصف الدراسي','الفصل','إجمالي غيابه خلال الفترة']];for(const x of dailyVisible){const p=DB.students[x.pi];rows.push([dailyState.date,WEEKDAYS[day(dailyState.date)],p[0],p[1],GRADE_NAMES[p[3]],p[2],x.days])}downloadCSV(rows,'كشف_الغياب_اليومي_'+(dailyState.date||'بدون_تاريخ')+'.csv')}
 function exportRepeatCSV(){const rows=[['اليوم المختار','الفترة من','الفترة إلى','رقم الطالب','اسم الطالب','الصف الدراسي','الفصل','مرات الغياب','فرص اليوم الفعلية','نسبة التكرار','تواريخ الغياب المسجلة']];for(const x of repeatVisible){const p=DB.students[x.pi];rows.push([WEEKDAYS[repeatState.weekday],state.start,state.end,p[0],p[1],GRADE_NAMES[p[3]],p[2],x.n,x.total,x.rate.toFixed(1)+'%',x.matched.join('، ')])}downloadCSV(rows,'الغياب_المتكرر_'+WEEKDAYS[repeatState.weekday]+'.csv')}
@@ -622,13 +622,13 @@ function makePrintReport(sectionKeys){
   });
  }
  if(sectionKeys.includes('daily')){
-  const iso=dailyState.date,rows=dailyVisible.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
-  chunkRows(rows,17).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · عدد الغائبين بعد تصفية الفصل والبحث: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[6,33,12,21,12,16])}`));
+  const iso=dailyState.date,orderedDaily=dailyVisible.slice().sort(compareGradeClassName),rows=orderedDaily.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
+  chunkRows(rows,17).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · عدد الغائبين بعد تصفية الفصل والبحث: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[6,33,12,21,12,16],orderedDaily.slice(i*17,(i+1)*17).map(r=>absenceLevel(r.days)))}`));
  }
  if(sectionKeys.includes('repeat')){
   const days=repeatOpportunityDates,criterion=d('repeatCriteria').selectedOptions[0]?.textContent||'';
-  const rows=repeatVisible.map((x,i)=>{const p=DB.students[x.pi];return[fmt(i+1),p[1],p[0],p[2].replace('اول','أول'),fmt(x.n),fmt(x.total),fmt(x.rate,1)+'%',x.matched.map(iso=>iso.slice(8)+'/'+iso.slice(5,7)).join('، ')]});
-  chunkRows(rows,13).forEach((subset,i,all)=>add('repeat','الغياب المتكرر حسب يوم الأسبوع',`<div class="pt-list-meta">${WEEKDAYS[repeatState.weekday]} · ${pt(criterion)} · مرات اليوم المحتسبة: ${fmt(days.length)} · الطلاب المطابقون: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div><div class="pt-datewrap">الأيام الداخلة في المقارنة: ${days.length?days.map(x=>t(x)).map(pt).join(' · '):'لا توجد أيام محسوبة'}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الفصل','الغــياب','الفرص','النسبة','تواريخ الغياب'],subset,[5,24,10,11,9,8,10,23])}<div class="pt-note">استبعاد أي يوم إجازة يقلل عدد الفرص المحتسبة؛ وتُعاد النسب عند تحويل الإجازة إلى دوام.</div>`));
+  const orderedRepeat=repeatVisible.slice().sort(compareGradeClassName),rows=orderedRepeat.map((x,i)=>{const p=DB.students[x.pi];return[fmt(i+1),p[1],p[0],p[2].replace('اول','أول'),fmt(x.n),fmt(x.total),fmt(x.rate,1)+'%',x.matched.map(iso=>iso.slice(8)+'/'+iso.slice(5,7)).join('، ')]});
+  chunkRows(rows,13).forEach((subset,i,all)=>add('repeat','الغياب المتكرر حسب يوم الأسبوع',`<div class="pt-list-meta">${WEEKDAYS[repeatState.weekday]} · ${pt(criterion)} · مرات اليوم المحتسبة: ${fmt(days.length)} · الطلاب المطابقون: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div><div class="pt-datewrap">الأيام الداخلة في المقارنة: ${days.length?days.map(x=>t(x)).map(pt).join(' · '):'لا توجد أيام محسوبة'}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الفصل','الغــياب','الفرص','النسبة','تواريخ الغياب'],subset,[5,24,10,11,9,8,10,23],orderedRepeat.slice(i*13,(i+1)*13).map(r=>absenceLevel(r.days)))}<div class="pt-note">استبعاد أي يوم إجازة يقلل عدد الفرص المحتسبة؛ وتُعاد النسب عند تحويل الإجازة إلى دوام.</div>`));
  }
  if(sectionKeys.includes('quality')){
   const allSet=new Set(c.allowed),out=DB.events.filter(([pi,di])=>{const iso=DB.dates[di];return allSet.has(pi)&&isSchoolDay(iso)&&(iso<DB.filenameStart||iso>DB.filenameEnd)}).length;
