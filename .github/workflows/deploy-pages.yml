@@ -1,0 +1,53 @@
+name: Publish Student Absence Dashboard (no student data)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - 'قالب_مرصد_غياب_الطلاب.html'
+      - .github/workflows/deploy-pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate the published template contains no students
+        run: |
+          python - <<'PY'
+          import json, pathlib, re
+          content = pathlib.Path('قالب_مرصد_غياب_الطلاب.html').read_text(encoding='utf-8')
+          match = re.search(r'const DB=(\{.*?\});\s*const GRADE_NAMES=', content, re.S)
+          if not match:
+              raise SystemExit('Dashboard template does not contain the expected empty DB marker.')
+          data = json.loads(match.group(1))
+          if data.get('students') or data.get('events') or data.get('dates'):
+              raise SystemExit('Privacy check failed: dashboard template includes student data.')
+          print('Privacy check passed: template includes no student data.')
+          PY
+      - name: Build site from safe HTML files only
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp 'قالب_مرصد_غياب_الطلاب.html' _site/
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
