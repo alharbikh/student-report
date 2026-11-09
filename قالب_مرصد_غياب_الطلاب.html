@@ -331,7 +331,7 @@ html.approved-report .calendar-card .week-day{cursor:default}
     <label class="print-choice"><input type="radio" name="printScope" value="current"> <span>القسم المفتوح حاليًا فقط</span></label>
     <label class="print-choice"><input type="radio" name="printScope" value="withoutStudents"> <span>تقرير واحد بدون قائمة متابعة الطلاب — عرضي</span></label>
     <label class="print-choice"><input type="radio" name="printScope" value="studentsPortrait"> <span>قائمة متابعة الطلاب فقط — طولي A4</span></label>
-    <div class="print-help">تُطبع أقسام التحليل بعرض A4، وقائمة الطلاب بطول A4. في التقرير الشامل يتم الجمع بين الاتجاهين وفق دعم متصفح Chrome؛ ويمكن طباعة قائمة الطلاب مستقلة بالطول. الصفحات مقسّمة مسبقًا مع رؤوس جداول وترقيم. استخدم «حفظ كملف PDF» من نافذة الطباعة للحصول على ملف واحد. أيام الإجازات والجمعة والسبت خارج جميع الحسابات.</div>
+    <div class="print-help">لا يُضمَّن كشف الغياب اليومي في التقرير الشامل إلا بعد تحديد يوم له. تُطبع أقسام التحليل بعرض A4، وقائمة الطلاب بطول A4. في التقرير الشامل يتم الجمع بين الاتجاهين وفق دعم متصفح Chrome؛ ويمكن طباعة قائمة الطلاب مستقلة بالطول. الصفحات مقسّمة مسبقًا مع رؤوس جداول وترقيم. استخدم «حفظ كملف PDF» من نافذة الطباعة للحصول على ملف واحد. أيام الإجازات والجمعة والسبت خارج جميع الحسابات.</div>
     <div class="print-dialog-actions">
        <button type="button" class="btn primary" id="openPrintPreview">معاينة التقرير والطباعة</button>
        <button type="button" class="btn" id="downloadPrintHTML">تحميل نسخة التقرير للطباعة HTML</button>
@@ -509,12 +509,9 @@ function focusPage(rows,page,pageSize,tableId,colspan,labelId,prevId,nextId){
 }
 function fillDailyDateOptions(c){
  const el=d('dailyFocusDate'),dates=c.activeDates;
- el.innerHTML=dates.map(iso=>`<option value="${iso}">${esc(fullDate(iso))}</option>`).join('');
- if(!dates.includes(dailyState.date)){
-  const recorded=[...c.byDay.keys()].filter(iso=>dates.includes(iso)).sort();
-  dailyState.date=recorded.length?recorded[recorded.length-1]:dates.length?dates[dates.length-1]:'';
-  dailyState.page=1;
- }
+ // A daily report must be explicitly selected; never silently choose the latest date.
+ if(!dates.includes(dailyState.date)){dailyState.date='';dailyState.page=1}
+ el.innerHTML='<option value="">اختر اليوم</option>'+dates.map(iso=>`<option value="${iso}">${esc(fullDate(iso))}</option>`).join('');
  el.value=dailyState.date;
  el.disabled=!dates.length;
 }
@@ -538,13 +535,13 @@ function renderDaily(c){
  const classes=new Set(rows.map(x=>DB.students[x.pi][2]));
  const scopeCount=dailyState.cls==='all'?c.allowed.length:c.allowed.filter(i=>DB.students[i][2]===dailyState.cls).length;
  d('dailySummary').innerHTML=card('الغائبون في اليوم',fmt(base.length),'ضمن الصفوف والفصول العامة')+card('نتائج التصفية والبحث',fmt(rows.length),'طلاب في الكشف المعروض')+card('الفصول المتأثرة',fmt(classes.size),'ضمن النتائج الحالية')+card('طلاب نطاق الفصل',fmt(scopeCount),'طلاب واردون في المصدر، ليس القيد الرسمي');
- d('dailyTableTitle').textContent=dailyState.date?`كشف الغائبين — ${fullDate(dailyState.date)}`:'لا توجد أيام دوام ضمن المرشحات';
+ d('dailyTableTitle').textContent=dailyState.date?`كشف الغائبين — ${fullDate(dailyState.date)}`:'اختر يوم دوام لعرض كشف الغائبين';
  d('dailyResultCount').textContent=`${fmt(rows.length)} طالب`;
  renderDailyPage();
 }
 function renderDailyPage(){
  const v=focusPage(dailyVisible,dailyState.page,30,'dailyTable',7,'dailyPageLabel','dailyPrev','dailyNext');dailyState.page=v.current;
- d('dailyTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr class="${absenceLevel(x.days)}"><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num">${fmt(x.days)}</td><td><button class="btn small" data-student="${x.pi}" type="button">تفاصيل الطالب</button></td></tr>`}).join('')||'<tr><td colspan="7" class="empty">لا توجد سجلات غياب مطابقة في هذا اليوم ضمن المرشحات.</td></tr>';
+ d('dailyTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr class="${absenceLevel(x.days)}"><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num">${fmt(x.days)}</td><td><button class="btn small" data-student="${x.pi}" type="button">تفاصيل الطالب</button></td></tr>`}).join('')||'<tr><td colspan="7" class="empty">اختر اليوم أولًا لعرض بيانات الغياب، أو لا توجد نتائج مطابقة.</td></tr>';
 }
 function eligibleWeekdayDates(c,weekday){return c.activeDates.filter(iso=>day(iso)===weekday)}
 function matchesRepeatCriteria(n,total,criterion){if(total===0||n===0)return false;
@@ -632,7 +629,12 @@ function annotateMobileTables(){
 function openPrintOptions(){const el=d('printOptions');el.classList.add('open');el.setAttribute('aria-hidden','false');d('openPrintPreview').focus();document.body.style.overflow='hidden'}
 function closePrintOptions(){const el=d('printOptions');el.classList.remove('open');el.setAttribute('aria-hidden','true');document.body.style.overflow='';d('printBtn').focus()}
 const reportSections=[['overview','المؤشرات العامة'],['classes','الصفوف والفصول'],['students','متابعة الطلاب'],['daily','غياب يوم محدد'],['repeat','الغياب المتكرر حسب اليوم'],['quality','جودة البيانات'],['calendar','التقويم والإجازات']];
-function printSelectedSections(){const picked=document.querySelector('input[name="printScope"]:checked'),scope=picked?.value||'all';if(scope==='current')return [state.tab];if(scope==='withoutStudents')return reportSections.filter(([key])=>key!=='students').map(([key])=>key);if(scope==='studentsPortrait')return ['students'];return reportSections.map(([key])=>key)}
+function printSelectedSections(){
+ const picked=document.querySelector('input[name="printScope"]:checked'),scope=picked?.value||'all';
+ const keys=scope==='current'?[state.tab]:scope==='studentsPortrait'?['students']:reportSections.filter(([key])=>scope!=='withoutStudents'||key!=='students').map(([key])=>key);
+ // No daily report in the combined document until the user explicitly selects its date.
+ return keys.filter(key=>key!=='daily'||Boolean(dailyState.date&&last?.activeDates?.includes(dailyState.date)));
+}
 function pt(v){return esc(v)}
 function chunkRows(rows,n){if(!rows.length)return [[]];const result=[];for(let i=0;i<rows.length;i+=n)result.push(rows.slice(i,i+n));return result}
 function printableTable(headings,rows,widths,rowClasses=[]){
