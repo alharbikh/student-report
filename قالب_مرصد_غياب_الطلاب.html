@@ -184,12 +184,38 @@ body{overflow-x:hidden}
 #studentTable tbody tr.abs-low,#dailyTable tbody tr.abs-low,#repeatTable tbody tr.abs-low{background:#f3faf6}#studentTable tbody tr.abs-mild,#dailyTable tbody tr.abs-mild,#repeatTable tbody tr.abs-mild{background:#e7f7ee}
 #studentTable tbody tr.abs-medium,#dailyTable tbody tr.abs-medium,#repeatTable tbody tr.abs-medium{background:#fff8e7}#studentTable tbody tr.abs-raised,#dailyTable tbody tr.abs-raised,#repeatTable tbody tr.abs-raised{background:#fff0e0}
 #studentTable tbody tr.abs-high,#dailyTable tbody tr.abs-high,#repeatTable tbody tr.abs-high{background:#fde9e9}}
+
+.approved-report-banner{margin:0 0 14px;padding:12px 16px;border:1px solid #c9e5d7;background:#eaf8ee;color:#1d5d48;border-radius:11px;font-size:12px;font-weight:800}
+.approved-report-banner[hidden]{display:none}
+.snapshot-dialog{max-width:710px;width:min(710px,100%);max-height:92dvh}
+.snapshot-summary{border:1px solid #d5e9dd;border-radius:10px;background:#f3f9f5;padding:12px 14px;color:#2f6751;font-size:12px;font-weight:800;line-height:1.9}
+.snapshot-actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.snapshot-sensitive{border:1px solid #f2d7bb;background:#fff7e8;color:#81552e;border-radius:9px;padding:10px!important;font-size:11px!important;line-height:1.8}
+.snapshot-publish{border-top:1px solid #d9e8df;margin-top:14px;padding-top:12px}
+.snapshot-publish h3{font-size:14px;color:#145b44;margin:0 0 7px}
+.snapshot-publish p{font-size:11px;line-height:1.9;color:#577468}
+.snapshot-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:9px 0}
+.snapshot-inputs label{font-size:11px;font-weight:800;color:#537064}
+.snapshot-inputs input{display:block;width:100%;font:inherit;background:white;color:#234e3f;min-height:41px;border:1px solid #d1e5d9;border-radius:8px;margin-top:5px;padding:7px 10px}
+.snapshot-path{font-size:11px;color:#446d5c;overflow-wrap:anywhere;margin:9px 0}
+.snapshot-feedback{font-size:11px;margin-top:8px;color:#165b44;min-height:20px}
+.snapshot-feedback.error{color:#b43b35}
+html.approved-report #approvePeriodBtn,html.approved-report #resetBtn,
+html.approved-report #saveHolidayWeek,html.approved-report #clearHolidayWeek,
+html.approved-report #importHolidayJSON,html.approved-report #exportHolidayJSON,
+html.approved-report #holidayReason,html.approved-report #customHolidayReason,
+html.approved-report #exportCalendarCSV,html.approved-report [data-remove-holiday],
+html.approved-report [data-go-holiday],html.approved-report #previousWeek,
+html.approved-report #nextWeek{display:none!important}
+html.approved-report .calendar-card .week-day{cursor:default}
+@media(max-width:680px){.snapshot-inputs{grid-template-columns:1fr}.snapshot-actions .btn{width:100%}.snapshot-dialog{padding:13px}.snapshot-publish a{display:inline-block;max-width:100%;overflow-wrap:anywhere}}
 </style>
 </head>
 <body>
-<header class="sitebar"><div class="bar-inner"><div class="brand"><div class="brand-mark" aria-hidden="true">▥</div><div><strong>مرصد غياب الطلاب</strong><small>المدرسة · لوحة تحليل تفاعلية</small></div></div><div class="bar-actions"><button class="btn ghost" id="printBtn" type="button" aria-haspopup="dialog" aria-controls="printOptions">⎙ الطباعة وPDF</button><button class="btn ghost" id="exportBtn" type="button">↓ تصدير CSV</button></div></div></header>
+<header class="sitebar"><div class="bar-inner"><div class="brand"><div class="brand-mark" aria-hidden="true">▥</div><div><strong>مرصد غياب الطلاب</strong><small>المدرسة · لوحة تحليل تفاعلية</small></div></div><div class="bar-actions"><button class="btn ghost" id="printBtn" type="button" aria-haspopup="dialog" aria-controls="printOptions">⎙ الطباعة وPDF</button><button class="btn ghost" id="exportBtn" type="button">↓ تصدير CSV</button><button class="btn ghost" id="approvePeriodBtn" type="button" aria-controls="approvedPeriodDialog">✓ اعتماد تقرير الفترة</button></div></div></header>
 <main class="page">
 <div class="intro"><div><h1>تحليل ومتابعة غياب الطلاب</h1><p>بيانات مستخرجة من ملف الغياب الأصلي · جميع الحسابات تتغير مع المرشحات</p></div><span class="data-note" id="rangeTag">● الفترة الافتراضية 27 سبتمبر – 9 نوفمبر 2026</span></div>
+<div id="approvedReportBanner" class="approved-report-banner" hidden role="status"></div>
 <section class="panel filter-panel nonprint" aria-label="المرشحات"><div class="filter-heading"><h2>☷ تصفية البيانات</h2><button class="btn small" id="resetBtn">إعادة الضبط</button></div><div class="filters"><div class="field"><label for="startDate">من تاريخ (ميلادي)</label><select id="startDate" aria-label="بداية الفترة من أيام الدوام"></select></div><div class="field"><label for="endDate">إلى تاريخ (ميلادي)</label><select id="endDate" aria-label="نهاية الفترة من أيام الدوام"></select></div><div class="field"><label for="gradeSelect">الصف الدراسي</label><select id="gradeSelect"><option value="all">جميع الصفوف</option><option value="1">الأول الثانوي</option><option value="2">الثاني الثانوي</option><option value="3">الثالث الثانوي</option></select></div><div class="field"><label for="classSelect">الفصل الدراسي</label><select id="classSelect"><option value="all">جميع الفصول</option></select></div><div class="field"><label for="riskThreshold">حد متابعة التكرار</label><select id="riskThreshold"><option value="5">5 أيام فأكثر</option><option value="10">10 أيام فأكثر</option><option value="15" selected>15 يومًا فأكثر</option><option value="20">20 يومًا فأكثر</option></select></div></div><div class="inline-options"><label class="check"><input id="skipAnomaly" type="checkbox"> استبعاد الأيام مرتفعة الغياب جدًا (≥80% من طلاب السجل)</label><span class="filter-meta">أيام الدوام: الأحد–الخميس فقط · الإجازات المحفوظة مستبعدة تلقائيًا</span><span class="holiday-indicator"><span id="holidayQuickCount">لا توجد أيام إجازة مستبعدة</span><button class="btn small" id="openCalendarBtn" type="button">☷ إدارة الإجازات</button></span><span class="filter-meta" id="filterInfo">البيانات محفوظة داخل هذا الملف وتعمل دون اتصال</span></div></section>
 <nav class="tabs nonprint" aria-label="أقسام اللوحة"><button class="tab active" data-tab="overview">▦ المؤشرات العامة</button><button class="tab" data-tab="classes">▤ الصفوف والفصول</button><button class="tab" data-tab="students">♙ متابعة الطلاب</button><button class="tab" data-tab="daily">▤ غياب يوم محدد</button><button class="tab" data-tab="repeat">◷ الغياب المتكرر حسب اليوم</button><button class="tab" data-tab="quality">⚑ جودة البيانات</button><button class="tab" data-tab="calendar">▦ التقويم والإجازات <span id="calendarTabCount"></span></button></nav>
 <section class="section active" id="sec-overview">
@@ -271,6 +297,32 @@ body{overflow-x:hidden}
 </main>
 <div class="modal-wrap" id="studentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><div><h2 id="modalTitle"></h2><small id="modalDesc"></small></div><button class="btn x" id="closeModal" aria-label="إغلاق">×</button></div><div class="statline" id="modalStats"></div><div class="head"><div><h3>التواريخ التي سُجل فيها غياب</h3><p>ضمن الفترة والمرشحات المطبقة حاليًا</p></div></div><div class="dates-tags" id="modalDates"></div><p class="disclaimer">تتابع الغياب محسوب وفق تسلسل الأيام التي لها سجلات في المصدر، لا وفق تقويم دراسي رسمي؛ قد تشمل البيانات أيامًا غير دراسية.</p></div></div>
 
+<div class="print-dialog" id="approvedPeriodDialog" role="dialog" aria-modal="true" aria-labelledby="approvedPeriodTitle" aria-hidden="true">
+ <div class="print-box snapshot-dialog">
+  <div class="modal-head"><h2 id="approvedPeriodTitle">اعتماد تقرير الفترة وإنشاء نسخة مستقلة</h2><button class="btn x" type="button" id="closeApprovedPeriod" aria-label="إغلاق">×</button></div>
+  <p>تعتمد النسخة الحالية الفترة والصفوف والفصول والمرشحات والإجازات. التقرير مستقل وتفاعلي، ولا يحتوي على شاشة استيراد الملفات.</p>
+  <div class="snapshot-summary" id="approvedPeriodSummary"></div>
+  <div class="snapshot-actions">
+   <button class="btn primary" type="button" id="downloadPeriodJSON">↓ حفظ JSON للفترة</button>
+   <button class="btn" type="button" id="downloadPeriodHTML">↓ صفحة HTML محلية</button>
+  </div>
+  <p class="snapshot-sensitive">تنبيه: ملف JSON وصفحة HTML المحلية يحتويان على أسماء الطلاب وأرقامهم. لا ترفعهما إلى مستودع GitHub العام.</p>
+  <div class="snapshot-publish">
+   <h3>تجهيز صفحة محمية للنشر على GitHub Pages</h3>
+   <p>تُشفّر بيانات التقرير داخل ملف HTML باستخدام AES-GCM وكلمة مرور تُدخل عند فتح الرابط. لا تُحفظ كلمة المرور داخل الصفحة أو في GitHub. اختر عبارة مرور قوية واحتفظ بها خارج الموقع.</p>
+   <div class="snapshot-inputs">
+    <label>عبارة المرور (14 حرفًا على الأقل)<input id="snapshotPassword" type="password" minlength="14" autocomplete="new-password" placeholder="عبارة مرور قوية وخاصة"></label>
+    <label>تأكيد عبارة المرور<input id="snapshotPasswordConfirm" type="password" minlength="14" autocomplete="new-password" placeholder="أعد إدخال عبارة المرور"></label>
+   </div>
+   <button class="btn primary" type="button" id="downloadEncryptedPeriod">🔒 تنزيل صفحة مشفرة للنشر</button>
+   <div class="snapshot-path">اسم الصفحة: <code id="snapshotFileName"></code></div>
+   <p>بعد تنزيل الملف المشفر، ارفعه يدويًا إلى مجلد <code>reports/</code> في GitHub. سيصبح رابط الفترة متاحًا بعد نجاح GitHub Actions، ولن يُفتح المحتوى دون عبارة المرور.</p>
+   <a href="https://github.com/alharbikh/student-report/upload/main/reports" target="_blank" rel="noopener noreferrer">فتح مجلد رفع التقارير المشفرة إلى GitHub</a>
+  </div>
+  <div class="snapshot-feedback" id="snapshotFeedback" role="status" aria-live="polite"></div>
+  <div class="print-dialog-actions"><button type="button" class="btn" id="cancelApprovedPeriod">إغلاق</button></div>
+ </div>
+</div>
 <div class="print-dialog" id="printOptions" role="dialog" aria-modal="true" aria-labelledby="printOptionsTitle" aria-hidden="true">
   <div class="print-box">
     <div class="modal-head"><h2 id="printOptionsTitle">تجهيز تقرير الطباعة وPDF</h2><button class="btn x" id="closePrintOptions" type="button" aria-label="إغلاق خيارات الطباعة">×</button></div>
