@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light"><meta name="theme-color" content="#115e50">
+<title>مرصد غياب الطلاب | المدرسة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#176452;--deep:#0e493f;--active:#dff4eb;--bg:#f4f8f7;--card:#fff;--ink:#173b37;--muted:#66807b;--border:#e1ece8;--orange:#cd8329;--red:#c94f4b;--blue:#397eae;--shadow:0 7px 22px rgba(15,81,65,.055)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',Tahoma,Arial,sans-serif;font-size:13px;line-height:1.75}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #73b7a3;outline-offset:2px}
+.sitebar{background:linear-gradient(112deg,#0c443c,#146450 70%,#167661);color:white;position:sticky;top:0;z-index:30;box-shadow:0 2px 15px rgba(5,49,40,.17)}.bar-inner{max-width:1520px;padding:12px 28px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:13px;min-width:0}.brand-mark{background:#ffffff20;border:1px solid #ffffff30;display:grid;place-items:center;width:44px;height:44px;border-radius:13px;font-size:23px;flex-shrink:0}.brand strong{display:block;font-size:19px;font-weight:900;line-height:1.55}.brand small{display:block;color:#e0f4e9;font-size:11px;line-height:1.3}.bar-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.btn{border:1px solid var(--border);background:white;color:var(--primary);border-radius:10px;padding:8px 13px;font-weight:700;white-space:nowrap;transition:.15s}.btn:hover{filter:brightness(.97);transform:translateY(-1px)}.btn.ghost{border-color:#ffffff63;background:#ffffff1c;color:#fff}.btn.primary{background:var(--primary);color:white;border-color:var(--primary)}.btn.small{padding:6px 10px;font-size:11px}.btn:disabled{opacity:.35;cursor:default}.page{max-width:1520px;margin:0 auto;padding:24px 28px 42px}.intro{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:16px}.intro h1{font-size:23px;font-weight:900;margin:0 0 3px}.intro p{margin:0;color:var(--muted);font-size:12px}.data-note{display:inline-flex;background:#e6f1eb;color:#155a49;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;white-space:nowrap;align-items:center;gap:6px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);min-width:0}.filter-panel{padding:16px 18px;margin-bottom:16px}.filter-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.filter-heading h2{font-size:14px;margin:0;font-weight:900}.filters{display:grid;grid-template-columns:1.15fr 1.15fr 1fr 1fr .8fr;gap:11px}.field{min-width:0}.field label{display:block;color:#6c817e;font-size:11px;font-weight:800;margin-bottom:4px}.field input,.field select{display:block;background:#fbfdfc;color:var(--ink);width:100%;min-height:41px;border:1px solid #d9e6e1;border-radius:9px;padding:7px 9px;min-width:0}.inline-options{display:flex;flex-wrap:wrap;gap:7px 17px;align-items:center;margin-top:11px}.check{display:inline-flex;gap:7px;align-items:center;color:#496b63;font-size:11px;font-weight:700;cursor:pointer}.check input{accent-color:var(--primary);width:16px;height:16px;margin:0}.filter-meta{margin-inline-start:auto;color:var(--muted);font-size:10px}
+.tabs{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:thin;padding:3px 1px 12px;margin-bottom:7px}.tab{border:1px solid transparent;background:transparent;white-space:nowrap;padding:9px 18px;border-radius:10px;color:#628079;font-weight:800}.tab.active{background:var(--primary);color:white;box-shadow:0 3px 9px #11634d2b}.tab:not(.active):hover{background:#e6f0ec}.section{display:none;animation:appear .18s ease}.section.active{display:block}@keyframes appear{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:15px}.kpi{padding:15px 16px;position:relative;overflow:hidden}.kpi:after{content:'';position:absolute;inset:0 auto 0 0;width:4px;background:var(--primary)}.kpi:nth-child(2):after{background:#4a91b8}.kpi:nth-child(4):after{background:var(--orange)}.kpi:nth-child(5):after{background:var(--red)}.kpi:nth-child(6):after{background:#8b6cb0}.kpi-label{display:block;color:var(--muted);font-size:11px;font-weight:800;white-space:nowrap}.kpi-number{font-size:26px;font-weight:900;line-height:1.4;display:block;letter-spacing:-1px;font-variant-numeric:tabular-nums}.kpi-sub{color:#81968e;font-size:10px;display:block}.layout-2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-bottom:15px}.layout-equal{grid-template-columns:1fr 1fr}.chart-card{padding:16px 18px;min-height:260px}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}.head h3{font-size:14px;font-weight:900;margin:0}.head p{font-size:11px;color:var(--muted);margin:2px 0 0}.legend{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--muted);white-space:nowrap}.dot{width:9px;height:9px;border-radius:50%;background:var(--primary);display:inline-block}.chart{width:100%;overflow:hidden}.chart svg{display:block;width:100%;height:240px;font-family:'Cairo',Arial,sans-serif}.chart text{fill:#65817b;font-size:11px}.chart .gridline{stroke:#e4eee9;stroke-width:1}.chart .line{fill:none;stroke:#19836e;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart .point{fill:#fff;stroke:#16816b;stroke-width:2}.chart .area{fill:#edf7f3}.empty{text-align:center;color:var(--muted);padding:47px 12px;font-size:12px}.metrics-table{width:100%;border-collapse:collapse;font-size:11px}.metrics-table th{text-align:right;background:#f5f9f7;color:#637f76;padding:9px 10px;font-weight:800}.metrics-table td{border-bottom:1px solid #edf2ef;padding:9px 10px}.metrics-table tr:last-child td{border-bottom:0}.metrics-table tr:hover td{background:#fbfdfc}.num{text-align:left;font-variant-numeric:tabular-nums;direction:ltr}.pbar{height:8px;border-radius:99px;background:#edf3f0;overflow:hidden;min-width:65px}.pbar>i{display:block;height:100%;background:linear-gradient(90deg,#5bb9a0,#126b57);border-radius:99px}.pill{display:inline-block;border-radius:99px;padding:3px 9px;font-size:10px;font-weight:900;background:#e7f6ed;color:#197153;white-space:nowrap}.pill.warning{background:#fff2dc;color:#aa701f}.pill.danger{background:#fae7e5;color:#ba4e49}.pill.neutral{background:#edf2f6;color:#627c89}.detail{color:#678077;font-size:11px}.subheader{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:13px;flex-wrap:wrap}.subheader h2{margin:0;font-size:17px}.subheader p{margin:0;color:var(--muted);font-size:11px}.tablewrap{width:100%;overflow:auto;border:1px solid var(--border);border-radius:11px}.datatable{width:100%;border-collapse:collapse;min-width:680px;font-size:11px}.datatable th{position:sticky;top:0;background:#f3f8f5;color:#4e7168;text-align:right;padding:11px;font-weight:900;white-space:nowrap;z-index:1}.datatable td{padding:11px;border-bottom:1px solid #edf2ef;white-space:nowrap}.datatable tbody tr:hover{background:#f8fbf9}.datatable tbody tr:last-child td{border-bottom:0}.tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:13px}.tools .search{min-width:200px;flex:1;max-width:375px}.tools input,.tools select{border:1px solid #d9e5e0;border-radius:9px;min-height:39px;padding:6px 11px;background:white;color:var(--ink)}.tools select{max-width:200px}.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:14px 0;color:var(--muted);font-size:11px}.heatmap-wrap{width:100%;overflow-x:auto}.heatmap{border-collapse:separate;border-spacing:5px;font-size:10px;min-width:660px;width:100%}.heatmap th{color:#658179;font-weight:700;text-align:center;white-space:nowrap;padding:3px}.heatmap th:first-child{text-align:right;min-width:71px}.heatmap td{border-radius:6px;text-align:center;height:36px;min-width:49px;font-variant-numeric:tabular-nums;font-weight:800}.heatmap td:first-child{text-align:right;font-weight:800;color:var(--ink);min-width:72px}.inline-key{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px}.scale{display:flex;align-items:center;gap:3px}.scale i{height:11px;width:18px;display:inline-block;border-radius:3px}.quality-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}.quality-box{padding:15px}.quality-box b{font-size:23px;display:block;line-height:1.7}.quality-box span{font-weight:800;font-size:11px;color:var(--muted)}.callout{border:1px solid #f1deac;border-right:4px solid var(--orange);border-radius:12px;background:#fffaf0;padding:12px 15px;color:#7d642e;margin-bottom:15px;font-size:11px}.callout strong{color:#856127}.mini-bars{display:flex;flex-direction:column;gap:12px}.mini-bar{display:grid;grid-template-columns:minmax(70px,100px) 1fr auto;align-items:center;gap:10px;font-size:11px}.mini-bar .value{width:35px;text-align:left;color:#4e7668;font-weight:800}.soft{color:var(--muted)}.footer{color:#81938f;font-size:10px;text-align:center;margin-top:26px;line-height:2}.modal-wrap{display:none;position:fixed;inset:0;z-index:80;background:rgba(3,31,26,.53);padding:25px;overflow:auto;align-items:center;justify-content:center}.modal-wrap.open{display:flex}.modal{width:min(760px,100%);max-height:min(93vh,900px);overflow:auto;background:white;border-radius:19px;box-shadow:0 24px 100px #0003;padding:24px}.modal-head{display:flex;justify-content:space-between;align-items:start;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}.modal-head h2{margin:0;font-size:19px}.modal-head small{color:var(--muted)}.modal .btn.x{font-size:18px;padding:0;width:34px;height:34px}.statline{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.statline>div{background:#f6faf8;padding:14px;border-radius:12px}.statline span{display:block;color:var(--muted);font-size:10px}.statline strong{font-size:20px}.dates-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.dates-tags span{padding:3px 8px;border-radius:8px;background:#eef7f1;color:#236f58;font-size:10px}.notice{background:#edf6f1;border-radius:10px;color:#536f62;padding:10px 14px;font-size:11px;margin:12px 0}.disclaimer{color:#8a7773;background:#fff5ef;border-radius:10px;padding:10px 12px;font-size:11px}.sr-only{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1250px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.quality-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:800px){.page{padding:17px 14px 28px}.bar-inner{padding:10px 14px}.brand strong{font-size:16px}.brand small{font-size:10px}.bar-actions .btn{padding:5px 8px;font-size:10px}.intro{align-items:start}.intro h1{font-size:19px}.layout-2,.layout-equal{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-card{min-height:unset}.chart svg{height:220px}}@media(max-width:500px){.bar-inner{align-items:flex-start}.brand-mark{width:35px;height:35px;font-size:18px}.bar-actions{gap:4px;justify-content:flex-end}.bar-actions .btn{font-size:9px}.intro{display:block}.data-note{margin-top:7px}.filters{gap:8px}.filter-panel{padding:13px}.inline-options{gap:10px}.filter-meta{margin-inline-start:0;width:100%}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.kpi{padding:12px}.kpi-number{font-size:22px}.kpi-label{font-size:10px}.kpi-sub{font-size:9px}.chart-card{padding:13px}.tab{font-size:11px;padding:7px 12px}.quality-grid{gap:8px}.quality-box{padding:12px}.quality-box b{font-size:20px}.head h3{font-size:13px}.statline{gap:5px}.statline>div{padding:8px}.statline strong{font-size:16px}.modal-wrap{padding:10px}.modal{padding:14px}.tools .search{max-width:none;min-width:0;width:100%}}
+
+/* إدارة التقويم والإجازات */
+.holiday-indicator{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap;background:#eaf6ee;border:1px solid #cce8d9;padding:5px 10px;border-radius:10px;color:#155944;font-weight:800;font-size:11px}
+.holiday-indicator .btn{padding:3px 8px}
+.calendar-layout{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(290px,.82fr);gap:15px;align-items:start}
+.calendar-card{padding:17px;min-width:0}.calendar-card h3{font-weight:900;font-size:14px;margin:0 0 5px}.calendar-card p{color:var(--muted);font-size:11px;margin:0 0 13px}
+.calendar-nav{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:13px 0}.calendar-nav>.field{flex:1;min-width:170px;max-width:285px}.calendar-week-label{background:#f4f8f6;color:#315f53;font-weight:800;border-radius:10px;padding:8px 10px;font-size:11px;margin-bottom:10px}
+.week-days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.week-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:3px;padding:10px 3px;background:#fafcfb;border:1px solid #dce9e4;border-radius:12px;min-height:93px;cursor:pointer;text-align:center;transition:.15s}.week-day:hover:not(.disabled){border-color:#74b19e}.week-day.selected{border-color:#16866b;background:#e4f5eb;box-shadow:inset 0 0 0 1px #16866b}.week-day.disabled{opacity:.40;cursor:not-allowed}.week-day input{position:absolute;top:6px;left:7px;accent-color:var(--primary);width:15px;height:15px}.week-day .weekday{font-size:11px;font-weight:800}.week-day .daynumber{font-size:20px;line-height:1.25;font-weight:900;font-variant-numeric:tabular-nums}.week-day .datedesc{font-size:9px;color:#718981;line-height:1.2}.week-day .marked{font-size:9px;color:#176a53;font-weight:900}
+.calendar-edit-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-top:13px}.calendar-edit-row .field{flex:1;min-width:180px}.calendar-edit-row .field input,.calendar-edit-row .field select{min-height:40px}.calendar-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:12px}.calendar-feedback{font-size:11px;color:#547265;min-height:20px;margin-top:9px}.calendar-feedback.error{color:#ab3b37}.calendar-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}.calendar-stat{background:#f1f7f4;padding:10px 12px;border-radius:12px}.calendar-stat strong{display:block;font-size:22px;line-height:1.4}.calendar-stat span{display:block;font-size:10px;color:#567368;font-weight:800}
+.holiday-list{display:flex;flex-direction:column;gap:7px;max-height:480px;overflow:auto}.holiday-entry{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 11px;border:1px solid #e3efe8;border-radius:10px;background:#fcfefd}.holiday-entry>div{min-width:0}.holiday-entry strong{display:block;font-size:11px}.holiday-entry small{color:var(--muted);font-size:10px}.holiday-entry .btn{flex-shrink:0}.holiday-tag{background:#edf5ef;border-radius:5px;padding:1px 5px;color:#246b56}.calendar-storage{font-size:10px;color:#7d847e;background:#faf9f3;border:1px solid #ece9d7;border-radius:10px;padding:10px;margin-top:14px}
+.print-calendar-note{display:none}
+@media(max-width:880px){.calendar-layout{grid-template-columns:1fr}}
+@media(max-width:560px){.calendar-card{padding:12px}.week-days{gap:3px}.week-day{min-height:83px;padding:7px 1px;border-radius:8px}.week-day .weekday{font-size:9px}.week-day .daynumber{font-size:16px}.week-day .datedesc{font-size:8px}.week-day .marked{font-size:8px}.week-day input{width:13px;height:13px;top:3px;left:3px}.holiday-indicator{width:100%;justify-content:space-between}.calendar-nav>.field{max-width:none}}
+@media print{.print-calendar-note{display:block;margin-bottom:10px;font-size:9pt;color:#444}.calendar-layout{display:none}.section#sec-calendar.active{display:block!important}.section#sec-calendar.active .calendar-layout{display:none!important}}
+
+@page{size:A4 landscape;margin:12mm}@media print{body{background:white;color:#000;font-family:'Tajawal',Tahoma,Arial,sans-serif;font-size:11pt}.sitebar,.filter-panel,.tabs,.tools,.pager,.modal-wrap,.btn,.footer,.nonprint{display:none!important}.page{padding:0;max-width:none}.intro{margin-bottom:12px}.intro h1{font-size:19pt}.kpis{grid-template-columns:repeat(6,1fr)}.panel{box-shadow:none;border-color:#bbb;break-inside:avoid}.chart-card{break-inside:avoid}.section{display:none!important}.section.active{display:block!important}.layout-2{grid-template-columns:1.2fr 1fr}.chart svg{height:175px}.tablewrap{overflow:visible}.datatable{min-width:0;font-size:9pt}.datatable th,.datatable td{padding:6px}.kpi-number{font-size:20pt}.heatmap{min-width:0}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+/* تقارير الغياب اليومي والمتكرر */
+.focus-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:0 0 13px}
+.focus-summary{border:1px solid var(--border);background:var(--card);border-radius:13px;padding:12px 14px;min-width:0}
+.focus-summary span{display:block;font-size:10px;color:var(--muted);font-weight:800;min-height:19px}
+.focus-summary strong{display:block;font-weight:900;font-size:23px;line-height:1.5;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.focus-summary small{font-size:10px;color:#658177}
+.focus-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.focus-controls .field input,.focus-controls .field select{min-height:42px}
+.focus-note{background:#eef7f2;border:1px solid #d4e9da;border-radius:10px;padding:10px 12px;color:#385e52;margin:10px 0;font-size:11px}
+.focus-small{font-size:10px;color:var(--muted);margin:3px 0 12px}
+.focus-daytags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0 14px}
+.focus-daytags span{background:#eff7f3;border:1px solid #dcebe3;padding:4px 8px;border-radius:7px;font-size:10px;color:#21654f;font-weight:800}
+.focus-daytags .muted{background:#f7f8f7;color:#8b9a95}
+.focus-results-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.focus-results-top h3{margin:0;font-size:14px;font-weight:900}
+.focus-table{min-width:840px}
+.focus-table td .btn{padding:4px 8px;font-size:10px}
+.focus-table .dates-cell{max-width:330px;white-space:normal;line-height:1.8}
+.focus-table .dates-cell small{font-size:10px;color:#57756a}
+.focus-filter-panel{padding:15px;margin-bottom:14px}
+@media(max-width:1150px){.focus-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.focus-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.focus-summary{padding:10px}.focus-summary strong{font-size:20px}.focus-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.focus-filter-panel{padding:12px}.focus-results-top{align-items:flex-start}.focus-results-top .btn{font-size:10px}}
+@media print{.focus-filter-panel{display:none!important}.focus-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.focus-daytags{display:flex}.focus-table{min-width:0;font-size:8pt}.focus-table .dates-cell{max-width:180px}}
+
+/* تحسينات العرض المتجاوب: سطح المكتب والجوال */
+body{overflow-x:hidden}
+.page{width:100%;max-width:1480px}
+.panel,.chart-card,.section,.layout-2,.layout-equal{min-width:0}
+.subheader .btn{flex-shrink:0}
+.tablewrap{scrollbar-width:thin;overscroll-behavior-inline:contain}
+.tablewrap:focus-within{outline:2px solid #94c9b6;outline-offset:2px}
+.tabs{scroll-snap-type:x proximity}
+.tab{scroll-snap-align:start}
+@media (min-width:1500px){.kpi-number{font-size:29px}.chart-card{padding:20px 22px}.page{padding:26px 30px 48px}}
+@media (max-width:990px){.layout-2,.layout-equal{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-card{min-height:0}}
+@media (max-width:680px){
+  body{font-size:12px;line-height:1.65}
+  .sitebar{position:relative}
+  .bar-inner{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:10px 13px}
+  .brand{gap:10px}.brand strong{font-size:16px}.brand small{font-size:10px}
+  .brand-mark{width:35px;height:35px;border-radius:10px}
+  .bar-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .bar-actions .btn{font-size:11px;padding:8px 6px;white-space:normal;min-height:38px}
+  .page{padding:12px 10px 32px}
+  .intro{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+  .intro h1{font-size:19px;line-height:1.45}.intro p{font-size:11px}
+  .data-note{max-width:100%;white-space:normal;font-size:10px}
+  .filter-panel{padding:12px;margin-bottom:12px}
+  .filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .field label{font-size:10px}
+  .field input,.field select{min-height:42px;padding:7px;font-size:11px}
+  .inline-options{align-items:stretch;gap:8px}
+  .inline-options .check{width:100%}
+  .filter-meta{width:100%;margin:0}
+  .holiday-indicator{width:100%;justify-content:space-between}
+  .tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;gap:7px;padding:0;margin:0 0 14px}
+  .tab{font-size:10px;line-height:1.45;white-space:normal;min-width:0;min-height:44px;padding:7px 5px;border:1px solid #dcebe3;background:#fff}
+  .tab.active{border-color:var(--primary)}
+  .tabs .tab:last-child:nth-child(odd){grid-column:1/-1}
+  .layout-2,.layout-equal{grid-template-columns:minmax(0,1fr);gap:11px;margin-bottom:11px}
+  .kpis,.focus-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:11px}
+  .kpi{padding:11px 9px}.kpi-number{font-size:22px}.kpi-label{white-space:normal;font-size:10px;line-height:1.5}.kpi-sub{font-size:9px}
+  .chart-card{padding:12px;min-width:0;min-height:0}
+  .chart svg{height:190px}
+  .head{flex-wrap:wrap;gap:6px}.head p{font-size:10px}
+  .subheader{align-items:stretch;gap:8px}.subheader h2{font-size:15px}.subheader p{font-size:10px}.subheader .btn{width:100%}
+  .mini-bar{grid-template-columns:minmax(65px,100px) 1fr 35px;gap:7px;font-size:10px}
+  .quality-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .quality-box{padding:11px}.quality-box b{font-size:20px}
+  .focus-filter-panel{padding:11px}.focus-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .focus-results-top h3{font-size:12px}
+  .focus-summary{padding:10px}.focus-summary strong{font-size:20px}
+  .pager{flex-wrap:wrap;justify-content:space-between}.pager span{width:100%}
+  .tools .search{max-width:none;min-width:0;width:100%}
+  .tools select{width:100%;max-width:none}
+  .heatmap-wrap{overflow-x:auto;scrollbar-width:thin}
+  .heatmap{min-width:700px}
+  .tablewrap{overflow-x:auto;max-width:100%}
+  /* تحويل جداول الأفراد إلى بطاقات واضحة دون تمرير جانبي على الهاتف */
+  #studentTable,#dailyTable,#repeatTable,#classRanking,#anomalyTable{display:block;min-width:0;width:100%;border-collapse:separate}
+  #studentTable thead,#dailyTable thead,#repeatTable thead,#classRanking thead,#anomalyTable thead{display:none}
+  #studentTable tbody,#dailyTable tbody,#repeatTable tbody,#classRanking tbody,#anomalyTable tbody{display:grid;grid-template-columns:1fr;gap:9px}
+  #studentTable tbody tr,#dailyTable tbody tr,#repeatTable tbody tr,#classRanking tbody tr,#anomalyTable tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 10px;background:#fff;border:1px solid #e0eae5;border-radius:11px;padding:10px;min-width:0}
+  #studentTable tbody td,#dailyTable tbody td,#repeatTable tbody td,#classRanking tbody td,#anomalyTable tbody td{min-width:0;padding:4px 0;border:0;white-space:normal;overflow-wrap:anywhere;text-align:right;direction:rtl;font-size:11px;line-height:1.45;display:flex;flex-direction:column;gap:2px}
+  #studentTable tbody td::before,#dailyTable tbody td::before,#repeatTable tbody td::before,#classRanking tbody td::before,#anomalyTable tbody td::before{content:attr(data-label);font-size:9px;color:#6a847a;font-weight:700;line-height:1.35}
+  #studentTable tbody td:nth-child(2),#dailyTable tbody td:nth-child(2),#repeatTable tbody td:nth-child(2){grid-column:1/-1;font-size:12px;color:#16483c;border-bottom:1px solid #e5eee9;padding-bottom:8px;margin-bottom:3px}
+  #studentTable tbody td:last-child,#dailyTable tbody td:last-child,#repeatTable tbody td:last-child{grid-column:1/-1}
+  #studentTable tbody td:last-child .btn,#dailyTable tbody td:last-child .btn,#repeatTable tbody td:last-child .btn{width:100%;min-height:34px}
+  #studentTable tbody tr:has(.empty),#dailyTable tbody tr:has(.empty),#repeatTable tbody tr:has(.empty),#classRanking tbody tr:has(.empty),#anomalyTable tbody tr:has(.empty){display:block}
+  #studentTable tbody td.empty,#dailyTable tbody td.empty,#repeatTable tbody td.empty,#classRanking tbody td.empty,#anomalyTable tbody td.empty{display:block;text-align:center;padding:18px 0}
+  #studentTable tbody td.empty:before,#dailyTable tbody td.empty:before,#repeatTable tbody td.empty:before,#classRanking tbody td.empty:before,#anomalyTable tbody td.empty:before{display:none}
+  .focus-table .dates-cell{max-width:100%}
+  .calendar-layout{grid-template-columns:1fr}
+  .calendar-card{padding:12px}
+  .calendar-nav>.field{min-width:0;flex:1 0 100%}
+  .calendar-actions .btn{white-space:normal}
+  .holiday-entry{align-items:flex-start;flex-direction:column}.holiday-entry .calendar-actions{width:100%}
+  .modal-wrap{padding:10px}.modal{max-height:95vh;padding:13px}
+  .statline{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:380px){.filters{grid-template-columns:1fr}.focus-controls{grid-template-columns:1fr}.kpi-number{font-size:20px}.week-day .daynumber{font-size:15px}}
+.print-dialog{display:none;position:fixed;inset:0;z-index:100;background:rgba(3,36,29,.62);padding:14px;align-items:center;justify-content:center;overflow:auto}
+.print-dialog.open{display:flex}
+.print-box{width:min(560px,100%);max-height:94vh;overflow:auto;background:white;padding:24px;border-radius:19px;box-shadow:0 16px 55px #0004}
+.print-box h2{font-size:19px;margin:0 0 7px}.print-box p{font-size:12px;color:#60766f;margin:0 0 15px}
+.print-choice{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid #dceae4;border-radius:11px;margin:8px 0;cursor:pointer;font-size:12px;font-weight:700}
+.print-choice input{accent-color:var(--primary);width:17px;height:17px;flex-shrink:0}
+.print-dialog-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-start;margin-top:17px}
+.print-help{background:#f1f8f4;padding:10px 12px;border-radius:9px;font-size:11px;color:#486c5e;margin-top:12px}
+@media(max-width:680px){.print-box{padding:16px}.print-dialog-actions .btn{flex:1 1 100%;white-space:normal}}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="bar-inner"><div class="brand"><div class="brand-mark" aria-hidden="true">▥</div><div><strong>مرصد غياب الطلاب</strong><small>المدرسة · لوحة تحليل تفاعلية</small></div></div><div class="bar-actions"><button class="btn ghost" id="printBtn" type="button" aria-haspopup="dialog" aria-controls="printOptions">⎙ الطباعة وPDF</button><button class="btn ghost" id="exportBtn" type="button">↓ تصدير CSV</button></div></div></header>
+<main class="page">
+<div class="intro"><div><h1>تحليل ومتابعة غياب الطلاب</h1><p>بيانات مستخرجة من ملف الغياب الأصلي · جميع الحسابات تتغير مع المرشحات</p></div><span class="data-note" id="rangeTag">● الفترة الافتراضية 27 سبتمبر – 9 نوفمبر 2026</span></div>
+<section class="panel filter-panel nonprint" aria-label="المرشحات"><div class="filter-heading"><h2>☷ تصفية البيانات</h2><button class="btn small" id="resetBtn">إعادة الضبط</button></div><div class="filters"><div class="field"><label for="startDate">من تاريخ (ميلادي)</label><select id="startDate" aria-label="بداية الفترة من أيام الدوام"></select></div><div class="field"><label for="endDate">إلى تاريخ (ميلادي)</label><select id="endDate" aria-label="نهاية الفترة من أيام الدوام"></select></div><div class="field"><label for="gradeSelect">الصف الدراسي</label><select id="gradeSelect"><option value="all">جميع الصفوف</option><option value="1">الأول الثانوي</option><option value="2">الثاني الثانوي</option><option value="3">الثالث الثانوي</option></select></div><div class="field"><label for="classSelect">الفصل الدراسي</label><select id="classSelect"><option value="all">جميع الفصول</option></select></div><div class="field"><label for="riskThreshold">حد متابعة التكرار</label><select id="riskThreshold"><option value="5">5 أيام فأكثر</option><option value="10">10 أيام فأكثر</option><option value="15" selected>15 يومًا فأكثر</option><option value="20">20 يومًا فأكثر</option></select></div></div><div class="inline-options"><label class="check"><input id="skipAnomaly" type="checkbox"> استبعاد الأيام مرتفعة الغياب جدًا (≥80% من طلاب السجل)</label><span class="filter-meta">أيام الدوام: الأحد–الخميس فقط · الإجازات المحفوظة مستبعدة تلقائيًا</span><span class="holiday-indicator"><span id="holidayQuickCount">لا توجد أيام إجازة مستبعدة</span><button class="btn small" id="openCalendarBtn" type="button">☷ إدارة الإجازات</button></span><span class="filter-meta" id="filterInfo">البيانات محفوظة داخل هذا الملف وتعمل دون اتصال</span></div></section>
+<nav class="tabs nonprint" aria-label="أقسام اللوحة"><button class="tab active" data-tab="overview">▦ المؤشرات العامة</button><button class="tab" data-tab="classes">▤ الصفوف والفصول</button><button class="tab" data-tab="students">♙ متابعة الطلاب</button><button class="tab" data-tab="daily">▤ غياب يوم محدد</button><button class="tab" data-tab="repeat">◷ الغياب المتكرر حسب اليوم</button><button class="tab" data-tab="quality">⚑ جودة البيانات</button><button class="tab" data-tab="calendar">▦ التقويم والإجازات <span id="calendarTabCount"></span></button></nav>
+<section class="section active" id="sec-overview">
+<div class="kpis" id="kpis"></div>
+<div class="layout-2"><article class="panel chart-card"><div class="head"><div><h3>اتجاه الغياب اليومي</h3><p>عدد سجلات الغياب وفق التواريخ الواردة في المصدر</p></div><span class="legend"><i class="dot"></i> سجلات الغياب</span></div><div class="chart" id="dailyChart"></div></article><article class="panel chart-card"><div class="head"><div><h3>الغياب حسب الصف</h3><p>مقارنة متوسط عدد الأيام لكل طالب في السجل</p></div></div><div id="gradeBars" class="mini-bars"></div><div id="gradeTable"></div></article></div>
+<div class="layout-2 layout-equal"><article class="panel chart-card"><div class="head"><div><h3>الغياب الأسبوعي</h3><p>الأسبوع الدراسي من الأحد إلى الخميس دون أيام الإجازات</p></div></div><div class="chart" id="weeklyChart"></div></article><article class="panel chart-card"><div class="head"><div><h3>توزيع الطلاب حسب عدد أيام الغياب</h3><p>يشمل الطلاب الواردين في المصدر ضمن المرشح الحالي</p></div></div><div id="bucketBars" class="mini-bars"></div></article></div>
+<div class="layout-2 layout-equal"><article class="panel chart-card"><div class="head"><div><h3>الغياب حسب يوم الدوام</h3><p>الأحد إلى الخميس فقط، بعد استبعاد الإجازات</p></div></div><div id="weekdayBars" class="mini-bars"></div></article><article class="panel chart-card"><div class="head"><div><h3>الملخص الشهري</h3><p>السجلات والشخصيات المتأثرة بكل شهر ضمن المرشحات</p></div></div><div id="monthTable"></div></article></div>
+</section>
+<section class="section" id="sec-classes"><div class="subheader"><div><h2>مقارنة الصفوف والفصول الدراسية</h2><p>الترتيب حسب متوسط الأيام للطالب؛ المتوسط لا يمثل نسبة غياب رسمية</p></div><button class="btn small" id="exportClasses">تصدير مقارنة الفصول</button></div><div class="layout-2 layout-equal"><article class="panel chart-card"><div class="head"><div><h3>ترتيب الفصول</h3><p>متوسط الغياب لكل طالب ورد في الملف</p></div></div><div class="tablewrap"><table class="datatable" id="classRanking"><thead><tr><th>الفصل</th><th>طلاب السجل</th><th>سجلات الغياب</th><th>المتوسط</th><th>طلاب تجاوزوا الحد</th></tr></thead><tbody></tbody></table></div></article><article class="panel chart-card"><div class="head"><div><h3>مقارنة الصفوف الثلاثة</h3><p>عدد الطلاب، وإجمالي السجلات، ومتوسطها</p></div></div><div id="gradeDetail"></div></article></div><article class="panel chart-card"><div class="head"><div><h3>خريطة الغياب الأسبوعية للفصول</h3><p>كل خلية تمثل متوسط الغياب المسجل للطالب في ذلك الفصل خلال الأسبوع</p></div></div><div id="heatmap" class="heatmap-wrap"></div><div class="inline-key"><span>القيم الأعلى تظليلًا أغمق · مرر المؤشر على الخلية للتفاصيل</span><span class="scale" id="heatScale"></span></div></article></section>
+<section class="section" id="sec-students"><div class="subheader"><div><h2>قائمة متابعة الطلاب</h2><p>اضغط «عرض التفاصيل» لرؤية سجل الطالب خلال الفترة المحددة</p></div><button class="btn small" id="exportStudents">تصدير بيانات الطلاب</button></div><article class="panel chart-card"><div class="tools"><input class="search" type="search" placeholder="بحث باسم الطالب أو رقمه أو الفصل..." id="studentSearch" aria-label="البحث في الطلاب"><select id="studentSort" aria-label="ترتيب الطلاب"><option value="days-desc">الأعلى غيابًا</option><option value="days-asc">الأقل غيابًا</option><option value="name">حسب الاسم</option><option value="class">حسب الفصل</option></select><label class="check"><input type="checkbox" id="onlyRisk">إظهار متجاوزي حد المتابعة فقط</label><span class="detail" id="studentCountLabel"></span></div><div class="tablewrap"><table class="datatable" id="studentTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الفصل</th><th>أيام الغياب</th><th>تتابع أيام الرصد</th><th>حالة المتابعة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div><div class="pager"><span id="pageLabel"></span><button id="nextPage" class="btn small">التالي ‹</button><button id="prevPage" class="btn small">› السابق</button></div></article></section>
+
+<section class="section" id="sec-daily">
+ <div class="subheader"><div><h2>كشف الغائبين في يوم محدد</h2><p>اختر يوم دوام فعليًا ثم ابحث، صفِّ النتائج، أو رتِّب الغائبين بحسب الفصل أو الاسم أو إجمالي غيابهم.</p></div><button class="btn small" type="button" id="exportDaily">↓ تصدير الغائبين في هذا اليوم CSV</button></div>
+ <div class="panel focus-filter-panel nonprint">
+  <div class="focus-controls">
+   <div class="field"><label for="dailyFocusDate">تاريخ يوم الغياب</label><select id="dailyFocusDate" aria-label="اختيار يوم دوام محتسب"></select></div>
+   <div class="field"><label for="dailyFocusClass">تصفية الفصل</label><select id="dailyFocusClass"><option value="all">كل الفصول ضمن المرشحات العامة</option></select></div>
+   <div class="field"><label for="dailySort">فرز القائمة</label><select id="dailySort"><option value="class">حسب الصف والفصل</option><option value="name">حسب اسم الطالب</option><option value="number">حسب رقم الطالب</option><option value="total-desc">الأكثر غيابًا في الفترة</option><option value="total-asc">الأقل غيابًا في الفترة</option></select></div>
+   <div class="field"><label for="dailySearch">البحث</label><input type="search" id="dailySearch" placeholder="اسم الطالب أو رقمه أو الفصل"></div>
+  </div>
+  <div class="focus-small">تتبع أيام اختيار التاريخ الفترة العامة في أعلى اللوحة. لا تُعرض الجمعة أو السبت أو أيام الإجازات، ولا تدخل أيام الكثافة المرتفعة عند تفعيل استبعادها.</div>
+ </div>
+ <div class="focus-grid" id="dailySummary"></div>
+ <article class="panel chart-card">
+  <div class="focus-results-top"><h3 id="dailyTableTitle">كشف الغائبين</h3><span class="pill neutral" id="dailyResultCount">0 طالب</span></div>
+  <div class="tablewrap"><table class="datatable focus-table" id="dailyTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف الدراسي</th><th>الفصل</th><th>إجمالي غيابه في الفترة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
+  <div class="pager nonprint"><span id="dailyPageLabel"></span><button class="btn small" type="button" id="dailyNext">التالي ‹</button><button class="btn small" type="button" id="dailyPrev">› السابق</button></div>
+ </article>
+ <div class="focus-note">المصدر يسجل الغياب ولا يقدم سجل حضور مستقلًا. النتيجة تعرض من <strong>سُجّل غيابه</strong> في التاريخ المختار، لا من يمكن إثبات حضوره أو عدم حضوره من نظام المدرسة.</div>
+</section>
+
+<section class="section" id="sec-repeat">
+ <div class="subheader"><div><h2>الغياب المتكرر في يوم معين من كل أسبوع</h2><p>اكتشف الطلاب الذين سُجل غيابهم في جميع أيام الأحد أو الخميس (أو أي يوم دوام آخر) خلال الفترة المختارة.</p></div><button class="btn small" type="button" id="exportRepeat">↓ تصدير نتيجة التكرار CSV</button></div>
+ <div class="panel focus-filter-panel nonprint">
+  <div class="focus-controls">
+   <div class="field"><label for="repeatWeekday">يوم الأسبوع المستهدف</label><select id="repeatWeekday"><option value="0">الأحد</option><option value="1">الاثنين</option><option value="2">الثلاثاء</option><option value="3">الأربعاء</option><option value="4">الخميس</option></select></div>
+   <div class="field"><label for="repeatCriteria">معيار الغياب المتكرر</label><select id="repeatCriteria"><option value="all">جميع مرات اليوم (100%)</option><option value="75">75% من المرات فأكثر</option><option value="50">50% من المرات فأكثر</option><option value="two">مرتان فأكثر</option><option value="one">مرة واحدة فأكثر</option></select></div>
+   <div class="field"><label for="repeatClass">تصفية الفصل</label><select id="repeatClass"><option value="all">جميع الفصول ضمن المرشحات العامة</option></select></div>
+   <div class="field"><label for="repeatSort">فرز النتائج</label><select id="repeatSort"><option value="rate">نسبة التكرار الأعلى</option><option value="absences">عدد مرات الغياب الأعلى</option><option value="class">حسب الصف والفصل</option><option value="name">حسب اسم الطالب</option></select></div>
+  </div>
+  <div class="tools" style="margin-bottom:0"><input class="search" type="search" id="repeatSearch" placeholder="بحث باسم الطالب أو رقمه أو الفصل" aria-label="البحث في طلاب التكرار"><span class="detail" id="repeatMethod"></span></div>
+ </div>
+ <div class="focus-grid" id="repeatSummary"></div>
+ <article class="panel chart-card" style="margin-bottom:14px">
+  <div class="head"><div><h3>التواريخ الداخلة في مقارنة اليوم المختار</h3><p>تُستبعد العطلات الأسبوعية والإجازات المحددة في التقويم وأي أيام مستبعدة بالمرشح العام.</p></div></div>
+  <div class="focus-daytags" id="repeatDates"></div>
+  <div class="focus-note" id="repeatExplain"></div>
+ </article>
+ <article class="panel chart-card">
+  <div class="focus-results-top"><h3 id="repeatTableTitle">قائمة الطلاب المطابقين</h3><span class="pill neutral" id="repeatResultCount">0 طالب</span></div>
+  <div class="tablewrap"><table class="datatable focus-table" id="repeatTable"><thead><tr><th>م</th><th>اسم الطالب</th><th>رقم الطالب</th><th>الصف والفصل</th><th>مرات الغياب</th><th>فرص اليوم المحتسبة</th><th>نسبة التكرار</th><th>تواريخ الغياب المسجلة</th><th>التفاصيل</th></tr></thead><tbody></tbody></table></div>
+  <div class="pager nonprint"><span id="repeatPageLabel"></span><button class="btn small" type="button" id="repeatNext">التالي ‹</button><button class="btn small" type="button" id="repeatPrev">› السابق</button></div>
+ </article>
+ <div class="focus-note"><strong>كيفية القراءة:</strong> «جميع مرات الأحد» تعني أن الطالب لديه سجل غياب في كل يوم أحد من أيام الدوام الفعلية داخل الفترة المختارة، بعد حذف الإجازات. عدم وجود سجل غياب في يوم لا يعد إثباتًا مستقلًا للحضور؛ ويُفضل مراجعة اكتمال بيانات المصدر قبل اتخاذ إجراء إداري.</div>
+</section>
+<section class="section" id="sec-quality"><div class="subheader"><div><h2>تدقيق البيانات وجودة السجلات</h2><p>هذه الملاحظات لا تعني بالضرورة وجود خطأ، لكنها تستدعي التحقق قبل قرارات المتابعة</p></div><button class="btn small" id="exportQuality">تصدير الأيام الاستثنائية</button></div><div class="quality-grid" id="qualityCards"></div><div class="callout"><strong>تنبيه منهجي:</strong> عتبة «اليوم الاستثنائي» استكشافية فقط، وتُقاس بنسبة الطلاب الذين لديهم أي غياب في الملف، وليست نسبة الغياب الرسمية من إجمالي المقيدين. تُستبعد أيام الراحة الأسبوعية والإجازات المسجلة تلقائيًا من جميع التحليلات. كما لا يمكن حساب نسبة الغياب المعتمدة أو تصنيف الغياب بعذر/دون عذر دون سجل القيد والتقويم الدراسي وبيانات الأعذار.</div><article class="panel chart-card"><div class="head"><div><h3>أيام الدوام ذات الكثافة المرتفعة</h3><p>سجلات غياب لا تقل عن 80% من طلاب النطاق المختار؛ لا تدخل الأيام المستبعدة في الحساب</p></div></div><div class="tablewrap"><table class="datatable" id="anomalyTable"><thead><tr><th>التاريخ</th><th>اليوم</th><th>سجلات الغياب</th><th>النسبة المرجعية</th><th>الحالة</th></tr></thead><tbody></tbody></table></div></article><article class="panel chart-card"><div class="head"><div><h3>معلومات المصدر وضوابط القراءة</h3></div></div><div id="sourceNotes"></div></article></section>
+
+<section class="section" id="sec-calendar">
+ <div class="subheader"><div><h2>إدارة أيام الإجازات والاستبعاد</h2><p>حدد أسبوعًا دراسيًا ثم اختر يومًا أو عدة أيام لاستبعاد الغياب المسجل خلالها من جميع الإحصائيات.</p></div><button class="btn small" id="exportCalendarCSV" type="button">تصدير قائمة الإجازات CSV</button></div>
+ <div class="callout"><strong>قاعدة الحساب:</strong> أيام الراحة الأسبوعية مستبعدة دائمًا، ولا تظهر في خيارات التقويم أو الرسوم أو الإحصائيات. وأي يوم تضعه «إجازة» يُزال من جميع المجاميع والمتوسطات والمقامات ونتائج الطلاب والتصدير والتدقيق. عند إعادته «دوامًا» تعود حساباته فورًا دون فقدان البيانات الأصلية.</div>
+ <div class="calendar-layout">
+   <article class="panel calendar-card">
+    <h3>تحديد الأسبوع والأيام</h3><p>اختر الأسبوع الدراسي، ثم حدد حالة كل يوم من الأحد إلى الخميس: دوام أو إجازة. اضغط حفظ لتطبيق التغيير على جميع الإحصائيات مباشرة.</p>
+    <div class="calendar-nav"><div class="field"><label for="holidayWeekDate">اختر الأسبوع الدراسي</label><select id="holidayWeekDate"></select></div><button class="btn small" type="button" id="previousWeek">‹ الأسبوع السابق</button><button class="btn small" type="button" id="nextWeek">الأسبوع التالي ›</button></div>
+    <div class="calendar-week-label" id="holidayWeekLabel"></div>
+    <div class="week-days" id="holidayWeekDays" role="group" aria-label="أيام الأسبوع المراد استبعادها"></div>
+    <div class="calendar-edit-row"><div class="field"><label for="holidayReason">نوع الإجازة أو سبب الاستبعاد</label><select id="holidayReason"><option value="إجازة مطولة">إجازة مطولة</option><option value="اليوم الوطني">اليوم الوطني</option><option value="إجازة رسمية">إجازة رسمية</option><option value="يوم التأسيس">يوم التأسيس</option><option value="تعليق الدراسة">تعليق الدراسة</option><option value="إجازة مدرسية">إجازة مدرسية</option><option value="أخرى">سبب آخر</option></select></div><div class="field" id="customReasonField" hidden><label for="customHolidayReason">وصف السبب</label><input id="customHolidayReason" maxlength="120" placeholder="اكتب سبب الاستبعاد"></div></div>
+    <div class="calendar-actions"><button class="btn primary" type="button" id="saveHolidayWeek">حفظ حالات أيام الأسبوع</button><button class="btn small" type="button" id="clearHolidayWeek">إعادة أيام الأسبوع إلى دوام</button></div>
+    <div class="calendar-feedback" id="calendarFeedback" role="status" aria-live="polite"></div>
+    <div class="calendar-info-grid"><div class="calendar-stat"><strong id="calendarMarkedDays">0</strong><span>أيام مستبعدة محفوظة ضمن كامل الملف</span></div><div class="calendar-stat"><strong id="calendarSkippedRows">0</strong><span>سجلات مستبعدة بسبب الإجازات (للمراجعة فقط، خارج الحسابات)</span></div></div>
+    <div class="calendar-storage" id="holidayStorageNote">تُحفظ الإجازات داخل متصفحك على هذا الجهاز. لن تنتقل تلقائيًا إلى جهاز آخر؛ استخدم «تصدير نسخة الإجازات» لنقلها أو الاحتفاظ بنسخة احتياطية.</div>
+    <div class="calendar-actions"><button class="btn small" type="button" id="exportHolidayJSON">↓ تصدير نسخة الإجازات JSON</button><button class="btn small" type="button" id="importHolidayJSON">↑ استيراد نسخة الإجازات JSON</button><input type="file" id="holidayImportFile" accept=".json,application/json" class="sr-only" aria-label="اختيار ملف إعدادات الإجازات"></div>
+   </article>
+   <article class="panel calendar-card"><div class="head"><div><h3>سجل الأيام المستبعدة</h3><p>يمكن حذف أي يوم منفرد أو العودة لأسبوعه لتعديل الأيام.</p></div><span class="pill neutral" id="holidayListCount">0 يوم</span></div><div id="holidayList" class="holiday-list"></div></article>
+ </div>
+</section>
+<div class="print-calendar-note" id="printCalendarNote"></div>
+<footer class="footer">هذه لوحة تحليل محلية تحتوي على أسماء الطلاب وسجلات غيابهم. احفظ الملف في مكان آمن ولا تشاركه إلا مع المخولين. — مؤشرات إحصائية مساعدة وليست قرارات انضباطية آلية.</footer>
+</main>
+<div class="modal-wrap" id="studentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><div><h2 id="modalTitle"></h2><small id="modalDesc"></small></div><button class="btn x" id="closeModal" aria-label="إغلاق">×</button></div><div class="statline" id="modalStats"></div><div class="head"><div><h3>التواريخ التي سُجل فيها غياب</h3><p>ضمن الفترة والمرشحات المطبقة حاليًا</p></div></div><div class="dates-tags" id="modalDates"></div><p class="disclaimer">تتابع الغياب محسوب وفق تسلسل الأيام التي لها سجلات في المصدر، لا وفق تقويم دراسي رسمي؛ قد تشمل البيانات أيامًا غير دراسية.</p></div></div>
+
+<div class="print-dialog" id="printOptions" role="dialog" aria-modal="true" aria-labelledby="printOptionsTitle" aria-hidden="true">
+  <div class="print-box">
+    <div class="modal-head"><h2 id="printOptionsTitle">تجهيز تقرير الطباعة وPDF</h2><button class="btn x" id="closePrintOptions" type="button" aria-label="إغلاق خيارات الطباعة">×</button></div>
+    <p>اختر التقرير المطلوب. تُطبع كل الجداول كاملة وفق مرشحاتك، وليس الصفحة الحالية من الجدول فقط.</p>
+    <label class="print-choice"><input type="radio" name="printScope" value="all" checked> <span>تقرير شامل واحد — جميع الأقسام السبعة</span></label>
+    <label class="print-choice"><input type="radio" name="printScope" value="current"> <span>القسم المفتوح حاليًا فقط</span></label>
+    <div class="print-help">تنسيق A4 عرضي، صفحات مقسّمة مسبقًا، تكرار رؤوس الجداول والترويسة والتذييل مع ترقيم الصفحات. استخدم «حفظ كملف PDF» من نافذة الطباعة للحصول على ملف واحد. أيام الإجازات والجمعة والسبت خارج جميع الحسابات.</div>
+    <div class="print-dialog-actions">
+       <button type="button" class="btn primary" id="openPrintPreview">معاينة التقرير والطباعة</button>
+       <button type="button" class="btn" id="downloadPrintHTML">تحميل نسخة التقرير للطباعة HTML</button>
+       <button type="button" class="btn" id="cancelPrintOptions">إلغاء</button>
+    </div>
+  </div>
+</div>
+<script>
+'use strict';
+const DB={"title":"مرصد غياب الطلاب","school":"المدرسة","source":"","filenameStart":"2026-01-01","filenameEnd":"2026-01-01","sourceHeaderStart":"","students":[],"dates":[],"events":[],"meta":{"sourceRows":0,"totalLines":0,"validRows":0,"uniqueStudents":0,"dateMin":"","dateMax":""}};
+const GRADE_NAMES={1:'الأول الثانوي',2:'الثاني الثانوي',3:'الثالث الثانوي'};
+const WEEKDAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const d=(id)=>document.getElementById(id);
+const fmt=(n,digits=0)=>Number(n||0).toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+const esc=(s)=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const parse=(iso)=>new Date(iso+'T00:00:00Z');
+const day=(iso)=>parse(iso).getUTCDay();
+const readable=(iso,opt={})=>new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn',{day:'numeric',month:'short',...opt,timeZone:'UTC'}).format(parse(iso));
+const fullDate=(iso)=>readable(iso,{year:'numeric',weekday:'long'});
+const dayOffset=(iso,offs)=>new Date(parse(iso).getTime()+offs*86400000).toISOString().slice(0,10);
+const sunday=(iso)=>dayOffset(iso,-day(iso));
+const sum=(nums)=>nums.reduce((a,b)=>a+b,0);
+const allDateCounts=Array(DB.dates.length).fill(0);
+DB.events.forEach(([pi,di])=>allDateCounts[di]++);
+const anomalousIdx=new Set(allDateCounts.map((count,i)=>count>=.8*DB.students.length?i:-1).filter(i=>i>=0));
+const classList=[...new Set(DB.students.map(p=>p[2]))].sort((a,b)=>{const ai=DB.students.find(p=>p[2]===a)[3],bi=DB.students.find(p=>p[2]===b)[3];return ai-bi||parseInt(a.split(' ').pop())-parseInt(b.split(' ').pop())});
+const state={start:DB.filenameStart,end:DB.filenameEnd,grade:'all',cls:'all',threshold:15,skipAnomaly:false,tab:'overview',sort:'days-desc',studentQuery:'',onlyRisk:false,page:1};
+let last=null, shown=[];
+
+const HOLIDAY_STORAGE_KEY='student-absence-calendar-v1-'+DB.meta.dateMin+'-'+DB.meta.dateMax+'-'+DB.students.length;
+let holidayStorageOk=true;
+function isWeekday(iso){return day(iso)<5}
+function isSchoolDay(iso){return isWeekday(iso)&&!holidayReasonFor(iso)}
+function validDate(iso){return typeof iso==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(iso)&&!Number.isNaN(parse(iso).getTime())&&parse(iso).toISOString().slice(0,10)===iso&&iso>=DB.meta.dateMin&&iso<=DB.meta.dateMax&&isWeekday(iso)}
+function workingDates(from,to){const days=[];for(let iso=from;iso<=to;iso=dayOffset(iso,1)){if(isSchoolDay(iso)&&(!state.skipAnomaly||!anomalousIdx.has(DB.dates.indexOf(iso))))days.push(iso)}return days}
+function refreshPeriodOptions(){const days=[];for(let iso=DB.meta.dateMin;iso<=DB.meta.dateMax;iso=dayOffset(iso,1))if(isWeekday(iso))days.push(iso);for(const [id,key] of [['startDate','start'],['endDate','end']]){const el=d(id);el.innerHTML=days.map(iso=>`<option value="${iso}">${esc(fullDate(iso))}${holidayReasonFor(iso)?' · إجازة مستبعدة':''}</option>`).join('');el.value=state[key]}}
+function refreshWeekOptions(){const el=d('holidayWeekDate'),current=el.value||sunday(DB.filenameStart),weeks=[];for(let iso=sunday(DB.meta.dateMin);iso<=DB.meta.dateMax;iso=dayOffset(iso,7))weeks.push(iso);el.innerHTML=weeks.map(w=>`<option value="${w}">${esc(readable(w,{year:'numeric'}))} – ${esc(readable(dayOffset(w,4),{year:'numeric'}))}</option>`).join('');el.value=weeks.includes(current)?current:weeks.includes(sunday(DB.filenameStart))?sunday(DB.filenameStart):weeks[0]}
+function validateHolidays(data){const safe={};if(data&&typeof data==='object'&&!Array.isArray(data))for(const [iso,reason] of Object.entries(data)){if(validDate(iso)&&typeof reason==='string'&&reason.trim())safe[iso]=reason.trim().slice(0,120)}return safe}
+function loadHolidayStore(){try{const value=localStorage.getItem(HOLIDAY_STORAGE_KEY);return value?validateHolidays(JSON.parse(value)):{};}catch(e){holidayStorageOk=false;return {}}}
+let savedHolidays=loadHolidayStore();
+function persistHolidays(){try{localStorage.setItem(HOLIDAY_STORAGE_KEY,JSON.stringify(savedHolidays));holidayStorageOk=true}catch(e){holidayStorageOk=false}}
+const holidayDates=()=>Object.keys(savedHolidays).sort();
+function holidayReasonFor(iso){return Object.prototype.hasOwnProperty.call(savedHolidays,iso)?savedHolidays[iso]:null}
+function selectedWeek(){return sunday(d('holidayWeekDate').value||DB.filenameStart)}
+function calendarWeekDates(week){return Array.from({length:5},(_,i)=>dayOffset(week,i))}
+function calendarMessage(message,isError=false){const el=d('calendarFeedback');el.textContent=message;el.classList.toggle('error',isError)}
+function calendarReasonInput(){const other=d('holidayReason').value==='أخرى';d('customReasonField').hidden=!other;if(other)d('customHolidayReason').focus()}
+function updateHolidayWeek(){const week=selectedWeek();d('holidayWeekLabel').textContent=`أيام الدوام من ${fullDate(week)} إلى ${fullDate(dayOffset(week,4))}`;
+ const weeks=[...d('holidayWeekDate').options].map(x=>x.value),position=weeks.indexOf(week);
+ d('previousWeek').disabled=position<=0;d('nextWeek').disabled=position>=weeks.length-1;
+ d('holidayWeekDays').innerHTML=calendarWeekDates(week).map((iso,i)=>{const inRange=validDate(iso),reason=holidayReasonFor(iso),checked=!!reason;return `<label class="week-day ${checked?'selected':''} ${!inRange?'disabled':''}" title="${esc(checked?'إجازة: '+reason:'يوم دوام')}"><input type="checkbox" data-holiday-date="${iso}" ${checked?'checked':''} ${!inRange?'disabled':''}><span class="weekday">${WEEKDAYS[i]}</span><span class="daynumber">${fmt(Number(iso.slice(8)))}</span><span class="datedesc">${esc(readable(iso,{year:undefined}))}</span><span class="marked">${checked?'✓ إجازة':'دوام'}</span></label>`}).join('');
+ const reasons=calendarWeekDates(week).map(holidayReasonFor).filter(Boolean);if(reasons.length&&reasons.every(x=>x===reasons[0])){const options=[...d('holidayReason').options].map(x=>x.value);if(options.includes(reasons[0])){d('holidayReason').value=reasons[0]}else{d('holidayReason').value='أخرى';d('customHolidayReason').value=reasons[0]}}
+ d('customReasonField').hidden=d('holidayReason').value!=='أخرى';
+}
+function renderHolidayList(c){const sorted=holidayDates();d('holidayListCount').textContent=`${fmt(sorted.length)} يوم`;d('calendarTabCount').textContent=sorted.length?`(${fmt(sorted.length)})`:'';d('calendarMarkedDays').textContent=fmt(sorted.length);d('calendarSkippedRows').textContent=fmt(c.manuallyExcludedEvents);
+ d('holidayQuickCount').textContent=sorted.length?`${fmt(sorted.length)} يوم إجازة خارج الحسابات`:'لا توجد إجازات محددة';
+ d('holidayList').innerHTML=sorted.length?sorted.map(iso=>{const within=iso>=state.start&&iso<=state.end;return `<div class="holiday-entry"><div><strong>${esc(fullDate(iso))}</strong><small><span class="holiday-tag">${esc(savedHolidays[iso])}</span> · ${within?'ضمن الفترة الحالية':'خارج الفترة الحالية'} · خارج جميع الإحصائيات</small></div><div class="calendar-actions" style="margin:0"><button class="btn small" type="button" data-go-holiday="${iso}" aria-label="تحرير يوم ${esc(iso)}">تحرير</button><button class="btn small" type="button" data-remove-holiday="${iso}" aria-label="إعادة ${esc(iso)} يوم دوام">إعادة إلى دوام</button></div></div>`}).join(''):'<div class="empty">لا توجد إجازات مسجلة. اختر أسبوعًا وحدد أيام الإجازة ثم احفظ.</div>';
+ d('holidayStorageNote').textContent=holidayStorageOk?'تُحفظ الإجازات محليًا في هذا المتصفح وعلى هذا الجهاز فقط. لن تنتقل تلقائيًا إلى أجهزة أخرى أو إلى نسخة HTML بعنوان مختلف؛ استخدم التصدير والاستيراد لنسخ الإعدادات.':'تعذّر حفظ الإجازات في تخزين المتصفح. تعمل الخيارات حاليًا حتى إغلاق الصفحة فقط؛ صدّر ملف JSON للاحتفاظ بها.';
+ d('printCalendarNote').textContent=sorted.length?`أيام الإجازات المستبعدة من الحسابات خلال الفترة: ${fmt(c.manuallyExcludedDates)} يوم. أيام الدوام الفعلية المحتسبة: ${fmt(c.schoolDayCount)} يوم.`:`أيام الدوام الفعلية المحتسبة: ${fmt(c.schoolDayCount)} يوم.`;
+}
+function saveWeekHolidays(){const week=selectedWeek(),days=calendarWeekDates(week).filter(validDate),selected=new Set([...d('holidayWeekDays').querySelectorAll('input[data-holiday-date]:checked')].map(el=>el.dataset.holidayDate));
+ let reason=d('holidayReason').value;if(reason==='أخرى')reason=d('customHolidayReason').value.trim();if(selected.size&&!reason){calendarMessage('اكتب سبب الاستبعاد أولًا.',true);return}
+ for(const iso of days){if(selected.has(iso))savedHolidays[iso]=reason;else delete savedHolidays[iso]}
+ persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تم حفظ ${fmt(selected.size)} يوم إجازة للأسبوع المختار وتحديث الإحصائيات.${holidayStorageOk?'':' احفظ نسخة JSON لضمان بقاء الإعدادات.'}`,!holidayStorageOk)}
+function clearWeekHolidays(){let count=0;for(const iso of calendarWeekDates(selectedWeek())){if(holidayReasonFor(iso)){delete savedHolidays[iso];count++}}persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تم إلغاء استبعاد ${fmt(count)} يوم من هذا الأسبوع.`)}
+function exportHolidaysJSON(){const payload={schema:'student-absence-holidays',version:1,scope:{dateMin:DB.meta.dateMin,dateMax:DB.meta.dateMax,students:DB.students.length},days:savedHolidays};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='إعدادات_إجازات_غياب_الطلاب.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+async function importHolidaysJSON(file){if(!file)return;try{if(file.size>1000000)throw Error('حجم الملف كبير جدًا');const json=JSON.parse(await file.text());if(json.schema!=='student-absence-holidays'||json.version!==1||!json.days||typeof json.days!=='object'||Array.isArray(json.days))throw Error('هذا ليس ملف إعدادات إجازات صالحًا');const imported=validateHolidays(json.days),count=Object.keys(imported).length;
+ if(count===0)throw Error('لا يحتوي الملف على تواريخ إجازات ضمن نطاق التقرير الحالي');savedHolidays={...savedHolidays,...imported};persistHolidays();refreshPeriodOptions();updateHolidayWeek();state.page=1;render();calendarMessage(`تم استيراد ${fmt(count)} يوم ودمجها مع الإجازات الموجودة بنجاح.`)}catch(err){calendarMessage('تعذّر الاستيراد: '+err.message,true)}finally{d('holidayImportFile').value=''}}
+function wireHolidays(){d('openCalendarBtn').addEventListener('click',()=>switchTab('calendar'));refreshWeekOptions();
+ d('holidayWeekDate').addEventListener('change',()=>{updateHolidayWeek();calendarMessage('')});d('previousWeek').addEventListener('click',()=>{const el=d('holidayWeekDate');el.selectedIndex=Math.max(0,el.selectedIndex-1);updateHolidayWeek();calendarMessage('')});d('nextWeek').addEventListener('click',()=>{const el=d('holidayWeekDate');el.selectedIndex=Math.min(el.options.length-1,el.selectedIndex+1);updateHolidayWeek();calendarMessage('')});
+ d('holidayWeekDays').addEventListener('change',e=>{if(e.target.matches('input[data-holiday-date]')){e.target.closest('label').classList.toggle('selected',e.target.checked);e.target.closest('label').querySelector('.marked').textContent=e.target.checked?'✓ إجازة':'دوام';calendarMessage('اضغط حفظ لتطبيق التغييرات على جميع الإحصائيات.')}});
+ d('holidayReason').addEventListener('change',calendarReasonInput);d('saveHolidayWeek').addEventListener('click',saveWeekHolidays);d('clearHolidayWeek').addEventListener('click',clearWeekHolidays);
+ d('holidayList').addEventListener('click',e=>{const remove=e.target.closest('[data-remove-holiday]');const go=e.target.closest('[data-go-holiday]');if(remove){const iso=remove.dataset.removeHoliday;delete savedHolidays[iso];persistHolidays();refreshPeriodOptions();state.page=1;updateHolidayWeek();render();calendarMessage(`تمت إعادة ${fullDate(iso)} إلى الدوام واستعادة حساباته.`)}else if(go){d('holidayWeekDate').value=sunday(go.dataset.goHoliday);updateHolidayWeek();calendarMessage('يمكنك تغيير حالة اليوم أو سببه ثم حفظ الأسبوع.');d('holidayWeekDate').focus()}});
+ d('exportHolidayJSON').addEventListener('click',exportHolidaysJSON);d('importHolidayJSON').addEventListener('click',()=>d('holidayImportFile').click());d('holidayImportFile').addEventListener('change',e=>importHolidaysJSON(e.target.files[0]));
+ d('exportCalendarCSV').addEventListener('click',()=>downloadCSV([['تاريخ الإجازة','اليوم','السبب','حالة اليوم'],...holidayDates().map(iso=>[iso,WEEKDAYS[day(iso)],savedHolidays[iso],'مستبعد من جميع الإحصائيات'])],'قائمة_أيام_الإجازات_المستبعدة.csv'));
+ updateHolidayWeek();
+}
+function updateClasses(){const current=state.cls;let options=classList.filter(cls=>state.grade==='all'||DB.students.find(p=>p[2]===cls)[3]===Number(state.grade));d('classSelect').innerHTML='<option value="all">جميع الفصول</option>'+options.map(c=>`<option value="${esc(c)}">${esc(c.replace('اول','أول'))}</option>`).join('');state.cls=options.includes(current)?current:'all';d('classSelect').value=state.cls}
+function calculate(){
+ const allowed=DB.students.map((p,i)=>state.grade!=='all'&&p[3]!==Number(state.grade)?-1:state.cls!=='all'&&p[2]!==state.cls?-1:i).filter(i=>i>=0),allowedSet=new Set(allowed);
+ const personCounts=Array(DB.students.length).fill(0),personDate=Array.from({length:DB.students.length},()=>[]),filtered=[],byDay=new Map(),byWeek=new Map(),byMonth=new Map(),byClass=new Map(),byGrade=new Map(),byWeekday=Array(5).fill(0);
+ const manuallyExcludedDates=holidayDates().filter(iso=>iso>=state.start&&iso<=state.end).length;
+ const manuallyExcludedEvents=DB.events.reduce((n,[pi,di])=>{const iso=DB.dates[di];return n+(allowedSet.has(pi)&&iso>=state.start&&iso<=state.end&&isWeekday(iso)&&!!holidayReasonFor(iso)?1:0)},0);
+ const activeDates=workingDates(state.start,state.end),schoolDayCount=activeDates.length,activeSet=new Set(activeDates);
+ const relevantDateIds=DB.dates.map((iso,i)=>activeSet.has(iso)?i:-1).filter(i=>i>=0),relevantSet=new Set(relevantDateIds);
+ for(const [pi,di] of DB.events){if(!allowedSet.has(pi)||!relevantSet.has(di))continue;const p=DB.students[pi],iso=DB.dates[di];filtered.push([pi,di]);personCounts[pi]++;personDate[pi].push(di);byDay.set(iso,(byDay.get(iso)||0)+1);const w=sunday(iso);byWeek.set(w,(byWeek.get(w)||0)+1);const month=iso.slice(0,7);if(!byMonth.has(month))byMonth.set(month,{events:0,people:new Set()});byMonth.get(month).events++;byMonth.get(month).people.add(pi);byClass.set(p[2],(byClass.get(p[2])||0)+1);byGrade.set(p[3],(byGrade.get(p[3])||0)+1);byWeekday[day(iso)]++}
+ const seenOrder=new Map(activeDates.map((iso,i)=>[iso,i]));
+ const longest=Array(DB.students.length).fill(0);
+ for(const pi of allowed){let current=0,maximum=0,lastPos=-2;const arr=personDate[pi].sort((a,b)=>a-b);for(const di of arr){const position=seenOrder.get(DB.dates[di]);if(position===lastPos+1){current++}else{current=1}lastPos=position;maximum=Math.max(maximum,current)}longest[pi]=maximum}
+ const students=allowed.map(pi=>({pi,days:personCounts[pi],longest:longest[pi],dates:personDate[pi]}));
+ const active=students.filter(x=>x.days>0).length,atRisk=students.filter(x=>x.days>=state.threshold).length,total=filtered.length;
+ return {allowed,students,total,active,atRisk,byDay,byWeek,byMonth,byClass,byGrade,byWeekday,filtered,personCounts,longest,relevantDateIds,activeDates,schoolDayCount,manuallyExcludedDates,manuallyExcludedEvents};
+}
+function card(label,n,sub){return `<article class="panel kpi"><span class="kpi-label">${esc(label)}</span><strong class="kpi-number">${esc(n)}</strong><span class="kpi-sub">${esc(sub)}</span></article>`}
+function renderKpis(c){
+ const peak=[...c.byDay.values()].reduce((m,v)=>Math.max(m,v),0);
+ d('kpis').innerHTML=card('إجمالي سجلات الغياب',fmt(c.total),'في أيام الدوام فقط')+card('طلاب سُجل لهم غياب',fmt(c.active),`من أصل ${fmt(c.allowed.length)} في السجل`)+card('متوسط الأيام لكل طالب',fmt(c.allowed.length?c.total/c.allowed.length:0,2),'لكل طالب وارد بالملف')+card('تجاوزوا حد المتابعة',fmt(c.atRisk),`${state.threshold} أيام فأكثر`)+card('أعلى غياب في يوم دوام',fmt(peak),'ضمن أيام الدوام المحتسبة')+card('أيام الدوام المحتسبة',fmt(c.schoolDayCount),'بعد حذف الإجازات وأيام الراحة الأسبوعية');
+}
+function lineChart(el, pairs, color='line'){
+ if(!pairs.length){el.innerHTML='<div class="empty">لا توجد بيانات ضمن المرشحات الحالية</div>';return}
+ const W=770,H=235,pad={l:47,r:12,t:15,b:43},innerW=W-pad.l-pad.r,innerH=H-pad.t-pad.b;
+ const mx=Math.max(1,...pairs.map(x=>x[1]));const y=v=>pad.t+innerH-(v/mx)*innerH;const x=i=>pad.l+(pairs.length===1?innerW/2:i/(pairs.length-1)*innerW);
+ const ticks=[0,.25,.5,.75,1].map(q=>Math.round(mx*q));
+ const grid=ticks.map(t=>`<line class="gridline" x1="${pad.l}" y1="${y(t)}" x2="${W-pad.r}" y2="${y(t)}"/><text x="${pad.l-8}" y="${y(t)+4}" text-anchor="end">${t}</text>`).join('');
+ const labels=pairs.map((p,i)=>i===0||i===pairs.length-1||i%Math.max(1,Math.ceil(pairs.length/7))===0?`<text x="${x(i)}" y="${H-14}" text-anchor="middle">${esc(readable(p[0]))}</text>`:'').join('');
+ const points=pairs.map((p,i)=>`${x(i)},${y(p[1])}`).join(' ');
+ const fill=`${x(0)},${pad.t+innerH} ${points} ${x(pairs.length-1)},${pad.t+innerH}`;
+ const dots=pairs.map((p,i)=>`<circle class="point" cx="${x(i)}" cy="${y(p[1])}" r="${pairs.length<35?3.5:2.6}"><title>${esc(fullDate(p[0]))} — ${fmt(p[1])} سجل غياب</title></circle>`).join('');
+ el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="مخطط عدد سجلات الغياب عبر الزمن" preserveAspectRatio="none"><polygon class="area" points="${fill}"/>${grid}<polyline class="line" points="${points}"/>${dots}${labels}</svg>`
+}
+function bars(el, items, maxDefault=0){
+ if(!items.length){el.innerHTML='<div class="empty">لا توجد بيانات</div>';return}
+ const max=Math.max(maxDefault,...items.map(x=>x.value),1);
+ el.innerHTML=items.map(x=>`<div class="mini-bar"><span title="${esc(x.label)}">${esc(x.label)}</span><div class="pbar"><i style="width:${Math.max(0,x.value/max*100).toFixed(2)}%"></i></div><span class="value" title="${esc(x.tooltip||'')}">${fmt(x.value,x.decimals||0)}</span></div>`).join('')
+}
+function gradeMetrics(c){return [1,2,3].filter(gr=>state.grade==='all'||state.grade===String(gr)).map(gr=>{const count=c.allowed.filter(i=>DB.students[i][3]===gr).length,events=c.byGrade.get(gr)||0,risk=c.students.filter(o=>DB.students[o.pi][3]===gr&&o.days>=state.threshold).length;return {grade:gr,count,events,avg:count?events/count:0,risk}})}
+function renderOverview(c){renderKpis(c);lineChart(d('dailyChart'),[...c.byDay.entries()].sort((a,b)=>a[0].localeCompare(b[0])));lineChart(d('weeklyChart'),[...c.byWeek.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([w,n])=>[c.activeDates.find(iso=>sunday(iso)===w)||w,n]));
+ const grades=gradeMetrics(c);bars(d('gradeBars'),grades.map(g=>({label:GRADE_NAMES[g.grade],value:g.avg,decimals:2})));d('gradeTable').innerHTML=`<div style="margin-top:18px"><table class="metrics-table"><thead><tr><th>الصف</th><th class="num">الطلاب</th><th class="num">السجلات</th><th class="num">المتوسط</th></tr></thead><tbody>${grades.map(g=>`<tr><td>${GRADE_NAMES[g.grade]}</td><td class="num">${fmt(g.count)}</td><td class="num">${fmt(g.events)}</td><td class="num">${fmt(g.avg,2)}</td></tr>`).join('')}</tbody></table></div>`;
+ const buckets=[{label:'0 أيام',min:0,max:0},{label:'1–4 أيام',min:1,max:4},{label:'5–9 أيام',min:5,max:9},{label:'10–14 يومًا',min:10,max:14},{label:'15–19 يومًا',min:15,max:19},{label:'20 يومًا فأكثر',min:20,max:Infinity}];bars(d('bucketBars'),buckets.map(b=>({label:b.label,value:c.students.filter(s=>s.days>=b.min&&s.days<=b.max).length})));
+ bars(d('weekdayBars'),WEEKDAYS.slice(0,5).map((label,i)=>({label,value:c.byWeekday[i]})));
+ const month=[...c.byMonth.entries()].sort((a,b)=>a[0].localeCompare(b[0]));d('monthTable').innerHTML=month.length?`<table class="metrics-table"><thead><tr><th>الشهر</th><th class="num">سجلات الغياب</th><th class="num">طلاب متأثرون</th></tr></thead><tbody>${month.map(([ym,v])=>`<tr><td>${esc(readable(ym+'-01',{day:undefined,year:'numeric'}))}</td><td class="num">${fmt(v.events)}</td><td class="num">${fmt(v.people.size)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا توجد بيانات</div>';
+}
+function classMetrics(c){return classList.filter(cls=>state.cls==='all'||state.cls===cls).filter(cls=>state.grade==='all'||DB.students.find(p=>p[2]===cls)[3]===Number(state.grade)).map(cls=>{const persons=c.allowed.filter(i=>DB.students[i][2]===cls);const events=c.byClass.get(cls)||0;return {name:cls,count:persons.length,events,avg:persons.length?events/persons.length:0,risk:persons.filter(i=>c.personCounts[i]>=state.threshold).length}}).sort((a,b)=>b.avg-a.avg||a.name.localeCompare(b.name))}
+function renderClasses(c){const classes=classMetrics(c);d('classRanking').querySelector('tbody').innerHTML=classes.map(x=>`<tr><td><strong>${esc(x.name.replace('اول','أول'))}</strong></td><td class="num">${fmt(x.count)}</td><td class="num">${fmt(x.events)}</td><td class="num"><strong>${fmt(x.avg,2)}</strong></td><td class="num">${fmt(x.risk)}</td></tr>`).join('');const grades=gradeMetrics(c);d('gradeDetail').innerHTML=`<table class="metrics-table"><thead><tr><th>الصف</th><th class="num">الطلاب</th><th class="num">السجلات</th><th class="num">المتوسط</th><th class="num">متابعة</th></tr></thead><tbody>${grades.map(g=>`<tr><td>${GRADE_NAMES[g.grade]}</td><td class="num">${fmt(g.count)}</td><td class="num">${fmt(g.events)}</td><td class="num">${fmt(g.avg,2)}</td><td class="num">${fmt(g.risk)}</td></tr>`).join('')}</tbody></table>`;
+ const weeks=[...new Set(c.relevantDateIds.map(i=>sunday(DB.dates[i])))].sort();const clsw=[...new Set(classes.map(x=>x.name))];const counts=new Map();for(const [pi,di] of c.filtered){let key=DB.students[pi][2]+'|'+sunday(DB.dates[di]);counts.set(key,(counts.get(key)||0)+1)}const classSizes=new Map(classes.map(x=>[x.name,x.count]));const max=Math.max(1,...Array.from(counts,([key,n])=>n/Math.max(1,classSizes.get(key.split('|')[0]))));
+ d('heatmap').innerHTML=weeks.length?`<table class="heatmap"><thead><tr><th>الفصل</th>${weeks.map(w=>`<th>${esc(readable(c.activeDates.find(iso=>sunday(iso)===w)||w))}</th>`).join('')}</tr></thead><tbody>${clsw.map(cls=>`<tr><td>${esc(cls.replace('اول','أول'))}</td>${weeks.map(w=>{const cnt=counts.get(cls+'|'+w)||0,avg=cnt/Math.max(1,classSizes.get(cls));const intensity=Math.min(1,avg/max);return `<td title="الفصل ${esc(cls)} | أسبوع ${esc(readable(w))} | ${cnt} سجل | المتوسط ${fmt(avg,2)}" style="background:rgba(23,117,90,${(.06+intensity*.84).toFixed(2)});color:${intensity>.55?'#fff':'#236451'}">${avg?fmt(avg,1):'—'}</td>`}).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">لا توجد أسابيع لعرضها</div>';
+ d('heatScale').innerHTML=[.1,.3,.5,.7,.9].map(t=>`<i style="background:rgba(23,117,90,${t})"></i>`).join('')
+}
+function badge(days){return days>=state.threshold?'<span class="pill danger">تحتاج متابعة</span>':days>=Math.ceil(state.threshold*.6)?'<span class="pill warning">متابعة دورية</span>':days===0?'<span class="pill neutral">لا غياب ضمن الفترة</span>':'<span class="pill">أقل من الحد</span>'}
+function getStudents(c){const q=state.studentQuery.trim().toLowerCase();let list=c.students.filter(x=>{const p=DB.students[x.pi];return (!state.onlyRisk||x.days>=state.threshold)&&(!q||[p[0],p[1],p[2],GRADE_NAMES[p[3]]].some(v=>String(v).toLowerCase().includes(q))) });list.sort((a,b)=>{const pa=DB.students[a.pi],pb=DB.students[b.pi];switch(state.sort){case'days-asc':return a.days-b.days||pa[1].localeCompare(pb[1],'ar');case'name':return pa[1].localeCompare(pb[1],'ar');case'class':return pa[3]-pb[3]||pa[2].localeCompare(pb[2],'ar')||b.days-a.days;default:return b.days-a.days||pa[1].localeCompare(pb[1],'ar')}});return list}
+function renderStudents(c){shown=getStudents(c);const pageSize=25,totalPages=Math.max(1,Math.ceil(shown.length/pageSize));state.page=Math.min(totalPages,Math.max(1,state.page));const first=(state.page-1)*pageSize;const slice=shown.slice(first,first+pageSize);d('studentTable').querySelector('tbody').innerHTML=slice.map((r,j)=>{const p=DB.students[r.pi];return `<tr><td>${fmt(first+j+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num"><strong>${fmt(r.days)}</strong></td><td class="num">${fmt(r.longest)}</td><td>${badge(r.days)}</td><td><button type="button" class="btn small" data-student="${r.pi}">عرض التفاصيل</button></td></tr>`}).join('')||'<tr><td colspan="8" class="empty">لا توجد نتائج مطابقة للبحث والمرشحات</td></tr>';d('pageLabel').textContent=`${fmt(shown.length)} طالب · صفحة ${state.page} من ${totalPages}`;d('prevPage').disabled=state.page<=1;d('nextPage').disabled=state.page>=totalPages;d('studentCountLabel').textContent=`${fmt(shown.length)} من ${fmt(c.allowed.length)} طالب`}
+function renderQuality(c){
+ const allowedSet=new Set(c.allowed),outside=DB.events.filter(([pi,di])=>{const iso=DB.dates[di];return allowedSet.has(pi)&&isSchoolDay(iso)&&(iso<DB.filenameStart||iso>DB.filenameEnd)}).length;
+ const anomalies=c.relevantDateIds.map(i=>({i,iso:DB.dates[i],count:c.byDay.get(DB.dates[i])||0})).filter(x=>c.allowed.length>0&&x.count>=.8*c.allowed.length).sort((a,b)=>b.count-a.count);
+ const dup=c.filtered.length-new Set(c.filtered.map(([pi,di])=>pi+'-'+di)).size;
+ d('qualityCards').innerHTML=[['سجلات خارج الفترة المكتوبة على الملف',fmt(outside),'من أيام الدوام غير المستبعدة'],['أيام كثافة غير معتادة',fmt(anomalies.length),'ضمن الدوام والأيام النشطة فقط'],['أيام الدوام المحتسبة',fmt(c.schoolDayCount),'المقام الزمني بعد استبعاد الإجازات'],['تكرارات الطالب والتاريخ',fmt(dup),'ضمن السجلات المحتسبة فقط']].map(([label,val,sub])=>`<article class="panel quality-box"><span>${label}</span><b>${val}</b><small class="soft">${sub}</small></article>`).join('');
+ d('anomalyTable').querySelector('tbody').innerHTML=anomalies.map(x=>`<tr><td>${esc(fullDate(x.iso))}</td><td>${WEEKDAYS[day(x.iso)]}</td><td class="num">${fmt(x.count)}</td><td class="num">${fmt(100*x.count/c.allowed.length,1)}%</td><td><span class="pill warning">يوم دوام ضمن المرشح</span></td></tr>`).join('')||'<tr><td colspan="5" class="empty">لا توجد أيام مرتفعة الكثافة ضمن أيام الدوام المحتسبة.</td></tr>';
+ d('sourceNotes').innerHTML=`<div class="notice"><strong>النطاق المحتسب حاليًا:</strong> ${fmt(c.total)} سجل غياب، ${fmt(c.active)} طالب مسجل له غياب، ${fmt(c.schoolDayCount)} يوم دوام في الفترة من ${fullDate(state.start)} إلى ${fullDate(state.end)}. تُستبعد الإجازات وأيام الراحة الأسبوعية من هذه الأرقام ومن الجداول والرسوم والتصدير.</div><div class="notice"><strong>الحقول المتاحة:</strong> رقم الطالب، الاسم، الفصل، الصف، تاريخ الغياب ويوم الغياب. <strong>الحقول غير المتاحة:</strong> مبرر الغياب، عدد الطلاب المقيدين إجمالًا، سجل الأعذار؛ لذلك المتوسطات هنا ليست نسبة الغياب الرسمية.</div><div class="notice"><strong>التقويم:</strong> الفترة تُحسب بناءً على أيام الأحد–الخميس فقط، باستثناء الإجازات التي حددتها في التقويم. العودة من «إجازة» إلى «دوام» تعيد إدراج السجلات تلقائيًا في كل الأقسام. الملف المصدر لا يتغير.</div>`;
+}
+
+// تحليلات يوم محدد والتكرار الدوري — تستخدم مخرجات calculate نفسها حتى تتبع الإجازات والمرشحات.
+const dailyState={date:'',cls:'all',sort:'class',query:'',page:1};
+const repeatState={weekday:0,criteria:'all',cls:'all',sort:'rate',query:'',page:1};
+let dailyVisible=[],repeatVisible=[],repeatBase=[],repeatOpportunityDates=[];
+function focusClassOptions(id,c,selected){
+ const sel=d(id),values=[...new Set(c.allowed.map(i=>DB.students[i][2]))].sort((a,b)=>classList.indexOf(a)-classList.indexOf(b));
+ sel.innerHTML='<option value="all">جميع الفصول ضمن المرشحات العامة</option>'+values.map(x=>`<option value="${esc(x)}">${esc(x.replace('اول','أول'))}</option>`).join('');
+ const choice=values.includes(selected)?selected:'all';sel.value=choice;return choice;
+}
+function focusNameMatch(pi,q){if(!q)return true;const p=DB.students[pi];return [p[0],p[1],p[2],GRADE_NAMES[p[3]]].some(v=>String(v).toLowerCase().includes(q))}
+function nameCompare(pa,pb){return pa[1].localeCompare(pb[1],'ar')}
+function focusPage(rows,page,pageSize,tableId,colspan,labelId,prevId,nextId){
+ const max=Math.max(1,Math.ceil(rows.length/pageSize)),current=Math.min(max,Math.max(1,page));
+ d(labelId).textContent=`${fmt(rows.length)} طالب · صفحة ${fmt(current)} من ${fmt(max)}`;
+ d(prevId).disabled=current<=1;d(nextId).disabled=current>=max;
+ return {current,start:(current-1)*pageSize,rows:rows.slice((current-1)*pageSize,current*pageSize)};
+}
+function fillDailyDateOptions(c){
+ const el=d('dailyFocusDate'),dates=c.activeDates;
+ el.innerHTML=dates.map(iso=>`<option value="${iso}">${esc(fullDate(iso))}</option>`).join('');
+ if(!dates.includes(dailyState.date)){
+  const recorded=[...c.byDay.keys()].filter(iso=>dates.includes(iso)).sort();
+  dailyState.date=recorded.length?recorded[recorded.length-1]:dates.length?dates[dates.length-1]:'';
+  dailyState.page=1;
+ }
+ el.value=dailyState.date;
+ el.disabled=!dates.length;
+}
+function computeDailyRows(c){
+ const target=dailyState.date;if(!target)return {base:[],rows:[]};
+ const base=c.students.filter(x=>x.dates.some(di=>DB.dates[di]===target));
+ const q=dailyState.query.trim().toLowerCase();
+ const rows=base.filter(x=>(dailyState.cls==='all'||DB.students[x.pi][2]===dailyState.cls)&&focusNameMatch(x.pi,q));
+ rows.sort((a,b)=>{const pa=DB.students[a.pi],pb=DB.students[b.pi];switch(dailyState.sort){
+  case 'name':return nameCompare(pa,pb);
+  case 'number':return String(pa[0]).localeCompare(String(pb[0]),'ar',{numeric:true});
+  case 'total-desc':return b.days-a.days||nameCompare(pa,pb);
+  case 'total-asc':return a.days-b.days||nameCompare(pa,pb);
+  default:return pa[3]-pb[3]||classList.indexOf(pa[2])-classList.indexOf(pb[2])||nameCompare(pa,pb);
+ }});
+ return {base,rows};
+}
+function renderDaily(c){
+ fillDailyDateOptions(c);dailyState.cls=focusClassOptions('dailyFocusClass',c,dailyState.cls);
+ const {base,rows}=computeDailyRows(c);dailyVisible=rows;
+ const classes=new Set(rows.map(x=>DB.students[x.pi][2]));
+ const scopeCount=dailyState.cls==='all'?c.allowed.length:c.allowed.filter(i=>DB.students[i][2]===dailyState.cls).length;
+ d('dailySummary').innerHTML=card('الغائبون في اليوم',fmt(base.length),'ضمن الصفوف والفصول العامة')+card('نتائج التصفية والبحث',fmt(rows.length),'طلاب في الكشف المعروض')+card('الفصول المتأثرة',fmt(classes.size),'ضمن النتائج الحالية')+card('طلاب نطاق الفصل',fmt(scopeCount),'طلاب واردون في المصدر، ليس القيد الرسمي');
+ d('dailyTableTitle').textContent=dailyState.date?`كشف الغائبين — ${fullDate(dailyState.date)}`:'لا توجد أيام دوام ضمن المرشحات';
+ d('dailyResultCount').textContent=`${fmt(rows.length)} طالب`;
+ renderDailyPage();
+}
+function renderDailyPage(){
+ const v=focusPage(dailyVisible,dailyState.page,30,'dailyTable',7,'dailyPageLabel','dailyPrev','dailyNext');dailyState.page=v.current;
+ d('dailyTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])}</td><td>${esc(p[2].replace('اول','أول'))}</td><td class="num">${fmt(x.days)}</td><td><button class="btn small" data-student="${x.pi}" type="button">تفاصيل الطالب</button></td></tr>`}).join('')||'<tr><td colspan="7" class="empty">لا توجد سجلات غياب مطابقة في هذا اليوم ضمن المرشحات.</td></tr>';
+}
+function eligibleWeekdayDates(c,weekday){return c.activeDates.filter(iso=>day(iso)===weekday)}
+function matchesRepeatCriteria(n,total,criterion){if(total===0||n===0)return false;
+ if(criterion==='all')return n===total;
+ if(criterion==='75')return n/total>=.75-1e-12;
+ if(criterion==='50')return n/total>=.5-1e-12;
+ if(criterion==='two')return n>=2;
+ return n>=1;
+}
+function computeRepeatRows(c){
+ const weekday=Number(repeatState.weekday),dates=eligibleWeekdayDates(c,weekday),dateSet=new Set(dates);
+ const base=c.students.map(x=>{const matched=x.dates.map(di=>DB.dates[di]).filter(iso=>dateSet.has(iso)).sort();return {pi:x.pi,days:x.days,matched,n:matched.length,total:dates.length,rate:dates.length?100*matched.length/dates.length:0}});
+ const strict=base.filter(x=>dates.length>0&&x.n===dates.length).length;
+ const q=repeatState.query.trim().toLowerCase();
+ const rows=base.filter(x=>matchesRepeatCriteria(x.n,dates.length,repeatState.criteria)&&(repeatState.cls==='all'||DB.students[x.pi][2]===repeatState.cls)&&focusNameMatch(x.pi,q));
+ rows.sort((a,b)=>{const pa=DB.students[a.pi],pb=DB.students[b.pi];switch(repeatState.sort){
+  case 'name':return nameCompare(pa,pb);
+  case 'class':return pa[3]-pb[3]||classList.indexOf(pa[2])-classList.indexOf(pb[2])||nameCompare(pa,pb);
+  case 'absences':return b.n-a.n||b.rate-a.rate||nameCompare(pa,pb);
+  default:return b.rate-a.rate||b.n-a.n||nameCompare(pa,pb);
+ }});
+ return {dates,base,strict,rows};
+}
+function renderRepeat(c){
+ repeatState.cls=focusClassOptions('repeatClass',c,repeatState.cls);
+ const {dates,base,strict,rows}=computeRepeatRows(c);
+ repeatVisible=rows;repeatBase=base;repeatOpportunityDates=dates;
+ const label=WEEKDAYS[Number(repeatState.weekday)],potential=base.filter(x=>x.n>0).length,max=base.reduce((m,x)=>Math.max(m,x.n),0);
+ d('repeatSummary').innerHTML=card('مرات '+label+' المحتسبة',fmt(dates.length),'أيام دوام فعلية خلال الفترة')+card('غابوا في جميع المرات',fmt(strict),'المعيار الكامل 100%')+card('مطابقون لمعيار العرض',fmt(rows.length),'بعد جميع خيارات التصفية')+card('طلاب غابوا في '+label,fmt(potential),`مرة واحدة على الأقل · الأعلى ${fmt(max)} مرة`);
+ d('repeatMethod').textContent=`يُحسب الغياب من ${fmt(dates.length)} يوم ${label} فعلي، لا من عدد الأسابيع التقويمية قبل حذف الإجازات.`;
+ d('repeatDates').innerHTML=dates.length?dates.map(iso=>`<span>${esc(fullDate(iso))}</span>`).join(''):'<span class="muted">لا توجد فرص لهذا اليوم في الفترة المختارة بعد استبعاد الإجازات.</span>';
+ d('repeatExplain').textContent=dates.length?`الشرط الافتراضي: للظهور ضمن «جميع المرات» يجب أن يكون الطالب غائبًا ${fmt(dates.length)} من ${fmt(dates.length)} يوم ${label}. عند استبعاد يوم إجازة يقل المقام ويُعاد تقييم جميع الطلاب تلقائيًا. ويمكن اختيار معيار أخف من القائمة.`:'اختر فترة تحتوي على يوم دوام من اليوم المحدد أو أعد يوم إجازة إلى دوام لإجراء المقارنة.';
+ d('repeatTableTitle').textContent=`طلاب الغياب المتكرر — ${label}`;
+ d('repeatResultCount').textContent=`${fmt(rows.length)} طالب`;
+ renderRepeatPage();
+}
+function renderRepeatPage(){
+ const v=focusPage(repeatVisible,repeatState.page,25,'repeatTable',9,'repeatPageLabel','repeatPrev','repeatNext');repeatState.page=v.current;
+ d('repeatTable').querySelector('tbody').innerHTML=v.rows.map((x,i)=>{const p=DB.students[x.pi];return `<tr><td>${fmt(v.start+i+1)}</td><td><strong>${esc(p[1])}</strong></td><td>${esc(p[0])}</td><td>${esc(GRADE_NAMES[p[3]])} · ${esc(p[2].replace('اول','أول'))}</td><td class="num"><strong>${fmt(x.n)}</strong></td><td class="num">${fmt(x.total)}</td><td class="num"><span class="pill ${x.rate===100?'danger':x.rate>=75?'warning':''}">${fmt(x.rate,1)}%</span></td><td class="dates-cell"><small>${esc(x.matched.map(iso=>readable(iso,{year:'numeric'})).join('، '))}</small></td><td><button class="btn small" type="button" data-student="${x.pi}">التفاصيل</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">لا يوجد طلاب يطابقون معيار الغياب في هذا اليوم خلال الفترة الحالية.</td></tr>';
+}
+function exportDailyCSV(){const rows=[['تاريخ الغياب','اليوم','رقم الطالب','اسم الطالب','الصف الدراسي','الفصل','إجمالي غيابه خلال الفترة']];for(const x of dailyVisible){const p=DB.students[x.pi];rows.push([dailyState.date,WEEKDAYS[day(dailyState.date)],p[0],p[1],GRADE_NAMES[p[3]],p[2],x.days])}downloadCSV(rows,'كشف_الغياب_اليومي_'+(dailyState.date||'بدون_تاريخ')+'.csv')}
+function exportRepeatCSV(){const rows=[['اليوم المختار','الفترة من','الفترة إلى','رقم الطالب','اسم الطالب','الصف الدراسي','الفصل','مرات الغياب','فرص اليوم الفعلية','نسبة التكرار','تواريخ الغياب المسجلة']];for(const x of repeatVisible){const p=DB.students[x.pi];rows.push([WEEKDAYS[repeatState.weekday],state.start,state.end,p[0],p[1],GRADE_NAMES[p[3]],p[2],x.n,x.total,x.rate.toFixed(1)+'%',x.matched.join('، ')])}downloadCSV(rows,'الغياب_المتكرر_'+WEEKDAYS[repeatState.weekday]+'.csv')}
+function wireFocusReports(){
+ d('dailyFocusDate').addEventListener('change',e=>{dailyState.date=e.target.value;dailyState.page=1;renderDaily(last)});
+ d('dailyFocusClass').addEventListener('change',e=>{dailyState.cls=e.target.value;dailyState.page=1;renderDaily(last)});
+ d('dailySort').addEventListener('change',e=>{dailyState.sort=e.target.value;dailyState.page=1;renderDaily(last)});
+ d('dailySearch').addEventListener('input',e=>{dailyState.query=e.target.value;dailyState.page=1;renderDaily(last)});
+ d('dailyPrev').addEventListener('click',()=>{dailyState.page--;renderDailyPage()});d('dailyNext').addEventListener('click',()=>{dailyState.page++;renderDailyPage()});
+ d('dailyTable').addEventListener('click',e=>{const b=e.target.closest('[data-student]');if(b)openStudent(Number(b.dataset.student))});
+ d('exportDaily').addEventListener('click',exportDailyCSV);
+ d('repeatWeekday').addEventListener('change',e=>{repeatState.weekday=Number(e.target.value);repeatState.page=1;renderRepeat(last)});
+ d('repeatCriteria').addEventListener('change',e=>{repeatState.criteria=e.target.value;repeatState.page=1;renderRepeat(last)});
+ d('repeatClass').addEventListener('change',e=>{repeatState.cls=e.target.value;repeatState.page=1;renderRepeat(last)});
+ d('repeatSort').addEventListener('change',e=>{repeatState.sort=e.target.value;repeatState.page=1;renderRepeat(last)});
+ d('repeatSearch').addEventListener('input',e=>{repeatState.query=e.target.value;repeatState.page=1;renderRepeat(last)});
+ d('repeatPrev').addEventListener('click',()=>{repeatState.page--;renderRepeatPage()});d('repeatNext').addEventListener('click',()=>{repeatState.page++;renderRepeatPage()});
+ d('repeatTable').addEventListener('click',e=>{const b=e.target.closest('[data-student]');if(b)openStudent(Number(b.dataset.student))});
+ d('exportRepeat').addEventListener('click',exportRepeatCSV);
+}
+
+function render(){last=calculate();d('filterInfo').textContent=`${fmt(last.total)} سجل مطابق · ${fmt(last.allowed.length)} طالب في النطاق`;d('rangeTag').textContent=`● ${readable(state.start,{year:'numeric'})} — ${readable(state.end,{year:'numeric'})}`;if(state.start>state.end){d('filterInfo').textContent='تنبيه: تاريخ البداية بعد تاريخ النهاية'};renderOverview(last);renderClasses(last);renderStudents(last);renderQuality(last);renderHolidayList(last);renderDaily(last);renderRepeat(last);annotateMobileTables()}
+function switchTab(t){state.tab=t;document.querySelectorAll('.tab').forEach(el=>{const active=el.dataset.tab===t;el.classList.toggle('active',active);el.setAttribute('aria-selected',active?'true':'false')});document.querySelectorAll('.section').forEach(el=>el.classList.toggle('active',el.id==='sec-'+t));window.scrollTo({top:0,behavior:'smooth'})}
+function openStudent(pi){const p=DB.students[pi],r=last.students.find(x=>x.pi===pi);if(!r)return;d('modalTitle').textContent=p[1];d('modalDesc').textContent=`رقم الطالب: ${p[0]} · الفصل ${p[2].replace('اول','أول')} · ${GRADE_NAMES[p[3]]}`;d('modalStats').innerHTML=`<div><span>سجلات الغياب</span><strong>${fmt(r.days)}</strong></div><div><span>أطول تتابع في أيام الدوام</span><strong>${fmt(r.longest)}</strong></div><div><span>المتابعة</span><strong style="font-size:13px">${r.days>=state.threshold?'يحتاج متابعة':'دون حد المتابعة'}</strong></div>`;d('modalDates').innerHTML=r.dates.length?r.dates.map(di=>`<span title="${esc(WEEKDAYS[day(DB.dates[di])])}">${esc(fullDate(DB.dates[di]))}${anomalousIdx.has(di)?' ⚑':''}</span>`).join(''):'<span>لا توجد سجلات ضمن المرشحات</span>';d('studentModal').classList.add('open');document.body.style.overflow='hidden';d('closeModal').focus()}
+function closeStudent(){d('studentModal').classList.remove('open');document.body.style.overflow=''}
+function downloadCSV(rows,filename){const csv='\ufeff'+rows.map(row=>row.map(val=>'"'+String(val??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportStudentCSV(){const rows=[['رقم الطالب','اسم الطالب','الفصل','الصف','أيام الغياب ضمن المرشحات','أطول تتابع في أيام الدوام','يحتاج متابعة']];for(const s of getStudents(last)){const p=DB.students[s.pi];rows.push([p[0],p[1],p[2],GRADE_NAMES[p[3]],s.days,s.longest,s.days>=state.threshold?'نعم':'لا'])}downloadCSV(rows,'متابعة_غياب_الطلاب.csv')}
+function exportClassCSV(){downloadCSV([['الفصل','طلاب واردون بالملف','سجلات غياب','متوسط أيام لكل طالب','تجاوز حد المتابعة'],...classMetrics(last).map(x=>[x.name,x.count,x.events,x.avg.toFixed(2),x.risk])],'مقارنة_غياب_الفصول.csv')}
+function exportDetailsCSV(){const rows=[['رقم الطالب','اسم الطالب','الصف','الفصل','تاريخ الغياب','اليوم','يوم كثيف إحصائيا']];for(const [pi,di] of last.filtered){const p=DB.students[pi],iso=DB.dates[di];rows.push([p[0],p[1],GRADE_NAMES[p[3]],p[2],iso,WEEKDAYS[day(iso)],anomalousIdx.has(di)?'نعم':'لا'])}downloadCSV(rows,'سجلات_غياب_الطلاب_المصفاة.csv')}
+function exportQualityCSV(){const c=last;const rows=[['التاريخ','اليوم','عدد السجلات','النسبة من طلاب السجل المختار','السبب']];for(const i of c.relevantDateIds){const iso=DB.dates[i],count=c.byDay.get(iso)||0;if(c.allowed.length&&count>=.8*c.allowed.length)rows.push([iso,WEEKDAYS[day(iso)],count,(count/c.allowed.length*100).toFixed(2)+'%','كثافة مرتفعة'])}downloadCSV(rows,'فحص_ايام_الدوام_الاستثنائية.csv')}
+function wire(){refreshPeriodOptions();
+ [['startDate','start'],['endDate','end']].forEach(([id,key])=>d(id).addEventListener('change',e=>{state[key]=e.target.value||state[key];state.page=1;render()}));
+ d('gradeSelect').addEventListener('change',e=>{state.grade=e.target.value;state.cls='all';updateClasses();state.page=1;render()});d('classSelect').addEventListener('change',e=>{state.cls=e.target.value;state.page=1;render()});d('riskThreshold').addEventListener('change',e=>{state.threshold=Number(e.target.value);state.page=1;render()});d('skipAnomaly').addEventListener('change',e=>{state.skipAnomaly=e.target.checked;state.page=1;render()});
+ d('resetBtn').addEventListener('click',()=>{dailyState.date='';dailyState.cls='all';dailyState.page=1;repeatState.cls='all';repeatState.page=1;Object.assign(state,{start:DB.filenameStart,end:DB.filenameEnd,grade:'all',cls:'all',threshold:15,skipAnomaly:false,studentQuery:'',sort:'days-desc',onlyRisk:false,page:1});refreshPeriodOptions();d('gradeSelect').value='all';updateClasses();d('riskThreshold').value='15';d('skipAnomaly').checked=false;d('studentSearch').value='';d('studentSort').value='days-desc';d('onlyRisk').checked=false;render()});
+ document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>switchTab(el.dataset.tab)));
+ d('studentSearch').addEventListener('input',e=>{state.studentQuery=e.target.value;state.page=1;renderStudents(last)});d('studentSort').addEventListener('change',e=>{state.sort=e.target.value;state.page=1;renderStudents(last)});d('onlyRisk').addEventListener('change',e=>{state.onlyRisk=e.target.checked;state.page=1;renderStudents(last)});d('prevPage').addEventListener('click',()=>{state.page--;renderStudents(last)});d('nextPage').addEventListener('click',()=>{state.page++;renderStudents(last)});d('studentTable').addEventListener('click',e=>{const btn=e.target.closest('[data-student]');if(btn)openStudent(Number(btn.dataset.student))});d('closeModal').addEventListener('click',closeStudent);d('studentModal').addEventListener('click',e=>{if(e.target.id==='studentModal')closeStudent()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeStudent()});
+ d('exportStudents').addEventListener('click',exportStudentCSV);d('exportClasses').addEventListener('click',exportClassCSV);d('exportQuality').addEventListener('click',exportQualityCSV);d('exportBtn').addEventListener('click',()=>{if(state.tab==='daily')exportDailyCSV();else if(state.tab==='repeat')exportRepeatCSV();else if(state.tab==='students')exportStudentCSV();else if(state.tab==='classes')exportClassCSV();else if(state.tab==='quality')exportQualityCSV();else exportDetailsCSV()});d('printBtn').addEventListener('click',openPrintOptions);}
+/* محرك الطباعة الموحد — وثيقة مستقلة ذات صفحات مدروسة مسبقاً */
+function annotateMobileTables(){
+ for(const id of ['studentTable','dailyTable','repeatTable','classRanking','anomalyTable']){
+  const table=d(id);if(!table)continue;
+  const labels=[...table.querySelectorAll('thead th')].map(th=>th.textContent.trim());
+  table.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>{td.dataset.label=labels[i]||''}));
+ }
+}
+function openPrintOptions(){const el=d('printOptions');el.classList.add('open');el.setAttribute('aria-hidden','false');d('openPrintPreview').focus();document.body.style.overflow='hidden'}
+function closePrintOptions(){const el=d('printOptions');el.classList.remove('open');el.setAttribute('aria-hidden','true');document.body.style.overflow='';d('printBtn').focus()}
+const reportSections=[['overview','المؤشرات العامة'],['classes','الصفوف والفصول'],['students','متابعة الطلاب'],['daily','غياب يوم محدد'],['repeat','الغياب المتكرر حسب اليوم'],['quality','جودة البيانات'],['calendar','التقويم والإجازات']];
+function printSelectedSections(){const picked=document.querySelector('input[name="printScope"]:checked');return picked?.value==='current'?[state.tab]:reportSections.map(x=>x[0])}
+function pt(v){return esc(v)}
+function chunkRows(rows,n){if(!rows.length)return [[]];const result=[];for(let i=0;i<rows.length;i+=n)result.push(rows.slice(i,i+n));return result}
+function printableTable(headings,rows,widths){
+ const col=widths?`<colgroup>${widths.map(x=>`<col style="width:${Number(x)}%">`).join('')}</colgroup>`:'';
+ return `<table class="pt-table">${col}<thead><tr>${headings.map(x=>`<th>${pt(x)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td${i===0?' class="pt-first"':''}>${pt(cell)}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headings.length}" class="pt-empty">لا توجد نتائج ضمن المرشحات المختارة</td></tr>`}</tbody></table>`;
+}
+function printBarList(items){const max=Math.max(1,...items.map(x=>x[1]));return `<div class="pt-bars">${items.map(([name,n,display])=>`<div class="pt-barrow"><span>${pt(name)}</span><i><b style="width:${Math.max(0,n/max*100).toFixed(1)}%"></b></i><strong>${pt(display??fmt(n))}</strong></div>`).join('')}</div>`}
+function printChart(svg){return `<div class="pt-chart">${svg||'<p>لا توجد بيانات في النطاق</p>'}</div>`}
+function makePrintReport(sectionKeys){
+ const c=last||calculate(),pages=[];
+ const add=(key,name,body,sub='')=>pages.push({key,name,body,sub});
+ const t=iso=>readable(iso,{year:'numeric'});
+ const printMeta=`${t(state.start)} — ${t(state.end)} · ${state.grade==='all'?'جميع الصفوف':GRADE_NAMES[Number(state.grade)]} · ${state.cls==='all'?'جميع الفصول':state.cls.replace('اول','أول')} · ${fmt(c.schoolDayCount)} يوم دوام فعلي`;
+ if(sectionKeys.includes('overview')){
+  const peak=Math.max(0,...c.byDay.values()),avg=c.allowed.length?c.total/c.allowed.length:0;
+  const stats=[['سجلات الغياب',fmt(c.total)],['طلاب ورد لهم غياب',fmt(c.active)],['متوسط أيام الغياب',fmt(avg,2)],['تجاوزوا حد المتابعة',fmt(c.atRisk)],['أعلى غياب يومي',fmt(peak)],['أيام الدوام',fmt(c.schoolDayCount)]];
+  const grade=gradeMetrics(c);
+  add('overview','المؤشرات العامة',`<div class="pt-statgrid">${stats.map(([label,value])=>`<div class="pt-stat"><span>${pt(label)}</span><strong>${pt(value)}</strong></div>`).join('')}</div><div class="pt-two"><div class="pt-card"><h3>اتجاه الغياب اليومي</h3>${printChart(d('dailyChart').innerHTML)}</div><div class="pt-card"><h3>متوسط الغياب حسب الصف</h3>${printBarList(grade.map(g=>[GRADE_NAMES[g.grade],g.avg,fmt(g.avg,2)]))}<div class="pt-note">المتوسط من الطلاب الواردين في سجل الغياب، وليس نسبة الغياب الرسمية.</div></div></div><div class="pt-ribbon">الجمعة والسبت وجميع أيام الإجازات المحفوظة لا تدخل في حساب أي مؤشر.</div>`);
+  const buckets=[['0 أيام',0,0],['1–4',1,4],['5–9',5,9],['10–14',10,14],['15–19',15,19],['20+',20,Infinity]];
+  const months=[...c.byMonth.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([m,o])=>[readable(m+'-01',{day:undefined,year:'numeric'}),fmt(o.events),fmt(o.people.size)]);
+  add('overview','المؤشرات العامة — التوزيع الزمني',`<div class="pt-two"><div class="pt-card"><h3>الغياب الأسبوعي</h3>${printChart(d('weeklyChart').innerHTML)}</div><div class="pt-card"><h3>توزيع الطلاب حسب أيام الغياب</h3>${printBarList(buckets.map(([name,min,max])=>[name,c.students.filter(x=>x.days>=min&&x.days<=max).length]))}</div></div><div class="pt-two"><div class="pt-card"><h3>الغياب حسب يوم الدوام</h3>${printBarList(WEEKDAYS.slice(0,5).map((x,i)=>[x,c.byWeekday[i]]))}</div><div class="pt-card"><h3>الملخص الشهري</h3>${printableTable(['الشهر','سجلات الغياب','طلاب متأثرون'],months,[50,25,25])}</div></div>`);
+ }
+ if(sectionKeys.includes('classes')){
+  const metrics=classMetrics(c),gr=gradeMetrics(c);
+  add('classes','مقارنة الصفوف والفصول',`<div class="pt-two pt-class-grid"><div class="pt-card"><h3>ترتيب الفصول حسب متوسط أيام الغياب</h3>${printableTable(['الفصل','الطلاب','السجلات','المتوسط','متابعة'],metrics.map(x=>[x.name.replace('اول','أول'),fmt(x.count),fmt(x.events),fmt(x.avg,2),fmt(x.risk)]),[24,17,20,18,21])}</div><div class="pt-card"><h3>مقارنة الصفوف</h3>${printableTable(['الصف','الطلاب','السجلات','المتوسط','متابعة'],gr.map(x=>[GRADE_NAMES[x.grade],fmt(x.count),fmt(x.events),fmt(x.avg,2),fmt(x.risk)]),[35,16,19,17,13])}<p class="pt-note">أولوية الترتيب هي المتوسط لكل طالب في ملف الغياب، ولا تمثل نسبة الغياب النظامية.</p></div></div>`);
+  const weeks=[...new Set(c.relevantDateIds.map(i=>sunday(DB.dates[i])))].sort();
+  const counts=new Map();for(const [pi,di] of c.filtered){const key=DB.students[pi][2]+'|'+sunday(DB.dates[di]);counts.set(key,(counts.get(key)||0)+1)}
+  const rows=metrics.map(x=>[x.name.replace('اول','أول'),...weeks.map(w=>{const n=counts.get(x.name+'|'+w)||0;return n?fmt(n/Math.max(1,x.count),1):'—'})]);
+  const headers=['الفصل',...weeks.map(w=>readable(c.activeDates.find(iso=>sunday(iso)===w)||w))];
+  add('classes','الخريطة الأسبوعية للفصول',`<p class="pt-note">كل خلية: متوسط عدد أيام الغياب المسجلة لكل طالب في الفصل خلال الأسبوع الدراسي.</p>${printableTable(headers,rows,[18,...weeks.map(()=>82/Math.max(1,weeks.length))])}`);
+ }
+ if(sectionKeys.includes('students')){
+  const rows=getStudents(c).map((r,i)=>{const p=DB.students[r.pi];return [fmt(i+1),p[1],p[0],p[2].replace('اول','أول'),fmt(r.days),fmt(r.longest),r.days>=state.threshold?'تحتاج متابعة':r.days>=Math.ceil(state.threshold*.6)?'متابعة دورية':'أقل من الحد']});
+  chunkRows(rows,17).forEach((subset,i,all)=>add('students','قائمة متابعة الطلاب',`<div class="pt-list-meta">عدد الطلاب المطابقين للمرشحات: ${fmt(rows.length)} · حد المتابعة: ${fmt(state.threshold)} أيام · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الفصل','أيام الغياب','أطول تتابع','الحالة'],subset,[5,32,11,12,11,12,17])}`));
+ }
+ if(sectionKeys.includes('daily')){
+  const iso=dailyState.date,rows=dailyVisible.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
+  chunkRows(rows,17).forEach((subset,i,all)=>add('daily','كشف الغائبين في يوم محدد',`<div class="pt-list-meta">${iso?t(iso):'لا يوجد يوم دوام محدد'} · عدد الغائبين بعد تصفية الفصل والبحث: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','إجمالي أيام غيابه'],subset,[6,33,12,21,12,16])}`));
+ }
+ if(sectionKeys.includes('repeat')){
+  const days=repeatOpportunityDates,criterion=d('repeatCriteria').selectedOptions[0]?.textContent||'';
+  const rows=repeatVisible.map((x,i)=>{const p=DB.students[x.pi];return[fmt(i+1),p[1],p[0],p[2].replace('اول','أول'),fmt(x.n),fmt(x.total),fmt(x.rate,1)+'%',x.matched.map(iso=>iso.slice(8)+'/'+iso.slice(5,7)).join('، ')]});
+  chunkRows(rows,13).forEach((subset,i,all)=>add('repeat','الغياب المتكرر حسب يوم الأسبوع',`<div class="pt-list-meta">${WEEKDAYS[repeatState.weekday]} · ${pt(criterion)} · مرات اليوم المحتسبة: ${fmt(days.length)} · الطلاب المطابقون: ${fmt(rows.length)} · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div><div class="pt-datewrap">الأيام الداخلة في المقارنة: ${days.length?days.map(x=>t(x)).map(pt).join(' · '):'لا توجد أيام محسوبة'}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الفصل','الغــياب','الفرص','النسبة','تواريخ الغياب'],subset,[5,24,10,11,9,8,10,23])}<div class="pt-note">استبعاد أي يوم إجازة يقلل عدد الفرص المحتسبة؛ وتُعاد النسب عند تحويل الإجازة إلى دوام.</div>`));
+ }
+ if(sectionKeys.includes('quality')){
+  const allSet=new Set(c.allowed),out=DB.events.filter(([pi,di])=>{const iso=DB.dates[di];return allSet.has(pi)&&isSchoolDay(iso)&&(iso<DB.filenameStart||iso>DB.filenameEnd)}).length;
+  const anomalies=c.relevantDateIds.map(i=>({iso:DB.dates[i],count:c.byDay.get(DB.dates[i])||0})).filter(x=>c.allowed.length&&x.count>=.8*c.allowed.length).sort((a,b)=>b.count-a.count);
+  const duplicate=c.filtered.length-new Set(c.filtered.map(([pi,di])=>pi+'-'+di)).size;
+  chunkRows(anomalies,18).forEach((chunk,i,all)=>add('quality','جودة البيانات والأيام الاستثنائية',`<div class="pt-statgrid pt-four"><div class="pt-stat"><span>خارج فترة اسم الملف</span><strong>${fmt(out)}</strong></div><div class="pt-stat"><span>أيام كثافة مرتفعة</span><strong>${fmt(anomalies.length)}</strong></div><div class="pt-stat"><span>أيام دوام محسوبة</span><strong>${fmt(c.schoolDayCount)}</strong></div><div class="pt-stat"><span>تكرار طالب/تاريخ</span><strong>${fmt(duplicate)}</strong></div></div><h3>أيام الدوام ذات غياب ≥80% من الطلاب الواردين بالملف</h3>${printableTable(['التاريخ','اليوم','السجلات','النسبة المرجعية'],chunk.map(x=>[t(x.iso),WEEKDAYS[day(x.iso)],fmt(x.count),fmt(100*x.count/c.allowed.length,1)+'%']),[45,16,18,21])}<div class="pt-note">هذه النسبة للمراجعة الإحصائية وليست نسبة الغياب النظامية؛ البيانات لا تتضمن الأعذار أو جميع الطلاب المقيدين.</div>`));
+ }
+ if(sectionKeys.includes('calendar')){
+  const holidays=holidayDates().filter(iso=>iso>=state.start&&iso<=state.end).map(iso=>[t(iso),WEEKDAYS[day(iso)],savedHolidays[iso],'مستبعد من جميع الحسابات']);
+  chunkRows(holidays,17).forEach((chunk,i,all)=>add('calendar','التقويم وأيام الإجازات',`<div class="pt-statgrid pt-four"><div class="pt-stat"><span>أيام الدوام الفعلية</span><strong>${fmt(c.schoolDayCount)}</strong></div><div class="pt-stat"><span>الإجازات في الفترة</span><strong>${fmt(c.manuallyExcludedDates)}</strong></div><div class="pt-stat"><span>سجلات لم تُحتسب للإجازات</span><strong>${fmt(c.manuallyExcludedEvents)}</strong></div><div class="pt-stat"><span>الراحة الأسبوعية</span><strong>الجمعة والسبت</strong></div></div><h3>الإجازات المستبعدة ضمن الفترة المختارة</h3>${printableTable(['التاريخ','اليوم','السبب','حالة الحساب'],chunk,[28,12,27,33])}<div class="pt-ribbon">عند تغيير يوم من «إجازة» إلى «دوام» وإعادة طباعة التقرير تُستعاد حساباته فورًا. بيانات المصدر الأصلية لا تتغير.</div>`));
+ }
+ const allSections=new Map(reportSections);
+ const title=sectionKeys.length===1?`تقرير ${allSections.get(sectionKeys[0])}`:'التقرير الإحصائي الشامل لغياب الطلاب';
+ const styles=`
+@page{size:A4 landscape;margin:0}
+*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajawal',Tahoma,Arial,sans-serif;direction:rtl;font-size:10pt;line-height:1.35}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:9;padding:13px 20px;background:#123f34;color:#fff;font:14px Tahoma,Arial,sans-serif}
+.preview-toolbar strong{font-weight:700}.preview-toolbar button{padding:10px 17px;border-radius:7px;border:0;background:#fff;color:#124534;cursor:pointer;font-weight:700}.preview-toolbar p{font-size:11px;opacity:.85;margin:3px 0 0}
+.preview-guide{padding:9px 15px;font-family:Tahoma,Arial;font-size:12px;color:#355d4b;text-align:center}
+.sheet{width:297mm;height:210mm;margin:15px auto;background:#fff;display:flex;flex-direction:column;padding:9mm 11mm 7mm;overflow:hidden;box-shadow:0 2px 16px #234c3933;break-after:page;page-break-after:always}
+.sheet:last-child{break-after:auto;page-break-after:auto}
+.sheet-head{flex:0 0 21mm;min-height:21mm;border-bottom:1.2px solid #166b54;display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:4mm}
+.sheet-head h1{font-size:17pt;color:#124c3e;margin:0 0 1mm;line-height:1.2}.sheet-head p{margin:0;color:#617c70;font-size:8.4pt}.school{font-size:9.5pt;color:#185441;font-weight:700;max-width:70mm;text-align:left}
+.sheet-body{flex:1;min-height:0;overflow:hidden;font-size:9.5pt}.sheet-body h3{font-size:10pt;margin:0 0 2.5mm;color:#155846}
+.sheet-foot{flex:0 0 9mm;margin-top:3mm;border-top:1px solid #d9e8df;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:8pt;color:#6a8177}
+.sheet-foot .page-count{font-weight:700;color:#315f4e}
+.pt-statgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2.3mm;margin-bottom:4mm}.pt-statgrid.pt-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pt-stat{padding:2.4mm 3mm;background:#f4faf6;border:1px solid #dfebe3;border-radius:3mm;min-width:0;overflow:hidden}.pt-stat span{display:block;font-size:8pt;color:#527768}.pt-stat strong{display:block;font-size:17pt;color:#165c49;line-height:1.15;margin-top:1mm}
+.pt-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3mm;align-items:start;margin-bottom:3mm}.pt-two.pt-class-grid{grid-template-columns:1.2fr 1fr}
+.pt-card{border:1px solid #dfebe3;border-radius:3mm;padding:3.5mm;min-width:0;overflow:hidden}
+.pt-chart svg{height:55mm;width:100%;display:block;max-width:100%;font-family:'Tajawal',Tahoma,Arial,sans-serif}
+.pt-chart svg text{font-size:11px;fill:#597368}.pt-chart .gridline{stroke:#e0e9e3}.pt-chart .line{stroke:#178269;fill:none;stroke-width:3}.pt-chart .point{stroke:#178269;fill:#fff;stroke-width:2}.pt-chart .area{fill:#edf7f1}
+.pt-bars{display:flex;flex-direction:column;gap:2.4mm}.pt-barrow{display:grid;grid-template-columns:31mm 1fr 13mm;gap:2mm;align-items:center;min-width:0;font-size:8.3pt}.pt-barrow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pt-barrow i{background:#e8efe9;height:3.6mm;border-radius:8px;overflow:hidden}.pt-barrow b{height:100%;display:block;background:#23826a}.pt-barrow strong{font-size:8.5pt;text-align:left}
+.pt-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt}.pt-table th{background:#e9f2ec;border-bottom:1px solid #a6cebb;color:#225b48;padding:2.5mm 1.4mm;text-align:right;font-weight:700;white-space:normal}.pt-table td{border-bottom:1px solid #e4ece6;padding:1.85mm 1.4mm;line-height:1.15;overflow-wrap:anywhere;vertical-align:middle}.pt-table tbody tr:nth-child(even){background:#fafcfb}.pt-class-grid .pt-table td{padding:1.05mm 1.3mm;font-size:8.5pt}
+.pt-table .pt-first{color:#487363}.pt-empty{text-align:center!important;padding:8mm!important;color:#83978b}
+.pt-list-meta{background:#f2f7f4;border:1px solid #e0ebe3;padding:2.5mm 4mm;border-radius:2.4mm;font-size:9pt;margin-bottom:3mm;color:#315b4a}
+.pt-datewrap{border:1px solid #e0ebe3;border-radius:2mm;padding:2mm 3mm;margin-bottom:3mm;font-size:8.3pt;color:#507461}
+.pt-note{font-size:8.2pt;color:#658075;line-height:1.35;margin:3mm 0}
+.pt-ribbon{font-size:9pt;color:#296549;background:#edf7f0;padding:3mm 4mm;border-radius:2mm;margin-top:3mm}
+@media print{html,body{width:297mm;background:#fff}.preview-toolbar,.preview-guide{display:none!important}.sheet{box-shadow:none;margin:0;padding:9mm 11mm 7mm;overflow:hidden;break-after:page;page-break-after:always}.sheet:last-child{break-after:auto;page-break-after:auto}}
+`;
+ const sheetMarkup=pages.map((p,i)=>`<section class="sheet" data-report="${p.key}"><header class="sheet-head"><div><h1>${pt(p.name)}</h1><p>${pt(printMeta)}</p></div><div class="school">المدرسة<br>${pt(title)}</div></header><main class="sheet-body">${p.body}</main><footer class="sheet-foot"><span>مرصد غياب الطلاب · مؤشرات من بيانات السجل وليست نسب الغياب الرسمية</span><span class="page-count">صفحة ${fmt(i+1)} من ${fmt(pages.length)}</span></footer></section>`).join('');
+ return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+pt(title)+'</title><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet"><style>'+styles+'</style></head><body><div class="preview-toolbar"><div><strong>'+pt(title)+'</strong><p>'+fmt(pages.length)+' صفحة · A4 عرضي · للحفظ ملفًا واحدًا اختر PDF من الطابعة</p></div><button onclick="window.print()">⎙ طباعة / حفظ PDF</button></div><p class="preview-guide">معاينة الصفحات قبل الطباعة؛ الصفحات مقسمة مسبقًا وتحتفظ بترويسة وتذييل ورقم صفحة.</p>'+sheetMarkup+'</body></html>';
+}
+function makePrintBlob(){return new Blob([makePrintReport(printSelectedSections())],{type:'text/html;charset=utf-8'})}
+function previewPrintable(){
+ const blob=makePrintBlob(),url=URL.createObjectURL(blob);
+ const pop=window.open(url,'_blank');
+ if(!pop){alert('المتصفح منع فتح المعاينة. استخدم زر «تحميل نسخة التقرير للطباعة» ثم افتح الملف واطبعه من المتصفح.')}else closePrintOptions();
+ setTimeout(()=>URL.revokeObjectURL(url),120000);
+}
+function downloadPrintable(){
+ const url=URL.createObjectURL(makePrintBlob()),a=document.createElement('a');a.href=url;a.download='التقرير_الإحصائي_الموحد_غياب_الطلاب.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);closePrintOptions();
+}
+d('closePrintOptions').addEventListener('click',closePrintOptions);
+d('cancelPrintOptions').addEventListener('click',closePrintOptions);
+d('openPrintPreview').addEventListener('click',previewPrintable);
+d('downloadPrintHTML').addEventListener('click',downloadPrintable);
+d('printOptions').addEventListener('click',e=>{if(e.target===d('printOptions'))closePrintOptions()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&d('printOptions').classList.contains('open'))closePrintOptions()});
+
+updateClasses();wire();wireHolidays();wireFocusReports();render();
+</script>
+</body></html>
