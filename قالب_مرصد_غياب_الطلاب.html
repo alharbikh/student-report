@@ -141,6 +141,33 @@ body{overflow-x:hidden}
 .print-dialog-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-start;margin-top:17px}
 .print-help{background:#f1f8f4;padding:10px 12px;border-radius:9px;font-size:11px;color:#486c5e;margin-top:12px}
 @media(max-width:680px){.print-box{padding:16px}.print-dialog-actions .btn{flex:1 1 100%;white-space:normal}}
+
+
+/* قوائم اختيار صغيرة وواضحة داخل المتصفح بدلاً من لوحة Android المدمجة */
+.compact-choice{position:relative;display:block;min-width:0;width:100%}
+.compact-choice-button{display:none;width:100%;align-items:center;justify-content:space-between;gap:8px;min-height:42px;text-align:right;border:1px solid #d4e4dd;border-radius:10px;background:#fff;color:#173b37;padding:7px 12px;font:inherit;font-weight:700;line-height:1.6;cursor:pointer;box-shadow:0 1px 1px #123f3408}
+.compact-choice-button:focus-visible{outline:3px solid #79baa4;outline-offset:2px}
+.compact-choice-value{display:block;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1}
+.compact-choice-chevron{font-size:14px;color:#557a6b;flex-shrink:0;line-height:1}
+.compact-choice-popup{position:fixed;z-index:150;background:#fff;direction:rtl;border:1px solid #c7dfd3;border-radius:12px;padding:5px;box-shadow:0 15px 40px #173e3560;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;max-height:300px}
+.compact-choice-option{display:block;width:100%;min-height:41px;text-align:right;background:transparent;color:#1c4036;border:0;border-radius:7px;padding:9px 11px;font:700 12px/1.65 Cairo,Tahoma,Arial,sans-serif;cursor:pointer;white-space:normal;overflow-wrap:anywhere}
+.compact-choice-option:hover,.compact-choice-option:focus-visible{background:#e9f6ef;outline:none}
+.compact-choice-option[aria-selected="true"]{background:#dcefe5;color:#0b543f}
+.compact-choice-option[disabled]{opacity:.4;cursor:not-allowed}
+.compact-choice-none{padding:15px;text-align:center;color:#657e72;font-size:12px}
+@media(max-width:680px){
+  .compact-choice select{position:absolute!important;inset-inline-start:0;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;border:0!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)}
+  .compact-choice-button{display:flex}
+  .filters{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .filters>.field:last-child:nth-child(odd){grid-column:1/-1}
+  .field label{line-height:1.5}
+  .tabs{gap:6px}
+  .focus-controls .compact-choice-button{min-height:42px}
+}
+@media(max-width:320px){.filters,.focus-controls{grid-template-columns:minmax(0,1fr)!important}}
+@media(min-width:681px){.tools .compact-choice{max-width:200px;min-width:130px;flex:0 0 auto}}
+@media print{.compact-choice-button,.compact-choice-popup{display:none!important}.compact-choice select{display:block!important}}
+
 </style>
 </head>
 <body>
@@ -623,6 +650,103 @@ d('downloadPrintHTML').addEventListener('click',downloadPrintable);
 d('printOptions').addEventListener('click',e=>{if(e.target===d('printOptions'))closePrintOptions()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&d('printOptions').classList.contains('open'))closePrintOptions()});
 
-updateClasses();wire();wireHolidays();wireFocusReports();render();
+updateClasses();wire();wireHolidays();wireFocusReports();render();installCompactChoiceControls();
+
+/* واجهة الخيارات المدمجة للجوال - تبقى عناصر select الأصلية مصدر الحالة */
+function installCompactChoiceControls(){
+ const media=window.matchMedia('(max-width: 680px)');
+ let opened=null;
+ const pairs=[];
+ const labelFor=select=>select.getAttribute('aria-label')||document.querySelector(`label[for="${select.id}"]`)?.textContent?.trim()||'اختر خيارًا';
+ function closeChoice(restoreFocus=false){
+  if(!opened)return;
+  const active=opened;opened=null;
+  active.popup.remove();active.trigger.setAttribute('aria-expanded','false');
+  if(restoreFocus&&active.trigger.isConnected)active.trigger.focus({preventScroll:true});
+ }
+ function syncPair(pair){
+  const value=pair.select.selectedOptions[0]||pair.select.options[0];
+  const full=value?.textContent?.trim()||'اختر';
+  pair.caption.textContent=['startDate','endDate','dailyFocusDate'].includes(pair.select.id)&&/^\d{4}-\d{2}-\d{2}$/.test(value?.value||'')?value.value.split('-').reverse().join('/'):full;
+  pair.caption.title=full;
+  pair.trigger.disabled=pair.select.disabled;
+ }
+ function updateMode(){
+  if(!media.matches)closeChoice();
+  for(const pair of pairs){
+   if(media.matches){pair.select.tabIndex=-1;pair.select.setAttribute('aria-hidden','true')}
+   else{if(pair.oldTabIndex===null)pair.select.removeAttribute('tabindex');else pair.select.setAttribute('tabindex',pair.oldTabIndex);
+    if(pair.oldAriaHidden===null)pair.select.removeAttribute('aria-hidden');else pair.select.setAttribute('aria-hidden',pair.oldAriaHidden)}
+   syncPair(pair);
+  }
+ }
+ function openChoice(pair){
+  if(!media.matches||pair.select.disabled)return;
+  if(opened?.trigger===pair.trigger){closeChoice(true);return}
+  closeChoice();
+  const popup=document.createElement('div');popup.className='compact-choice-popup';popup.setAttribute('role','listbox');popup.setAttribute('aria-label',labelFor(pair.select));
+  const options=Array.from(pair.select.options);
+  if(!options.length){const empty=document.createElement('div');empty.className='compact-choice-none';empty.textContent='لا توجد خيارات متاحة';popup.appendChild(empty)}
+  const optionButtons=options.map((opt,index)=>{
+   const button=document.createElement('button');button.type='button';button.className='compact-choice-option';button.setAttribute('role','option');button.setAttribute('aria-selected',String(opt.selected));button.textContent=opt.textContent.trim();button.disabled=opt.disabled;
+   button.addEventListener('click',()=>{
+    if(button.disabled)return;
+    closeChoice();pair.select.selectedIndex=index;syncPair(pair);
+    pair.select.dispatchEvent(new Event('change',{bubbles:true}));
+    if(document.activeElement===document.body)pair.trigger.focus({preventScroll:true});
+   });
+   popup.appendChild(button);return button;
+  });
+  document.body.appendChild(popup);
+  const rect=pair.trigger.getBoundingClientRect(),margin=8;
+  const width=Math.min(Math.max(220,rect.width),window.innerWidth-margin*2);
+  const left=Math.max(margin,Math.min(rect.left,window.innerWidth-width-margin));
+  const below=window.innerHeight-rect.bottom-margin,above=rect.top-margin;
+  const placeBelow=below>=170||below>=above;
+  const space=placeBelow?below:above;
+  const height=Math.min(290,Math.max(90,space-6));
+  popup.style.width=width+'px';popup.style.left=left+'px';popup.style.maxHeight=height+'px';
+  popup.style.top=(placeBelow?Math.min(rect.bottom+5,window.innerHeight-height-margin):Math.max(margin,rect.top-height-5))+'px';
+  opened={popup,trigger:pair.trigger,buttons:optionButtons,startedAt:performance.now()};
+  pair.trigger.setAttribute('aria-expanded','true');
+  const selected=optionButtons.find(b=>b.getAttribute('aria-selected')==='true'&&!b.disabled)||optionButtons.find(b=>!b.disabled);
+  if(selected){selected.focus({preventScroll:true});popup.scrollTop=Math.max(0,selected.offsetTop-popup.offsetTop-height/2)}
+ }
+ for(const select of document.querySelectorAll('select')){
+  if(select.closest('.compact-choice'))continue;
+  const wrapper=document.createElement('span');wrapper.className='compact-choice';
+  select.parentNode.insertBefore(wrapper,select);wrapper.appendChild(select);
+  const trigger=document.createElement('button');trigger.type='button';trigger.className='compact-choice-button';trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-label',labelFor(select));
+  const caption=document.createElement('span');caption.className='compact-choice-value';
+  const chevron=document.createElement('span');chevron.className='compact-choice-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌄';
+  trigger.append(caption,chevron);wrapper.appendChild(trigger);
+  const pair={select,wrapper,trigger,caption,oldTabIndex:select.getAttribute('tabindex'),oldAriaHidden:select.getAttribute('aria-hidden')};pairs.push(pair);
+  trigger.addEventListener('click',()=>openChoice(pair));
+  select.addEventListener('change',()=>syncPair(pair));
+  new MutationObserver(()=>syncPair(pair)).observe(select,{subtree:true,childList:true,attributes:true,attributeFilter:['selected','disabled']});
+  const label=document.querySelector(`label[for="${select.id}"]`);
+  if(label)label.addEventListener('click',e=>{if(media.matches){e.preventDefault();trigger.focus({preventScroll:true});openChoice(pair)}});
+ }
+ document.addEventListener('pointerdown',e=>{if(opened&&!opened.popup.contains(e.target)&&!opened.trigger.contains(e.target))closeChoice()});
+ document.addEventListener('keydown',e=>{
+  if(!opened)return;
+  if(e.key==='Escape'){e.preventDefault();closeChoice(true);return}
+  if(e.key==='Tab'){closeChoice();return}
+  const options=opened.buttons;
+  if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+   e.preventDefault();let ix=options.indexOf(document.activeElement);
+   if(e.key==='Home')ix=-1;
+   else if(e.key==='End')ix=options.length;
+   const delta=e.key==='ArrowUp'||e.key==='End'?-1:1;
+   for(let j=ix+delta;j>=0&&j<options.length;j+=delta){if(!options[j].disabled){options[j].focus({preventScroll:true});options[j].scrollIntoView({block:'nearest'});break}}
+  }
+ });
+ window.addEventListener('scroll',()=>{if(opened&&performance.now()-opened.startedAt>900)closeChoice()},{passive:true});
+ window.addEventListener('resize',()=>closeChoice(),{passive:true});
+ media.addEventListener('change',updateMode);
+ document.addEventListener('click',()=>requestAnimationFrame(()=>pairs.forEach(syncPair)));
+ updateMode();
+}
+
 </script>
 </body></html>
