@@ -277,7 +277,9 @@ body{overflow-x:hidden}
     <p>اختر التقرير المطلوب. تُطبع كل الجداول كاملة وفق مرشحاتك، وليس الصفحة الحالية من الجدول فقط.</p>
     <label class="print-choice"><input type="radio" name="printScope" value="all" checked> <span>تقرير شامل واحد — جميع الأقسام السبعة</span></label>
     <label class="print-choice"><input type="radio" name="printScope" value="current"> <span>القسم المفتوح حاليًا فقط</span></label>
-    <div class="print-help">تنسيق A4 عرضي، صفحات مقسّمة مسبقًا، تكرار رؤوس الجداول والترويسة والتذييل مع ترقيم الصفحات. استخدم «حفظ كملف PDF» من نافذة الطباعة للحصول على ملف واحد. أيام الإجازات والجمعة والسبت خارج جميع الحسابات.</div>
+    <label class="print-choice"><input type="radio" name="printScope" value="withoutStudents"> <span>تقرير واحد بدون قائمة متابعة الطلاب — عرضي</span></label>
+    <label class="print-choice"><input type="radio" name="printScope" value="studentsPortrait"> <span>قائمة متابعة الطلاب فقط — طولي A4</span></label>
+    <div class="print-help">تُطبع أقسام التحليل بعرض A4، وقائمة الطلاب بطول A4. في التقرير الشامل يتم الجمع بين الاتجاهين وفق دعم متصفح Chrome؛ ويمكن طباعة قائمة الطلاب مستقلة بالطول. الصفحات مقسّمة مسبقًا مع رؤوس جداول وترقيم. استخدم «حفظ كملف PDF» من نافذة الطباعة للحصول على ملف واحد. أيام الإجازات والجمعة والسبت خارج جميع الحسابات.</div>
     <div class="print-dialog-actions">
        <button type="button" class="btn primary" id="openPrintPreview">معاينة التقرير والطباعة</button>
        <button type="button" class="btn" id="downloadPrintHTML">تحميل نسخة التقرير للطباعة HTML</button>
@@ -577,12 +579,12 @@ function annotateMobileTables(){
 function openPrintOptions(){const el=d('printOptions');el.classList.add('open');el.setAttribute('aria-hidden','false');d('openPrintPreview').focus();document.body.style.overflow='hidden'}
 function closePrintOptions(){const el=d('printOptions');el.classList.remove('open');el.setAttribute('aria-hidden','true');document.body.style.overflow='';d('printBtn').focus()}
 const reportSections=[['overview','المؤشرات العامة'],['classes','الصفوف والفصول'],['students','متابعة الطلاب'],['daily','غياب يوم محدد'],['repeat','الغياب المتكرر حسب اليوم'],['quality','جودة البيانات'],['calendar','التقويم والإجازات']];
-function printSelectedSections(){const picked=document.querySelector('input[name="printScope"]:checked');return picked?.value==='current'?[state.tab]:reportSections.map(x=>x[0])}
+function printSelectedSections(){const picked=document.querySelector('input[name="printScope"]:checked'),scope=picked?.value||'all';if(scope==='current')return [state.tab];if(scope==='withoutStudents')return reportSections.filter(([key])=>key!=='students').map(([key])=>key);if(scope==='studentsPortrait')return ['students'];return reportSections.map(([key])=>key)}
 function pt(v){return esc(v)}
 function chunkRows(rows,n){if(!rows.length)return [[]];const result=[];for(let i=0;i<rows.length;i+=n)result.push(rows.slice(i,i+n));return result}
-function printableTable(headings,rows,widths){
+function printableTable(headings,rows,widths,rowClasses=[]){
  const col=widths?`<colgroup>${widths.map(x=>`<col style="width:${Number(x)}%">`).join('')}</colgroup>`:'';
- return `<table class="pt-table">${col}<thead><tr>${headings.map(x=>`<th>${pt(x)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td${i===0?' class="pt-first"':''}>${pt(cell)}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headings.length}" class="pt-empty">لا توجد نتائج ضمن المرشحات المختارة</td></tr>`}</tbody></table>`;
+ return `<table class="pt-table">${col}<thead><tr>${headings.map(x=>`<th>${pt(x)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map((row,index)=>{const tone=/^abs-(?:low|mild|medium|raised|high)$/.test(rowClasses[index]||'')?rowClasses[index]:'';return `<tr${tone?' class="'+tone+'"':''}>${row.map((cell,i)=>`<td${i===0?' class="pt-first"':''}>${pt(cell)}</td>`).join('')}</tr>`}).join(''):`<tr><td colspan="${headings.length}" class="pt-empty">لا توجد نتائج ضمن المرشحات المختارة</td></tr>`}</tbody></table>`;
 }
 function printBarList(items){const max=Math.max(1,...items.map(x=>x[1]));return `<div class="pt-bars">${items.map(([name,n,display])=>`<div class="pt-barrow"><span>${pt(name)}</span><i><b style="width:${Math.max(0,n/max*100).toFixed(1)}%"></b></i><strong>${pt(display??fmt(n))}</strong></div>`).join('')}</div>`}
 function printChart(svg){return `<div class="pt-chart">${svg||'<p>لا توجد بيانات في النطاق</p>'}</div>`}
@@ -610,8 +612,14 @@ function makePrintReport(sectionKeys){
   add('classes','الخريطة الأسبوعية للفصول',`<p class="pt-note">كل خلية: متوسط عدد أيام الغياب المسجلة لكل طالب في الفصل خلال الأسبوع الدراسي.</p>${printableTable(headers,rows,[18,...weeks.map(()=>82/Math.max(1,weeks.length))])}`);
  }
  if(sectionKeys.includes('students')){
-  const rows=getStudents(c).map((r,i)=>{const p=DB.students[r.pi];return [fmt(i+1),p[1],p[0],p[2].replace('اول','أول'),fmt(r.days),fmt(r.longest),r.days>=state.threshold?'تحتاج متابعة':r.days>=Math.ceil(state.threshold*.6)?'متابعة دورية':'أقل من الحد']});
-  chunkRows(rows,17).forEach((subset,i,all)=>add('students','قائمة متابعة الطلاب',`<div class="pt-list-meta">عدد الطلاب المطابقين للمرشحات: ${fmt(rows.length)} · حد المتابعة: ${fmt(state.threshold)} أيام · مجموعة ${fmt(i+1)} من ${fmt(all.length)}</div>${printableTable(['م','اسم الطالب','رقم الطالب','الفصل','أيام الغياب','أطول تتابع','الحالة'],subset,[5,32,11,12,11,12,17])}`));
+  // Printed student list is always ordered grade → class → name, regardless of UI alternate sort.
+  const ordered=getStudents(c).slice().sort(compareGradeClassName);
+  const rows=ordered.map((r,i)=>{const p=DB.students[r.pi];return [fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days),fmt(r.longest),r.days>=state.threshold?'تحتاج متابعة':r.days>=Math.ceil(state.threshold*.6)?'متابعة دورية':'أقل من الحد']});
+  const pageRows=27;
+  chunkRows(rows,pageRows).forEach((subset,i,all)=>{
+   const rowLevels=ordered.slice(i*pageRows,(i+1)*pageRows).map(r=>absenceLevel(r.days));
+   add('students','قائمة متابعة الطلاب — A4 طولي',`<div class="pt-list-meta">الترتيب: الصف ← الفصل ← الاسم · ${fmt(rows.length)} طالب · حد المتابعة: ${fmt(state.threshold)} أيام · الصفحة ${fmt(i+1)} من ${fmt(all.length)}</div>${absenceLegend()}${printableTable(['م','اسم الطالب','رقم الطالب','الصف','الفصل','أيام الغياب','أطول تتابع','الحالة'],subset,[5,31,11,14,9,8,9,13],rowLevels)}`);
+  });
  }
  if(sectionKeys.includes('daily')){
   const iso=dailyState.date,rows=dailyVisible.map((r,i)=>{const p=DB.students[r.pi];return[fmt(i+1),p[1],p[0],GRADE_NAMES[p[3]],p[2].replace('اول','أول'),fmt(r.days)]});
@@ -633,9 +641,11 @@ function makePrintReport(sectionKeys){
   chunkRows(holidays,17).forEach((chunk,i,all)=>add('calendar','التقويم وأيام الإجازات',`<div class="pt-statgrid pt-four"><div class="pt-stat"><span>أيام الدوام الفعلية</span><strong>${fmt(c.schoolDayCount)}</strong></div><div class="pt-stat"><span>الإجازات في الفترة</span><strong>${fmt(c.manuallyExcludedDates)}</strong></div><div class="pt-stat"><span>سجلات لم تُحتسب للإجازات</span><strong>${fmt(c.manuallyExcludedEvents)}</strong></div><div class="pt-stat"><span>الراحة الأسبوعية</span><strong>الجمعة والسبت</strong></div></div><h3>الإجازات المستبعدة ضمن الفترة المختارة</h3>${printableTable(['التاريخ','اليوم','السبب','حالة الحساب'],chunk,[28,12,27,33])}<div class="pt-ribbon">عند تغيير يوم من «إجازة» إلى «دوام» وإعادة طباعة التقرير تُستعاد حساباته فورًا. بيانات المصدر الأصلية لا تتغير.</div>`));
  }
  const allSections=new Map(reportSections);
- const title=sectionKeys.length===1?`تقرير ${allSections.get(sectionKeys[0])}`:'التقرير الإحصائي الشامل لغياب الطلاب';
+ const title=sectionKeys.length===1?`تقرير ${allSections.get(sectionKeys[0])}`:sectionKeys.includes('students')?'التقرير الإحصائي الشامل لغياب الطلاب':'التقرير الإحصائي لغياب الطلاب بدون القائمة الفردية';
+ const portraitOnly=sectionKeys.length===1&&sectionKeys[0]==='students';
  const styles=`
-@page{size:A4 landscape;margin:0}
+@page{size:${portraitOnly?'A4 portrait':'A4 landscape'};margin:0}
+@page studentPortrait{size:A4 portrait;margin:0}
 *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajawal',Tahoma,Arial,sans-serif;direction:rtl;font-size:10pt;line-height:1.35}
 .preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:9;padding:13px 20px;background:#123f34;color:#fff;font:14px Tahoma,Arial,sans-serif}
@@ -643,6 +653,23 @@ html,body{margin:0;padding:0;color:#193d34;background:#eef4ef;font-family:'Tajaw
 .preview-guide{padding:9px 15px;font-family:Tahoma,Arial;font-size:12px;color:#355d4b;text-align:center}
 .sheet{width:297mm;height:210mm;margin:15px auto;background:#fff;display:flex;flex-direction:column;padding:9mm 11mm 7mm;overflow:hidden;box-shadow:0 2px 16px #234c3933;break-after:page;page-break-after:always}
 .sheet:last-child{break-after:auto;page-break-after:auto}
+.sheet[data-report="students"]{page:studentPortrait;width:210mm;height:297mm}
+.sheet[data-report="students"] .sheet-head h1{font-size:15pt}
+.sheet[data-report="students"] .sheet-body{font-size:8.4pt}
+.sheet[data-report="students"] .pt-table{font-size:8.1pt}
+.sheet[data-report="students"] .pt-table th{padding:2.2mm 1mm}
+.sheet[data-report="students"] .pt-table td{padding:1.5mm 1mm;line-height:1.1}
+.sheet[data-report="students"] .pt-list-meta{font-size:8.2pt;margin-bottom:2mm}
+.sheet[data-report="students"] .absence-legend{margin-bottom:2mm}
+.sheet[data-report="students"] .absence-legend span{font-size:7pt;padding:1mm 2mm}
+.pt-table tbody tr.abs-low td{background:#f3faf6!important}
+.pt-table tbody tr.abs-mild td{background:#e7f7ee!important}
+.pt-table tbody tr.abs-medium td{background:#fff8e7!important}
+.pt-table tbody tr.abs-raised td{background:#fff0e0!important}
+.pt-table tbody tr.abs-high td{background:#fde9e9!important}
+.absence-legend{display:flex;flex-wrap:wrap;gap:2mm;font-size:8pt;font-weight:700}
+.absence-legend span{display:inline-block;padding:1.5mm 2.5mm;border:1px solid #dce8df;border-radius:1.5mm}
+.abs-low{background:#f3faf6}.abs-mild{background:#e7f7ee}.abs-medium{background:#fff8e7}.abs-raised{background:#fff0e0}.abs-high{background:#fde9e9}
 .sheet-head{flex:0 0 21mm;min-height:21mm;border-bottom:1.2px solid #166b54;display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:4mm}
 .sheet-head h1{font-size:17pt;color:#124c3e;margin:0 0 1mm;line-height:1.2}.sheet-head p{margin:0;color:#617c70;font-size:8.4pt}.school{font-size:9.5pt;color:#185441;font-weight:700;max-width:70mm;text-align:left}
 .sheet-body{flex:1;min-height:0;overflow:hidden;font-size:9.5pt}.sheet-body h3{font-size:10pt;margin:0 0 2.5mm;color:#155846}
